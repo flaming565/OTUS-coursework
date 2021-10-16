@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Care Diary</string>
+
+    <string name="common_save">Save</string>
+    <string name="common_settings">Settings</string>
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_error">Error</string>
+
+    <string name="home_new_category">New category</string>
+
+    <string name="add_category_title">Add Category</string>
+    <string name="add_category_enter_category">Enter category</string>
+    <string name="add_category_category_image">Category image:</string>
+    <string name="add_category_permission_rational_camera">To continue, you need to grant permission for the camera in the settings of your device.</string>
+    <string name="add_category_permission_rational_gallery">To continue, you need to grant permission to read media files in your device\'s settings.</string>
+    <string name="add_category_select_image">Select image</string>
+    <string name="add_category_open_camera">Open camera</string>
+    <string name="add_category_open_gallery">Open gallery</string>
+    <string name="add_category_error_saving">Saving file error, please, try again.</string>
+    <string name="add_category_error_database">Something went wrong, please, try again.</string>
+    <string name="add_category_get_temp_uri_error">Error accessing saving photos from the camera, please, try again.</string>
+    <string name="add_category_category_other">Other</string>
+    <string name="add_category_category_face">Skin care</string>
+    <string name="add_category_category_body">Body care</string>
+    <string name="add_category_category_hair">Hair care</string>
+    <string name="add_category_category_hands">Hand care</string>
+    <string name="add_category_category_legs">Feet care</string>
+    <string name="add_category_category_mouth">Oral care</string>
+
+
+    <string name="task_list_add_task">Add new task</string>
+
+    <string name="add_task_title">Add Task</string>
+    <string name="add_task_task_name">Task name</string>
+    <string name="add_task_enter_task">Enter task</string>
+    <string name="add_task_priority">Priority</string>
+    <string name="add_task_frequency">Frequency</string>
+    <string name="add_task_every">Every</string>
+    <string name="add_task_current_state">Current state</string>
+    <string name="add_task_state_good">Good</string>
+    <string name="add_task_state_about_time">About time</string>
+    <string name="add_task_note">Note</string>
+    <string name="add_task_enter_note">Enter note</string>
+    <string name="add_task_minus_sign">-</string>
+    <string name="add_task_plus_sign">+</string>
+
+</resources>

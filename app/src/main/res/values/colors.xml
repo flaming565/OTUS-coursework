@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#eee3dd</color>
+    <color name="colorPrimaryVariant">#bcb1ab</color>
+    <color name="colorPrimaryLight">#F8F3F0</color>
+    <color name="colorOnPrimary">#51453E</color>
+
+    <color name="progress_color_min">#81C784</color>
+    <color name="progress_color_medium">#9CCC65</color>
+    <color name="progress_color_normal">#FFA726</color>
+    <color name="progress_color_max">#E44B48</color>
+    <color name="progress_color_divider">@color/colorOnPrimary</color>
+
+    <color name="primary_overlay_80">#80eee3dd</color>
+    <color name="color_primary_overlay">#70ede7f6</color>
+    <color name="card_backgroud_color">#f9f8f4</color>
+
+
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

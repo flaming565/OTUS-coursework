@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.amalkina.beautydiary.ui.tasks.models.TaskItem.Task" />
+
+        <variable
+            name="taskList"
+            type="com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:elevation="8dp"
+        android:onClick="@{() -> taskList.onClickTask(vm.id)}"
+        app:cardBackgroundColor="@color/card_backgroud_color"
+        app:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="6dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.title}"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        tools:text="Task title" />
+
+                    <androidx.appcompat.widget.AppCompatRatingBar
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:numStars="3"
+                        android:rating="@{vm.priority}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                    <com.amalkina.beautydiary.ui.common.views.ProgressBarView
+                        android:layout_width="100dp"
+                        android:layout_height="16dp"
+                        app:progress="@{vm.progress}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:text="@{vm.progressDesc}"
+                        tools:text="Осталось 5 дней" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryDark"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="4dp"
+                app:goneIfNot="@{vm.note}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="@{vm.note}"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:colorBackground"
+                    app:drawableStartCompat="@drawable/ic_outline_description"
+                    app:drawableTint="?android:colorBackground"
+                    tools:text="Description task task long Description task task long Description task task long" />
+            </FrameLayout>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
