@@ -2,6 +2,7 @@ package com.amalkina.beautydiary.data.room.dao
 
 import androidx.room.*
 import com.amalkina.beautydiary.data.models.CategoryModel
+import com.amalkina.beautydiary.data.models.CategoryWithTasks
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -24,4 +25,8 @@ internal interface CategoryDao {
 
     @Delete
     suspend fun delete(category: CategoryModel)
+
+    @Transaction
+    @Query("SELECT * FROM category")
+    fun getCategoryWithTasks(): List<CategoryWithTasks>
 }

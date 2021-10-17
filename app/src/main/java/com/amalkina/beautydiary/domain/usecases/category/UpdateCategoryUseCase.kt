@@ -1,11 +1,11 @@
-package com.amalkina.beautydiary.domain.usecases
+package com.amalkina.beautydiary.domain.usecases.category
 
 import com.amalkina.beautydiary.domain.interfaces.CategoryRepository
 import com.amalkina.beautydiary.domain.models.Category
-import org.koin.core.component.KoinApiExtension
+import com.amalkina.beautydiary.domain.usecases.common.BaseUseCase
 import org.koin.core.component.inject
 
-@KoinApiExtension
+
 class UpdateCategoryUseCase : BaseUseCase() {
     private val repository by inject<CategoryRepository>()
 

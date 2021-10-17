@@ -8,7 +8,7 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-@KoinApiExtension
+
 internal open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->

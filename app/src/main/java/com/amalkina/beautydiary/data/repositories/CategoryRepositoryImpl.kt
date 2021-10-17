@@ -7,10 +7,9 @@ import com.amalkina.beautydiary.domain.interfaces.CategoryRepository
 import com.amalkina.beautydiary.domain.models.Category
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.inject
 
-@KoinApiExtension
+
 internal class CategoryRepositoryImpl : BaseRepository(), CategoryRepository {
     private val dao by inject<CategoryDao>()
 

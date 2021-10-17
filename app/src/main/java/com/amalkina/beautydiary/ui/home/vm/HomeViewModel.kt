@@ -5,17 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.models.Category
-import com.amalkina.beautydiary.domain.usecases.GetCategoriesUseCase
+import com.amalkina.beautydiary.domain.usecases.category.GetCategoriesUseCase
 import com.amalkina.beautydiary.ui.common.ext.resIdByName
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.HomeCategoryNew
 import kotlinx.coroutines.flow.*
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.get
 import org.koin.core.component.inject
 
-@KoinApiExtension
+
 internal class HomeViewModel : BaseViewModel() {
     private val getCategoriesUseCase by inject<GetCategoriesUseCase>()
 

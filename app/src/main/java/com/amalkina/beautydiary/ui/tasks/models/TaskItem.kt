@@ -1,6 +1,6 @@
 package com.amalkina.beautydiary.ui.tasks.models
 
-import com.amalkina.beautydiary.domain.models.Frequency
+import com.amalkina.beautydiary.domain.models.Schedule
 
 sealed class TaskItem {
 
@@ -10,10 +10,10 @@ sealed class TaskItem {
         val id: Long,
         val title: String,
         val priority: Int = 1,
-        val frequency: Frequency = Frequency(),
+        val schedule: Schedule = Schedule(),
         val progress: Int = 50,
         val note: String? = null
     ) : TaskItem() {
-        val progressDesc = "осталось ${frequency.value} days"
+        val progressDesc = "осталось ${schedule.value} days"
     }
 }

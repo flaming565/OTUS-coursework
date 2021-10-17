@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.domain.common.Event
+import com.amalkina.beautydiary.domain.models.Schedule
 import com.amalkina.beautydiary.domain.models.Frequency
-import com.amalkina.beautydiary.domain.models.FrequencyType
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.tasks.models.TaskItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,10 +40,10 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     val taskNote = MutableStateFlow<String?>(null)
 
     val taskFrequency = MutableStateFlow("")
-    private val taskFrequencyType = MutableStateFlow(FrequencyType.DAY)
+    private val taskFrequencyType = MutableStateFlow(Frequency.DAY)
     val taskFrequencyValue = taskFrequencyType.map { it.name.lowercase() }.asLiveData()
-    val isIncreaseFrequencyAvailable = taskFrequencyType.map { it != FrequencyType.YEAR }.asLiveData()
-    val isDecreaseFrequencyAvailable = taskFrequencyType.map { it != FrequencyType.DAY }.asLiveData()
+    val isIncreaseFrequencyAvailable = taskFrequencyType.map { it != Frequency.YEAR }.asLiveData()
+    val isDecreaseFrequencyAvailable = taskFrequencyType.map { it != Frequency.DAY }.asLiveData()
 
     val saveTaskEvent = MutableLiveData<Event<Unit>>()
     val errorEvent = MutableLiveData<Event<String>>()
@@ -55,8 +55,8 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     fun updateTaskFields(task: TaskItem.Task) {
         taskTitle.value = task.title
         taskPriority.value = task.priority.toFloat()
-        taskFrequency.value = task.frequency.value.toString()
-        taskFrequencyType.value = task.frequency.type
+        taskFrequency.value = task.schedule.value.toString()
+        taskFrequencyType.value = task.schedule.frequency
         taskProgress.value = task.progress
         taskNote.value = task.note
     }
@@ -75,16 +75,16 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
 
     private fun getCommonTasks(): List<TaskItem.Task> {
         val out = mutableListOf<TaskItem.Task>()
-        out.add(TaskItem.Task(1, "Крем для лица", 1, Frequency(1, FrequencyType.DAY), 20, "Описание задачи"))
-        out.add(TaskItem.Task(2, "Массаж лица", 2, Frequency(4, FrequencyType.WEEK), 70))
-        out.add(TaskItem.Task(3, "Пилинг для лица", 3, Frequency(2, FrequencyType.WEEK), 10))
-        out.add(TaskItem.Task(4, "Депиляция ног", 2, Frequency(2, FrequencyType.MONTH), 40))
+        out.add(TaskItem.Task(1, "Крем для лица", 1, Schedule(1, Frequency.DAY), 20, "Описание задачи"))
+        out.add(TaskItem.Task(2, "Массаж лица", 2, Schedule(4, Frequency.WEEK), 70))
+        out.add(TaskItem.Task(3, "Пилинг для лица", 3, Schedule(2, Frequency.WEEK), 10))
+        out.add(TaskItem.Task(4, "Депиляция ног", 2, Schedule(2, Frequency.MONTH), 40))
         out.add(getOtherTask())
         return out
     }
 
     private fun getOtherTask(): TaskItem.Task {
-        return TaskItem.Task(0, "Другое", 2, Frequency(2, FrequencyType.WEEK), 50)
+        return TaskItem.Task(0, "Другое", 2, Schedule(2, Frequency.WEEK), 50)
     }
 
 }

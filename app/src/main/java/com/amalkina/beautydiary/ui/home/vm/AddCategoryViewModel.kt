@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.models.Category
-import com.amalkina.beautydiary.domain.usecases.ReadWriteImageUseCase
-import com.amalkina.beautydiary.domain.usecases.UpdateCategoryUseCase
+import com.amalkina.beautydiary.domain.usecases.common.ReadWriteImageUseCase
+import com.amalkina.beautydiary.domain.usecases.category.UpdateCategoryUseCase
 import com.amalkina.beautydiary.ui.common.ext.getDrawableRes
 import com.amalkina.beautydiary.ui.common.ext.resNameById
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
@@ -17,13 +17,12 @@ import com.amalkina.beautydiary.ui.home.models.BaseCategory
 import com.amalkina.beautydiary.ui.home.models.getBaseCategories
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.get
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.FileNotFoundException
 
-@KoinApiExtension
+
 internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
 
     private val readWriteImageUseCase by inject<ReadWriteImageUseCase>()

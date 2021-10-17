@@ -1,4 +1,4 @@
-package com.amalkina.beautydiary.domain.usecases
+package com.amalkina.beautydiary.domain.usecases.common
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,7 +9,6 @@ import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
-import org.koin.core.component.KoinApiExtension
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -18,7 +17,7 @@ import java.io.FileOutputStream
 import java.lang.ref.WeakReference
 import java.util.*
 
-@KoinApiExtension
+
 class ReadWriteImageUseCase(context: Context) : BaseUseCase() {
 
     private val weakContext = WeakReference(context)
