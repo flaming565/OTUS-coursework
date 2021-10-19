@@ -13,10 +13,8 @@ import org.koin.core.component.inject
 internal class CategoryRepositoryImpl : BaseRepository(), CategoryRepository {
     private val dao by inject<CategoryDao>()
 
-    override fun getCategory(id: Long): Flow<Category> {
-        return dao.getCategory(id).map {
-            it.toCategory()
-        }
+    override suspend fun getCategory(id: Long): Category {
+        return dao.getCategory(id).toCategory()
     }
 
     override fun getAllCategories(): Flow<List<Category>> {

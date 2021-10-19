@@ -8,8 +8,13 @@
     <string name="common_error">Error</string>
 
     <string name="home_new_category">New category</string>
+    <string name="home_edit_category">Edit</string>
+    <string name="home_delete_category">Delete</string>
+    <string name="home_delete_category_dialog_title">Alert</string>
+    <string name="home_delete_category_dialog_message">If you delete this category, all associated tasks and activity history will also be deleted.</string>
 
     <string name="add_category_title">Add Category</string>
+    <string name="add_category_edit_title">Edit</string>
     <string name="add_category_enter_category">Enter category</string>
     <string name="add_category_category_image">Category image:</string>
     <string name="add_category_permission_rational_camera">To continue, you need to grant permission for the camera in the settings of your device.</string>

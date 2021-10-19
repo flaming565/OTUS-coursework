@@ -3,6 +3,7 @@ package com.amalkina.beautydiary.data.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 @Entity(tableName = "task")
 internal data class TaskModel(
@@ -24,9 +25,11 @@ internal data class TaskModel(
 /**
  * Execute every ${value} ${type}
  */
+@Serializable
 internal data class TaskSchedule(
     val value: Int = 1,
     val frequency: TaskFrequency = TaskFrequency.DAY
 )
 
+@Serializable
 internal enum class TaskFrequency { DAY, WEEK, MONTH, YEAR }

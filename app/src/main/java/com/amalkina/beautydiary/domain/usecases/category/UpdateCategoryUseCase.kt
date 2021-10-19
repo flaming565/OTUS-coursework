@@ -1,5 +1,6 @@
 package com.amalkina.beautydiary.domain.usecases.category
 
+import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.interfaces.CategoryRepository
 import com.amalkina.beautydiary.domain.models.Category
 import com.amalkina.beautydiary.domain.usecases.common.BaseUseCase
@@ -12,7 +13,7 @@ class UpdateCategoryUseCase : BaseUseCase() {
     suspend fun create(category: Category): Result {
         return try {
             repository.createCategory(category)
-            Result.Ok
+            Result.Success(Unit)
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }
@@ -21,7 +22,7 @@ class UpdateCategoryUseCase : BaseUseCase() {
     suspend fun update(category: Category): Result {
         return try {
             repository.updateCategory(category)
-            Result.Ok
+            Result.Success(Unit)
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }
@@ -30,14 +31,9 @@ class UpdateCategoryUseCase : BaseUseCase() {
     suspend fun delete(category: Category): Result {
         return try {
             repository.deleteCategory(category)
-            Result.Ok
+            Result.Success(Unit)
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }
-    }
-
-    sealed class Result {
-        object Ok : Result()
-        data class Error(val error: String) : Result()
     }
 }

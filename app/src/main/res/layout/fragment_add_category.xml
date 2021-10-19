@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back_arrow"
-                app:title="@string/add_category_title">
+                app:title="@{vm.fragmentTitle}">
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/OutlinedButton"
@@ -78,7 +78,8 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/add_category_category_image"
                     android:scaleType="centerCrop"
-                    android:src="@{vm.selectedCategoryImage}" />
+                    app:imageBitmap="@{vm.selectedCategoryBitmap}"
+                    app:imageDrawable="@{vm.selectedCategoryDrawable}" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"

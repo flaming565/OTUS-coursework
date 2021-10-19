@@ -1,17 +1,23 @@
 package com.amalkina.beautydiary.ui.home.vm
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.common.Event
+import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.Category
-import com.amalkina.beautydiary.domain.usecases.common.ReadWriteImageUseCase
+import com.amalkina.beautydiary.domain.usecases.category.GetCategoryUseCase
 import com.amalkina.beautydiary.domain.usecases.category.UpdateCategoryUseCase
+import com.amalkina.beautydiary.domain.usecases.common.ReadWriteImageUseCase
+import com.amalkina.beautydiary.ui.common.ext.cast
 import com.amalkina.beautydiary.ui.common.ext.getDrawableRes
 import com.amalkina.beautydiary.ui.common.ext.resNameById
+import com.amalkina.beautydiary.ui.common.ext.toHomeCategory
+import com.amalkina.beautydiary.ui.common.models.BaseModel.Companion.getString
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.BaseCategory
 import com.amalkina.beautydiary.ui.home.models.getBaseCategories
@@ -19,16 +25,26 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
 import org.koin.core.component.inject
-import timber.log.Timber
-import java.io.FileNotFoundException
 
 
-internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
+internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
 
     private val readWriteImageUseCase by inject<ReadWriteImageUseCase>()
+    private val getCategoryUseCase by inject<GetCategoryUseCase>()
     private val updateCategoryUseCase by inject<UpdateCategoryUseCase>()
 
-    val isEditMode = categoryId >= 0
+    val isEditMode = categoryId > 0
+    val fragmentTitle = getString(
+        when (isEditMode) {
+            true -> R.string.add_category_edit_title
+            else -> R.string.add_category_title
+        }
+    )
+
+    init {
+        if (isEditMode)
+            loadEditableCategory(categoryId)
+    }
 
     private val categories = getBaseCategories()
     val categoryNames = getBaseCategories().map { category -> category.name }
@@ -37,7 +53,7 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
     private val selectedCategory = currentIndex.transform {
         categories.getOrNull(it)?.let { category ->
             selectedCategoryTitle.value = category.name
-            selectedCategoryImage.value = category.drawable
+            selectedCategoryDrawable.value = category.drawable
             emit(category)
         }
     }.stateIn(
@@ -45,8 +61,11 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
         started = SharingStarted.Eagerly,
         initialValue = BaseCategory.OtherCategory
     )
+
+    private var selectedCategoryId = 0L
     val selectedCategoryTitle = MutableStateFlow("")
-    val selectedCategoryImage = MutableStateFlow<Drawable?>(null)
+    val selectedCategoryDrawable = MutableStateFlow<Drawable?>(null)
+    val selectedCategoryBitmap = MutableStateFlow<Bitmap?>(null)
 
     val userActionEvent = MutableLiveData<Event<UserActionItem>>()
     val launchActionEvent = MutableLiveData<Event<LaunchItem>>()
@@ -62,9 +81,6 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
             started = SharingStarted.Lazily,
             initialValue = null
         )
-
-    val isLoading = MutableStateFlow(false)
-    val errorEvent = MutableLiveData<Event<ErrorItem>>()
 
     fun onSaveClick() {
         saveCategory(createCategory())
@@ -98,23 +114,33 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
         rawImageUri.value = uri
     }
 
-    fun updateCategoryImage(context: Context, imagePath: String) {
-        val uri = readWriteImageUseCase.getFilesUri(imagePath)
-        val drawable = try {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            Drawable.createFromStream(inputStream, uri.toString())
-        } catch (e: FileNotFoundException) {
-            // TODO: gte other image
-            get<Context>().getDrawableRes(R.drawable.common_category_other)
+    fun updateCategoryImage(imagePath: String) {
+        readWriteImageUseCase.getBitmapFromPath(imagePath)?.let {
+            selectedCategoryBitmap.value = it
+        } ?: run {
+            // TODO: get other image^ show error
+            selectedCategoryDrawable.value = get<Context>().getDrawableRes(R.drawable.common_category_other)
         }
-        drawable?.let { selectedCategoryImage.value = it }
     }
 
     fun getTempUri(): Uri? {
         tempImageUri = readWriteImageUseCase.getTempUri()
         return tempImageUri ?: run {
-            errorEvent.postValue(Event(ErrorItem.TEMP_FILE))
+            errorEvent.postValue(Event(ErrorItem.TEMP_FILE.message))
             null
+        }
+    }
+
+    private fun loadEditableCategory(categoryId: Long) {
+        launch {
+            val category = getCategoryUseCase.get(categoryId)
+                .run { mapGetCategoryResult(this) }
+            category?.toHomeCategory()?.let {
+                selectedCategoryId = it.id
+                selectedCategoryTitle.value = it.name
+                selectedCategoryDrawable.value = it.drawable
+                selectedCategoryBitmap.value = it.bitmap
+            }
         }
     }
 
@@ -125,6 +151,7 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
         val drawableName = selectedCategory.value.imageDrawable?.let { get<Context>().resNameById(it) }
 
         return Category(
+            id = selectedCategoryId,
             name = selectedCategoryTitle.value,
             imagePath = imagePath,
             drawableName = if (imagePath.isNullOrBlank()) drawableName else null
@@ -134,34 +161,47 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
     private fun saveCategory(category: Category) {
         isLoading.value = true
         launch {
-            updateCategoryUseCase.create(category).let {
+            val result = if (isEditMode) updateCategoryUseCase.update(category)
+            else updateCategoryUseCase.create(category)
+            result.let {
                 isLoading.value = false
                 mapUpdateCategoryResult(it)
             }
         }
     }
 
-    private fun mapUpdateCategoryResult(result: UpdateCategoryUseCase.Result) {
-        when (result) {
-            is UpdateCategoryUseCase.Result.Error -> {
-                Timber.d("Category update error: ${result.error}")
-                errorEvent.postValue(Event(ErrorItem.DATABASE))
-            }
-            else -> userActionEvent.postValue(Event(UserActionItem.UPDATE_CATEGORY))
+    private fun mapGetCategoryResult(result: Result): Category? {
+        return mapResponseResult(result, ErrorItem.DATABASE.message)?.let { cast<Category>(it) }
+    }
+
+    private fun mapUpdateCategoryResult(result: Result) {
+        mapResponseResult(result, ErrorItem.DATABASE.message) {
+            userActionEvent.postValue(Event(UserActionItem.UPDATE_CATEGORY))
         }
     }
 
-    private fun mapUriState(result: ReadWriteImageUseCase.State?): String? {
+    private fun mapResponseResult(
+        result: Result,
+        errorMessage: String,
+        onSuccess: (() -> Unit)? = null
+    ): Any? {
         return when (result) {
-            is ReadWriteImageUseCase.State.Ok -> result.filePath
-            is ReadWriteImageUseCase.State.Error -> {
-                errorEvent.postValue(Event(ErrorItem.SAVE))
+            is Result.Success<*> -> {
+                onSuccess?.invoke()
+                result.value
+            }
+            is Result.Error -> {
+                errorEvent.postValue(Event(errorMessage))
                 null
             }
-            else -> null
         }
     }
 
+    private fun mapUriState(result: Result?): String? {
+        return result?.let {
+            mapResponseResult(result, ErrorItem.SAVE.message)?.let { cast<String>(it) }
+        }
+    }
 
     enum class UserActionItem {
         CHANGE_IMAGE, SELECT_CAMERA, SELECT_GALLERY, UPDATE_CATEGORY
@@ -171,7 +211,9 @@ internal class AddCategoryViewModel(categoryId: Long) : BaseViewModel() {
         LAUNCH_CAMERA, LAUNCH_GALLERY
     }
 
-    enum class ErrorItem {
-        SAVE, TEMP_FILE, DATABASE
+    enum class ErrorItem(val message: String) {
+        SAVE(getString(R.string.add_category_error_saving)),
+        TEMP_FILE(getString(R.string.add_category_get_temp_uri_error)),
+        DATABASE(getString(R.string.add_category_error_database))
     }
 }

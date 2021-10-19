@@ -1,5 +1,6 @@
 package com.amalkina.beautydiary.domain.usecases.task
 
+import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.interfaces.TaskRepository
 import com.amalkina.beautydiary.domain.models.Task
 import com.amalkina.beautydiary.domain.usecases.common.BaseUseCase
@@ -12,7 +13,7 @@ class UpdateTaskUseCase : BaseUseCase() {
     suspend fun create(task: Task): Result {
         return try {
             repository.createTask(task)
-            Result.Ok
+            Result.Success(Unit)
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }
@@ -21,7 +22,7 @@ class UpdateTaskUseCase : BaseUseCase() {
     suspend fun update(task: Task): Result {
         return try {
             repository.updateTask(task)
-            Result.Ok
+            Result.Success(Unit)
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }
@@ -30,14 +31,9 @@ class UpdateTaskUseCase : BaseUseCase() {
     suspend fun delete(task: Task): Result {
         return try {
             repository.deleteTask(task)
-            Result.Ok
+            Result.Success(Unit)
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }
-    }
-
-    sealed class Result {
-        object Ok : Result()
-        data class Error(val error: String) : Result()
     }
 }

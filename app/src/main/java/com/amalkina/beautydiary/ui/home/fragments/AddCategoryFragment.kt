@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -54,7 +53,7 @@ class AddCategoryFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readyImagePathEvent.collect { path ->
-                    path?.let { viewModel.updateCategoryImage(requireContext(), it) }
+                    path?.let { viewModel.updateCategoryImage(it) }
                 }
             }
         }
@@ -83,14 +82,7 @@ class AddCategoryFragment : BaseFragment() {
         }
 
         viewModel.errorEvent.observe(viewLifecycleOwner) { event ->
-            event.let {
-                @StringRes val message = when (it) {
-                    AddCategoryViewModel.ErrorItem.SAVE -> R.string.add_category_error_saving
-                    AddCategoryViewModel.ErrorItem.TEMP_FILE -> R.string.add_category_get_temp_uri_error
-                    AddCategoryViewModel.ErrorItem.DATABASE -> R.string.add_category_error_database
-                }
-                showInfoDialog(requireContext(), message)
-            }
+            event.let { showInfoDialog(requireContext(), it) }
         }
 
         return binding.root

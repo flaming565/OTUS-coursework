@@ -46,7 +46,6 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     val isDecreaseFrequencyAvailable = taskFrequencyType.map { it != Frequency.DAY }.asLiveData()
 
     val saveTaskEvent = MutableLiveData<Event<Unit>>()
-    val errorEvent = MutableLiveData<Event<String>>()
 
     init {
         commonTasks.value = getCommonTasks()

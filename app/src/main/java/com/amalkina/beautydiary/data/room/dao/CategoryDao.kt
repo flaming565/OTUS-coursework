@@ -12,10 +12,7 @@ internal interface CategoryDao {
     fun getAllCategories(): Flow<List<CategoryModel>>
 
     @Query("SELECT * FROM category WHERE id = :id")
-    fun getCategory(id: Long): Flow<CategoryModel>
-
-    fun getCategoryDistinctUntilChanged(id: Long) =
-        getCategory(id).distinctUntilChanged()
+    suspend fun getCategory(id: Long): CategoryModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(category: CategoryModel)

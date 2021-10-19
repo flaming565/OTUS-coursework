@@ -3,7 +3,11 @@ package com.amalkina.beautydiary.domain.usecases.common
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import com.amalkina.beautydiary.domain.common.Result
 import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +40,7 @@ class ReadWriteImageUseCase(context: Context) : BaseUseCase() {
 
     fun getFilesUri(path: String): Uri = Uri.fromFile(File(path))
 
-    suspend fun compressUriImage(uri: Uri?): State? {
+    suspend fun compressUriImage(uri: Uri?): Result? {
         val result = async(Dispatchers.IO) {
             uri?.let {
                 val fileName = getFileName()
@@ -55,10 +59,10 @@ class ReadWriteImageUseCase(context: Context) : BaseUseCase() {
                     while ((inputStream.read(buffer).also { length = it }) > 0) {
                         outputStream.write(buffer, 0, length)
                     }
-                    return@async State.Ok(file.absolutePath)
+                    return@async Result.Success(file.absolutePath)
                 } catch (ex: Exception) {
                     Timber.e(ex)
-                    return@async State.Error
+                    return@async Result.Error(ex.localizedMessage ?: "")
                 } finally {
                     inputStream.close()
                     outputStream.close()
@@ -67,6 +71,27 @@ class ReadWriteImageUseCase(context: Context) : BaseUseCase() {
             return@async null
         }
         return result.await()
+    }
+
+    fun getBitmapFromPath(imagePath: String): Bitmap? {
+        val uri = getFilesUri(imagePath)
+        return getBitmapFromUri(uri)
+    }
+
+    private fun getBitmapFromUri(uri: Uri): Bitmap? {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                weakContext.get()?.let { context ->
+                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                    ImageDecoder.decodeBitmap(source)
+                }
+            } else {
+                MediaStore.Images.Media.getBitmap(weakContext.get()?.contentResolver, uri)
+            }
+        } catch (ex: Exception) {
+            Timber.d("Error occurred while getting the bitmap: ${ex.localizedMessage ?: ex.message}")
+            null
+        }
     }
 
     private fun getSizeFromUri(uri: Uri): Long {
@@ -111,11 +136,6 @@ class ReadWriteImageUseCase(context: Context) : BaseUseCase() {
 
         } while (currSize >= MAX_IMAGE_SIZE && quality != 0)
         return ByteArrayInputStream(baos.toByteArray())
-    }
-
-    sealed class State {
-        data class Ok(val filePath: String) : State()
-        object Error : State()
     }
 
     private companion object {

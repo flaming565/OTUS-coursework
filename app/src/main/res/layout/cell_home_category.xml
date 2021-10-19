@@ -22,6 +22,7 @@
         android:clipToPadding="false"
         android:elevation="4dp"
         android:onClick="@{() -> home.onClickCategory(vm.id)}"
+        android:onLongClick="@{() -> home.onLongClickCategory(vm.id)}"
         app:cardCornerRadius="8dp"
         tools:layout_width="180dp">
 
