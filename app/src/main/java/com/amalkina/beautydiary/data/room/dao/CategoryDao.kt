@@ -1,29 +1,32 @@
 package com.amalkina.beautydiary.data.room.dao
 
 import androidx.room.*
-import com.amalkina.beautydiary.data.models.CategoryModel
+import com.amalkina.beautydiary.data.models.CategoryEntity
 import com.amalkina.beautydiary.data.models.CategoryWithTasks
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Dao
 internal interface CategoryDao {
     @Query("SELECT * FROM category")
-    fun getAllCategories(): Flow<List<CategoryModel>>
+    fun all(): Flow<List<CategoryEntity>>
 
     @Query("SELECT * FROM category WHERE id = :id")
-    suspend fun getCategory(id: Long): CategoryModel
+    suspend fun getById(id: Long): CategoryEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(category: CategoryModel)
+    suspend fun insert(category: CategoryEntity)
 
     @Update
-    suspend fun update(category: CategoryModel)
+    suspend fun update(category: CategoryEntity)
 
     @Delete
-    suspend fun delete(category: CategoryModel)
+    suspend fun delete(category: CategoryEntity)
 
     @Transaction
     @Query("SELECT * FROM category")
-    fun getCategoryWithTasks(): List<CategoryWithTasks>
+    fun allWithTasks(): Flow<List<CategoryWithTasks>>
+
+    @Transaction
+    @Query("SELECT * FROM category WHERE id = :id")
+    fun getByIdWithTasks(id: Long): Flow<CategoryWithTasks>
 }

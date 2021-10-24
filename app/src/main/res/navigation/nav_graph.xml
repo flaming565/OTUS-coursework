@@ -31,8 +31,8 @@
         android:name="com.amalkina.beautydiary.ui.tasks.fragments.TaskListFragment"
         android:label="TaskListFragment">
         <argument
-            android:name="categoryId"
-            app:argType="long" />
+            android:name="category"
+            app:argType="com.amalkina.beautydiary.domain.models.DomainCategory" />
         <action
             android:id="@+id/openAddTask"
             app:destination="@id/addTaskFragment" />

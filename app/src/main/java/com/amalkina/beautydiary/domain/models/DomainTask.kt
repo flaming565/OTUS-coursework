@@ -1,19 +1,28 @@
 package com.amalkina.beautydiary.domain.models
 
+import java.util.concurrent.TimeUnit
 
-data class Task(
+
+internal data class DomainTask(
     val id: Long = -1,
     val categoryId: Long = -1,
     val name: String = "",
+    val stringResName: String? = null,
     var priority: Priority = Priority.LOW,
     var schedule: Schedule = Schedule(),
     val note: String = "",
     var startDate: Long = System.currentTimeMillis(),
+    var lastExecutionDate: Long = startDate,
     var updateDate: Long = System.currentTimeMillis(),
     val creationDate: Long = System.currentTimeMillis()
-)
+) {
+    private val daysAfterExecution = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastExecutionDate)
+    private val maxAvailableDays = schedule.value * schedule.frequency.value
+    val progress = (daysAfterExecution * 100 / maxAvailableDays).toInt()
+    val daysRemaining = (maxAvailableDays - daysAfterExecution).toInt()
+}
 
-enum class Priority(val value: Int) {
+internal enum class Priority(val value: Int) {
     LOW(1),
     MEDIUM(2),
     HIGH(3);
@@ -24,12 +33,12 @@ enum class Priority(val value: Int) {
     }
 }
 
-data class Schedule(
+internal data class Schedule(
     val value: Int = 1,
     val frequency: Frequency = Frequency.DAY
 )
 
-enum class Frequency(val value: Int) {
+internal enum class Frequency(val value: Int) {
     DAY(1),
     WEEK(7),
     MONTH(30),

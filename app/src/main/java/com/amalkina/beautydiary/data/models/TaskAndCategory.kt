@@ -5,10 +5,10 @@ import androidx.room.Relation
 
 internal data class TaskAndCategory(
     @Embedded
-    val category: CategoryModel,
+    val task: TaskEntity,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "categoryId"
+        parentColumn = "category_id",
+        entityColumn = "id"
     )
-    val task: TaskModel
+    val category: CategoryEntity
 )

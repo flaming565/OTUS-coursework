@@ -13,16 +13,19 @@ import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.databinding.FragmentTaskListBinding
-import com.amalkina.beautydiary.ui.tasks.models.TaskItem
+import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
+import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
 import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel
+import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel.UserAction
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class TaskListFragment : BaseFragment() {
     private val args by navArgs<TaskListFragmentArgs>()
-    private val viewModel by viewModel<TaskListViewModel>()
+    private val viewModel by viewModel<TaskListViewModel> { parametersOf(args.category) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentTaskListBinding.inflate(inflater, container, false).apply {
@@ -36,16 +39,28 @@ class TaskListFragment : BaseFragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.tasks.collect {
+                viewModel.categoryTasks.collect {
                     taskAdapter.items = it.toTypedArray()
+                    if (it.size > 1) binding.recyclerView.scheduleLayoutAnimation()
                 }
             }
         }
 
-        viewModel.addTaskEvent.observe(viewLifecycleOwner) { event ->
+        // todo: add actions
+        viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
             event.let {
                 if (!updateEventTimestamp()) return@let
-                findNavController().navigate(TaskListFragmentDirections.openAddTask(args.categoryId))
+                dialog?.dismiss()
+
+                when (it) {
+                    is UserAction.OnClickTask -> {
+                    }
+                    is UserAction.AddTask -> findNavController().navigate(TaskListFragmentDirections.openAddTask(it.categoryId))
+                    is UserAction.EditTask -> {
+                    }
+                    is UserAction.DeleteTask -> {
+                    }
+                }
             }
         }
 
@@ -55,8 +70,8 @@ class TaskListFragment : BaseFragment() {
     private fun makeAdapter() = object : ViewModelAdapter(viewLifecycleOwner) {
         init {
             sharedObject(viewModel, BR.taskList)
-            cell(TaskItem.Task::class.java, R.layout.cell_task_list_card, BR.vm)
-            cell(TaskItem.New::class.java, R.layout.cell_task_list_card_new, BR.vm)
+            cell(CategoryTask::class.java, R.layout.cell_task_list_card, BR.vm)
+            cell(CategoryTaskNew::class.java, R.layout.cell_task_list_card_new, BR.vm)
         }
     }
 }

@@ -43,6 +43,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/layout_fragment_margin"
             android:orientation="vertical"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -50,7 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 app:boxBackgroundColor="?android:colorBackground"
                 app:boxStrokeColor="?attr/colorOnPrimary"
@@ -70,7 +70,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="12dp"
+                android:layout_margin="@dimen/layout_fragment_margin"
                 android:layout_weight="1">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -121,8 +121,8 @@
         </LinearLayout>
 
         <include
-            layout="@layout/include_loader"
-            app:goneIfNot="@{vm.isLoading}" />
+            layout="@layout/include_loading_view"
+            app:isLoading="@{vm.isFragmentLoading}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

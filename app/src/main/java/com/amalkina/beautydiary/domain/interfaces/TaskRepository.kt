@@ -1,19 +1,22 @@
 package com.amalkina.beautydiary.domain.interfaces
 
-import com.amalkina.beautydiary.domain.models.Task
+import com.amalkina.beautydiary.domain.models.DomainTask
+import com.amalkina.beautydiary.domain.models.DomainTaskAndCategory
 import kotlinx.coroutines.flow.Flow
 
-interface TaskRepository {
+internal interface TaskRepository {
 
-    fun getTask(id: Long): Flow<Task>
+    suspend fun getTask(id: Long): DomainTask
 
-    fun getAllTasks(): Flow<List<Task>>
+    fun getAllTasks(): Flow<List<DomainTask>>
 
-    fun getCategoryTasks(categoryId: Long): Flow<List<Task>>
+    fun getBaseTasks(baseCategoryId: Long): Flow<List<DomainTask>>
 
-    suspend fun createTask(task: Task)
+    suspend fun getCategoryTask(id: Long): DomainTaskAndCategory
 
-    suspend fun updateTask(task: Task)
+    suspend fun createTask(task: DomainTask)
 
-    suspend fun deleteTask(task: Task)
+    suspend fun updateTask(task: DomainTask)
+
+    suspend fun deleteTask(task: DomainTask)
 }

@@ -5,9 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "category")
-internal data class CategoryModel(
+internal data class CategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
+    @ColumnInfo(name = "base_category_id")
+    val baseCategoryId: Long = 0,
     var name: String,
     @ColumnInfo(name = "image_path")
     var imagePath: String? = null,

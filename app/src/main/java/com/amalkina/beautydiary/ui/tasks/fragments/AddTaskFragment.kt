@@ -8,10 +8,12 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.databinding.FragmentAddTaskBinding
+import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.ui.tasks.vm.AddTaskViewModel
+import com.weigan.loopview.LoopView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -19,6 +21,7 @@ import org.koin.core.parameter.parametersOf
 
 
 class AddTaskFragment : BaseFragment() {
+
     private val args by navArgs<AddTaskFragmentArgs>()
     private val viewModel by viewModel<AddTaskViewModel> { parametersOf(args.categoryId, args.taskId) }
 
@@ -27,12 +30,8 @@ class AddTaskFragment : BaseFragment() {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
             toolbar.setNavigationOnClickListener {
-                requireActivity().onBackPressed()
+                findNavController().popBackStack()
             }
-        }
-
-        binding.loopView.setListener { index ->
-            viewModel.currentIndex.value = index
         }
 
         binding.etTaskFrequency.doOnTextChanged { text, _, _, _ ->
@@ -49,7 +48,8 @@ class AddTaskFragment : BaseFragment() {
 
         viewModel.saveTaskEvent.observe(viewLifecycleOwner) { event ->
             event.let {
-                requireActivity().onBackPressed()
+                if (!updateEventTimestamp()) return@let
+                findNavController().popBackStack()
             }
         }
 
@@ -57,17 +57,7 @@ class AddTaskFragment : BaseFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.tasksNames.collect {
-                        binding.loopView.setItems(it)
-                        binding.loopView.setInitPosition(0)
-                        viewModel.currentIndex.value = 0
-                    }
-                }
-
-                launch {
-                    viewModel.currentTask.collect { task ->
-                        task?.let {
-                            viewModel.updateTaskFields(task)
-                        }
+                        initLoopView(binding.loopView, it)
                     }
                 }
 
@@ -87,5 +77,18 @@ class AddTaskFragment : BaseFragment() {
         }
 
         return binding.root
+    }
+
+    private fun initLoopView(loopView: LoopView, items: List<String>) {
+        if (items.isNotEmpty() && !viewModel.isEditMode) {
+            loopView.apply {
+                setItems(items)
+                setInitPosition(0)
+                setListener { index ->
+                    viewModel.currentIndex.value = index
+                }
+            }
+            viewModel.currentIndex.value = 0
+        }
     }
 }

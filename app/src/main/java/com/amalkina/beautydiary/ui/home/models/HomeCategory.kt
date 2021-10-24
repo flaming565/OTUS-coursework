@@ -5,16 +5,24 @@ import android.graphics.BitmapFactory
 import androidx.annotation.DrawableRes
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.ui.common.ext.getDrawableRes
+import com.amalkina.beautydiary.ui.common.ext.resIdByName
 import com.amalkina.beautydiary.ui.common.models.BaseModel
 
-// TODO: calculate progress
 internal open class HomeCategory(
     val id: Long = 0,
-    val name: String = "",
-    val progress: Int = BASE_PROGRESS,
+    val baseCategoryId: Long = 0,
+    var name: String = "",
+    val stringResName: String? = null,
     val imagePath: String? = null,
-    @DrawableRes val imageDrawable: Int? = null
+    val drawableName: String? = null,
+    @DrawableRes var imageDrawable: Int? = null,
+    val progress: Int = BASE_PROGRESS
 ) : BaseModel() {
+
+    init {
+        stringResName?.let { name = getString(getContext().resIdByName(it, "string")) }
+        drawableName?.let { imageDrawable = getContext().resIdByName(it, "drawable") }
+    }
 
     val bitmap: Bitmap? = imagePath?.let { BitmapFactory.decodeFile(it) }
     val drawable = imageDrawable?.let { getContext().getDrawableRes(it) }

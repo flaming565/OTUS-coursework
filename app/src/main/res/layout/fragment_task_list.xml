@@ -17,15 +17,20 @@
             android:id="@+id/appbar"
             layout="@layout/include_appbar"
             app:backNavigation="@{true}"
-            app:title="@{vm.fragmentTitle}" />
+            app:title="@{vm.titleFragment}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_margin="@dimen/layout_fragment_margin"
+            android:layoutAnimation="@anim/anim_recycler_view"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        <include
+            layout="@layout/include_loading_view"
+            app:isLoading="@{vm.isFragmentLoading}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

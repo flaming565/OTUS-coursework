@@ -15,7 +15,7 @@ import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.HomeCategoryNew
 import com.amalkina.beautydiary.ui.home.vm.HomeViewModel
-import com.amalkina.beautydiary.ui.home.vm.HomeViewModel.UserActionItem
+import com.amalkina.beautydiary.ui.home.vm.HomeViewModel.UserAction
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.collect
@@ -45,6 +45,7 @@ class HomeFragment : BaseFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.categories.collect {
                     categoryAdapter.items = it.toTypedArray()
+                    if (it.size > 1) binding.recyclerView.scheduleLayoutAnimation()
                 }
             }
         }
@@ -55,15 +56,17 @@ class HomeFragment : BaseFragment() {
                 dialog?.dismiss()
 
                 when (it) {
-                    is UserActionItem.OnClickCategory -> findNavController().navigate(
-                        HomeFragmentDirections.openTaskListFragment(it.id)
-                    )
-                    is UserActionItem.OnLongClickCategory -> showCategoryOptionsDialog()
-                    is UserActionItem.AddCategory -> findNavController().navigate(HomeFragmentDirections.openAddCategory())
-                    is UserActionItem.EditCategory -> viewModel.selectedCategory?.let { category ->
+                    UserAction.ON_CLICK -> {
+                        viewModel.selectedCategory?.let { category ->
+                            findNavController().navigate(HomeFragmentDirections.openTaskListFragment(category))
+                        }
+                    }
+                    UserAction.ON_LONG_CLICK -> showCategoryOptionsDialog()
+                    UserAction.ADD_CATEGORY -> findNavController().navigate(HomeFragmentDirections.openAddCategory())
+                    UserAction.EDIT_CATEGORY -> viewModel.selectedCategory?.let { category ->
                         findNavController().navigate(HomeFragmentDirections.openAddCategory(category.id))
                     }
-                    is UserActionItem.DeleteCategory -> showDeleteCategoryDialog()
+                    UserAction.DELETE_CATEGORY -> showDeleteCategoryDialog()
                 }
             }
         }

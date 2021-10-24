@@ -1,4 +1,4 @@
-package com.amalkina.beautydiary.domain.usecases.common
+package com.amalkina.beautydiary.domain.usecases
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,9 +7,9 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.amalkina.beautydiary.domain.common.Result
 import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
+import com.amalkina.beautydiary.domain.common.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*

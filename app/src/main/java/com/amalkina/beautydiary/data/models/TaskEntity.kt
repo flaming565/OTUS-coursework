@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Entity(tableName = "task")
-internal data class TaskModel(
+internal data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
+    @ColumnInfo(name = "category_id")
     val categoryId: Long,
     var name: String,
     var priority: Int,
@@ -16,6 +17,8 @@ internal data class TaskModel(
     var note: String = "",
     @ColumnInfo(name = "start_date")
     var startDate: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "last_execution_date")
+    var lastExecutionDate: Long = startDate,
     @ColumnInfo(name = "update_date")
     var updateDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "creation_date")

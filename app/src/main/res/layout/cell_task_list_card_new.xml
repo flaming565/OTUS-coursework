@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="vm"
+            type="com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew" />
 
         <variable
             name="taskList"
@@ -15,7 +20,7 @@
         android:layout_marginTop="12dp"
         android:clipToPadding="false"
         android:elevation="8dp"
-        android:onClick="@{() -> taskList.onClickNewTask()}"
+        android:onClick="@{() -> taskList.onAddTask()}"
         app:cardBackgroundColor="@color/card_backgroud_color"
         app:cardCornerRadius="8dp">
 
@@ -28,10 +33,11 @@
             android:paddingTop="8dp"
             android:paddingEnd="12dp"
             android:paddingBottom="8dp"
-            android:text="@string/task_list_add_task"
+            android:text="@{vm.name}"
             android:textAppearance="?textAppearanceBody1"
             android:textStyle="bold"
-            app:drawableStartCompat="@drawable/ic_add" />
+            app:drawableStartCompat="@drawable/ic_add"
+            tools:text="@string/task_list_new_task" />
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

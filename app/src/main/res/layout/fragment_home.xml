@@ -21,9 +21,14 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="@dimen/layout_fragment_margin"
+            android:layout_marginTop="@dimen/layout_fragment_margin"
+            android:layoutAnimation="@anim/anim_recycler_view"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        <include
+            layout="@layout/include_loading_view"
+            app:isLoading="@{vm.isFragmentLoading}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -4,11 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
-import com.amalkina.beautydiary.domain.models.Category
-import com.amalkina.beautydiary.domain.usecases.category.GetCategoriesUseCase
-import com.amalkina.beautydiary.domain.usecases.category.UpdateCategoryUseCase
-import com.amalkina.beautydiary.ui.common.ext.toCategory
-import com.amalkina.beautydiary.ui.common.ext.toHomeCategory
+import com.amalkina.beautydiary.domain.models.DomainCategory
+import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
+import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
+import com.amalkina.beautydiary.ui.common.ext.mapToMutable
+import com.amalkina.beautydiary.ui.common.ext.toDomain
+import com.amalkina.beautydiary.ui.common.ext.toUIModel
 import com.amalkina.beautydiary.ui.common.ext.tryCast
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
@@ -17,82 +18,78 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-// TODO: use loading state
+
 internal class HomeViewModel : BaseViewModel() {
-    private val getCategoriesUseCase by inject<GetCategoriesUseCase>()
-    private val updateCategoryUseCase by inject<UpdateCategoryUseCase>()
+    private val categoryUseCase by inject<CategoryActionsUseCase>()
 
-    val categories: StateFlow<List<HomeCategory>> = getCategoriesUseCase.get().run {
-        mapGetCategoriesResult(this)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = emptyList()
-    )
-    var selectedCategory: HomeCategory? = null
+    val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
+    val userActionEvent = MutableLiveData<Event<UserAction>>()
 
-    val userActionEvent = MutableLiveData<Event<UserActionItem>>()
+    val categories: StateFlow<List<HomeCategory>> = categoryUseCase.allWithTasks()
+        .flatMapMerge { mapGetCategoriesResult(it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = emptyList()
+        )
+    var selectedCategory: DomainCategory? = null
 
     fun onClickCategory(id: Long) {
-        userActionEvent.postValue(Event(UserActionItem.OnClickCategory(id)))
+        initSelectedCategory(id)
+        userActionEvent.postValue(Event(UserAction.ON_CLICK))
     }
 
     fun onLongClickCategory(id: Long): Boolean {
-        selectedCategory = categories.value.firstOrNull { it.id == id }
-        userActionEvent.postValue(Event(UserActionItem.OnLongClickCategory))
+        initSelectedCategory(id)
+        userActionEvent.postValue(Event(UserAction.ON_LONG_CLICK))
         return true
     }
 
+    fun onAddCategory() {
+        userActionEvent.postValue(Event(UserAction.ADD_CATEGORY))
+    }
+
     fun onEditCategory() {
-        userActionEvent.postValue(Event(UserActionItem.EditCategory))
+        userActionEvent.postValue(Event(UserAction.EDIT_CATEGORY))
     }
 
     fun onDeleteCategory() {
-        userActionEvent.postValue(Event(UserActionItem.DeleteCategory))
+        userActionEvent.postValue(Event(UserAction.DELETE_CATEGORY))
     }
 
     fun deleteSelectedCategory() {
-        selectedCategory?.let { deleteCategory(it.toCategory()) }
-    }
-
-    fun onClickNewCategory() {
-        userActionEvent.postValue(Event(UserActionItem.AddCategory))
+        selectedCategory?.let { deleteCategory(it) }
     }
 
     private fun mapGetCategoriesResult(result: Result): Flow<List<HomeCategory>> {
-        var categories = flowOf(emptyList<HomeCategory>())
-        when (result) {
-            is Result.Success<*> -> {
-                tryCast<Flow<List<Category>>>(result.value) {
-                    categories = this.transform { list ->
-                        emit(list.map { it.toHomeCategory() } + listOf(HomeCategoryNew))
-                    }
+        var categories: Flow<List<HomeCategory>> = flowOf(emptyList())
+        mapResponseResult(result)?.let {
+            tryCast<Flow<List<DomainCategoryWithTasks>>>(it) {
+                categories = this.transform { list ->
+                    emit(list.map { category -> category.toUIModel() } + listOf(HomeCategoryNew))
                 }
-            }
-            is Result.Error -> {
-                errorEvent.postValue(Event(result.message))
             }
         }
         return categories
     }
 
-    private fun deleteCategory(category: Category) {
-        isLoading.value = true
+    private fun initSelectedCategory(id: Long) {
+        selectedCategory = categories.value.firstOrNull { it.id == id }?.toDomain()
+    }
+
+    private fun deleteCategory(category: DomainCategory) {
+        isFragmentLoading.value = true
         launch {
-            updateCategoryUseCase.delete(category).let {
-                isLoading.value = false
-                if (it is Result.Error) {
-                    errorEvent.postValue(Event(it.message))
-                }
-            }
+            val result = categoryUseCase.delete(category)
+            mapResponseResult(result)
         }
     }
 
-    sealed class UserActionItem {
-        class OnClickCategory(val id: Long) : UserActionItem()
-        object OnLongClickCategory : UserActionItem()
-        object AddCategory : UserActionItem()
-        object DeleteCategory : UserActionItem()
-        object EditCategory : UserActionItem()
+    enum class UserAction {
+        ON_CLICK,
+        ON_LONG_CLICK,
+        ADD_CATEGORY,
+        EDIT_CATEGORY,
+        DELETE_CATEGORY
     }
 }

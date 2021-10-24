@@ -18,12 +18,14 @@ import com.amalkina.beautydiary.databinding.FragmentAddCategoryBinding
 import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel
 import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel.LaunchItem
-import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel.UserActionItem
+import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel.UserAction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.weigan.loopview.LoopView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+
 
 class AddCategoryFragment : BaseFragment() {
 
@@ -39,21 +41,18 @@ class AddCategoryFragment : BaseFragment() {
             }
         }
 
-        binding.loopView.apply {
-            setItems(viewModel.categoryNames)
-            if (!viewModel.isEditMode) {
-                setInitPosition(0)
-                setListener { index ->
-                    viewModel.currentIndex.value = index
-                }
-                viewModel.currentIndex.value = 0
-            }
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.readyImagePathEvent.collect { path ->
-                    path?.let { viewModel.updateCategoryImage(it) }
+                launch {
+                    viewModel.categoryNames.collect { list ->
+                        initLoopView(binding.loopView, list)
+                    }
+                }
+
+                launch {
+                    viewModel.readyImagePathEvent.collect { path ->
+                        path?.let { viewModel.updateCategoryImage(it) }
+                    }
                 }
             }
         }
@@ -62,10 +61,10 @@ class AddCategoryFragment : BaseFragment() {
             event.let { action ->
                 if (!updateEventTimestamp()) return@let
                 when (action) {
-                    UserActionItem.CHANGE_IMAGE -> showSelectImageDialog()
-                    UserActionItem.SELECT_CAMERA -> checkPermission(Manifest.permission.CAMERA)
-                    UserActionItem.SELECT_GALLERY -> checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    UserActionItem.UPDATE_CATEGORY -> findNavController().popBackStack()
+                    UserAction.CHANGE_IMAGE -> showSelectImageDialog()
+                    UserAction.SELECT_CAMERA -> checkPermission(Manifest.permission.CAMERA)
+                    UserAction.SELECT_GALLERY -> checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    UserAction.UPDATE_CATEGORY -> findNavController().popBackStack()
                 }
             }
         }
@@ -86,6 +85,19 @@ class AddCategoryFragment : BaseFragment() {
         }
 
         return binding.root
+    }
+
+    private fun initLoopView(loopView: LoopView, items: List<String>) {
+        if (items.isNotEmpty() && !viewModel.isEditMode) {
+            loopView.apply {
+                setItems(items)
+                setInitPosition(0)
+                setListener { index ->
+                    viewModel.currentIndex.value = index
+                }
+            }
+            viewModel.currentIndex.value = 0
+        }
     }
 
     private fun showSelectImageDialog() {

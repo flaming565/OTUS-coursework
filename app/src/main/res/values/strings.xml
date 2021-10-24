@@ -6,6 +6,7 @@
     <string name="common_ok">OK</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_error">Error</string>
+    <string name="common_edit">Edit</string>
 
     <string name="home_new_category">New category</string>
     <string name="home_edit_category">Edit</string>
@@ -14,7 +15,6 @@
     <string name="home_delete_category_dialog_message">If you delete this category, all associated tasks and activity history will also be deleted.</string>
 
     <string name="add_category_title">Add Category</string>
-    <string name="add_category_edit_title">Edit</string>
     <string name="add_category_enter_category">Enter category</string>
     <string name="add_category_category_image">Category image:</string>
     <string name="add_category_permission_rational_camera">To continue, you need to grant permission for the camera in the settings of your device.</string>
@@ -25,16 +25,8 @@
     <string name="add_category_error_saving">Saving file error, please, try again.</string>
     <string name="add_category_error_database">Something went wrong, please, try again.</string>
     <string name="add_category_get_temp_uri_error">Error accessing saving photos from the camera, please, try again.</string>
-    <string name="add_category_category_other">Other</string>
-    <string name="add_category_category_face">Skin care</string>
-    <string name="add_category_category_body">Body care</string>
-    <string name="add_category_category_hair">Hair care</string>
-    <string name="add_category_category_hands">Hand care</string>
-    <string name="add_category_category_legs">Feet care</string>
-    <string name="add_category_category_mouth">Oral care</string>
 
-
-    <string name="task_list_add_task">Add new task</string>
+    <string name="task_list_new_task">Add new task</string>
 
     <string name="add_task_title">Add Task</string>
     <string name="add_task_task_name">Task name</string>
@@ -49,5 +41,35 @@
     <string name="add_task_enter_note">Enter note</string>
     <string name="add_task_minus_sign">-</string>
     <string name="add_task_plus_sign">+</string>
+
+    <string name="base_category_other">Other</string>
+    <string name="base_category_face">Skin care</string>
+    <string name="base_category_body">Body care</string>
+    <string name="base_category_hair">Hair care</string>
+    <string name="base_category_hands">Hand care</string>
+    <string name="base_category_legs">Feet care</string>
+    <string name="base_category_mouth">Oral care</string>
+
+    <string name="base_face_category_task_day_cream">Дневной крем</string>
+    <string name="base_face_category_task_night_cream">Ночной крем</string>
+    <string name="base_face_category_task_massage">Массаж лица</string>
+    <string name="base_face_category_task_mask">Маска</string>
+    <string name="base_face_category_task_serum">Сыворотка</string>
+
+    <string name="base_hands_category_task_cream">Крем для рук</string>
+    <string name="base_hands_category_task_massage">Массаж рук</string>
+    <string name="base_hands_category_task_manicure">Маникюр</string>
+
+    <string name="base_body_category_task_cream">Крем для тела</string>
+    <string name="base_body_category_task_massage">Массаж</string>
+
+    <string name="base_hair_category_task_other">Other</string>
+
+    <string name="base_feet_category_task_other">Other</string>
+
+    <string name="base_oral_category_task_dentist">Dentist</string>
+    <string name="base_oral_category_task_other">Other</string>
+
+    <string name="base_other_category_task_other">Other</string>
 
 </resources>

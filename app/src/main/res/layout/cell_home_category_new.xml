@@ -21,7 +21,7 @@
         android:layout_marginBottom="12dp"
         android:clipToPadding="false"
         android:elevation="4dp"
-        android:onClick="@{() -> home.onClickNewCategory()}"
+        android:onClick="@{() -> home.onAddCategory()}"
         app:cardCornerRadius="8dp"
         tools:layout_width="180dp">
 

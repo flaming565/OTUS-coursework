@@ -1,26 +1,19 @@
 package com.amalkina.beautydiary.ui.home.vm
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
-import com.amalkina.beautydiary.domain.models.Category
-import com.amalkina.beautydiary.domain.usecases.category.GetCategoryUseCase
-import com.amalkina.beautydiary.domain.usecases.category.UpdateCategoryUseCase
-import com.amalkina.beautydiary.domain.usecases.common.ReadWriteImageUseCase
-import com.amalkina.beautydiary.ui.common.ext.cast
-import com.amalkina.beautydiary.ui.common.ext.getDrawableRes
-import com.amalkina.beautydiary.ui.common.ext.resNameById
-import com.amalkina.beautydiary.ui.common.ext.toHomeCategory
+import com.amalkina.beautydiary.domain.models.DomainCategory
+import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
+import com.amalkina.beautydiary.domain.usecases.ReadWriteImageUseCase
+import com.amalkina.beautydiary.ui.common.ext.*
 import com.amalkina.beautydiary.ui.common.models.BaseModel.Companion.getString
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
-import com.amalkina.beautydiary.ui.home.models.BaseCategory
-import com.amalkina.beautydiary.ui.home.models.getBaseCategories
+import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
@@ -30,13 +23,16 @@ import org.koin.core.component.inject
 internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
 
     private val readWriteImageUseCase by inject<ReadWriteImageUseCase>()
-    private val getCategoryUseCase by inject<GetCategoryUseCase>()
-    private val updateCategoryUseCase by inject<UpdateCategoryUseCase>()
+    private val categoryUseCase by inject<CategoryActionsUseCase>()
+
+    val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
+    val userActionEvent = MutableLiveData<Event<UserAction>>()
+    val launchActionEvent = MutableLiveData<Event<LaunchItem>>()
 
     val isEditMode = categoryId > 0
     val fragmentTitle = getString(
         when (isEditMode) {
-            true -> R.string.add_category_edit_title
+            true -> R.string.common_edit
             else -> R.string.add_category_title
         }
     )
@@ -46,33 +42,23 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
             loadEditableCategory(categoryId)
     }
 
-    private val categories = getBaseCategories()
-    val categoryNames = getBaseCategories().map { category -> category.name }
+    private val baseCategories: StateFlow<List<HomeCategory>> = categoryUseCase.baseCategories()
+        .flatMapMerge { mapGetCategoriesResult(it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = emptyList()
+        )
+    val categoryNames = baseCategories.map(viewModelScope) { list -> list.map { category -> category.name } }
 
     val currentIndex = MutableStateFlow(-1)
-    private val selectedCategory = currentIndex.transform {
-        categories.getOrNull(it)?.let { category ->
-            selectedCategoryTitle.value = category.name
-            selectedCategoryDrawable.value = category.drawable
-            emit(category)
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = BaseCategory.OtherCategory
-    )
-
-    private var selectedCategoryId = 0L
-    val selectedCategoryTitle = MutableStateFlow("")
-    val selectedCategoryDrawable = MutableStateFlow<Drawable?>(null)
-    val selectedCategoryBitmap = MutableStateFlow<Bitmap?>(null)
-
-    val userActionEvent = MutableLiveData<Event<UserActionItem>>()
-    val launchActionEvent = MutableLiveData<Event<LaunchItem>>()
+    private val selectedCategory = currentIndex.mapToMutable(viewModelScope) { baseCategories.value.getOrNull(it) }
+    val selectedCategoryTitle = selectedCategory.mapToMutable(viewModelScope) { it?.name ?: "" }
+    val selectedCategoryDrawable = selectedCategory.mapToMutable(viewModelScope) { it?.drawable }
+    val selectedCategoryBitmap = selectedCategory.mapToMutable(viewModelScope) { it?.bitmap }
 
     private var tempImageUri: Uri? = null
     private val rawImageUri = MutableStateFlow<Uri?>(null)
-
     val readyImagePathEvent: StateFlow<String?> = rawImageUri
         .map { readWriteImageUseCase.compressUriImage(it) }
         .map { mapUriState(it) }
@@ -87,15 +73,15 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
     }
 
     fun onChangeImageClick() {
-        userActionEvent.postValue(Event(UserActionItem.CHANGE_IMAGE))
+        userActionEvent.postValue(Event(UserAction.CHANGE_IMAGE))
     }
 
-    fun onClickCamera() {
-        userActionEvent.postValue(Event(UserActionItem.SELECT_CAMERA))
+    fun onCameraClick() {
+        userActionEvent.postValue(Event(UserAction.SELECT_CAMERA))
     }
 
-    fun onClickGallery() {
-        userActionEvent.postValue(Event(UserActionItem.SELECT_GALLERY))
+    fun onGalleryClick() {
+        userActionEvent.postValue(Event(UserAction.SELECT_GALLERY))
     }
 
     fun getImageFromCamera() {
@@ -125,75 +111,67 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
 
     fun getTempUri(): Uri? {
         tempImageUri = readWriteImageUseCase.getTempUri()
-        return tempImageUri ?: run {
+        if (tempImageUri == null)
             errorEvent.postValue(Event(ErrorItem.TEMP_FILE.message))
-            null
-        }
+        return tempImageUri
     }
 
     private fun loadEditableCategory(categoryId: Long) {
+        isFragmentLoading.value = true
         launch {
-            val category = getCategoryUseCase.get(categoryId)
-                .run { mapGetCategoryResult(this) }
-            category?.toHomeCategory()?.let {
-                selectedCategoryId = it.id
-                selectedCategoryTitle.value = it.name
-                selectedCategoryDrawable.value = it.drawable
-                selectedCategoryBitmap.value = it.bitmap
+            val result = categoryUseCase.get(categoryId)
+            val category = mapGetCategoryResult(result)
+            category?.toUIModel()?.let {
+                selectedCategory.value = it
             }
         }
     }
 
-    private fun createCategory(): Category {
+    private fun createCategory(): DomainCategory {
         val newImagePath = readyImagePathEvent.value
-        val currentImagePath = selectedCategory.value.imagePath
+        val currentImagePath = selectedCategory.value?.imagePath
         val imagePath = newImagePath ?: currentImagePath
-        val drawableName = selectedCategory.value.imageDrawable?.let { get<Context>().resNameById(it) }
+        val drawableName = selectedCategory.value?.imageDrawable?.let { get<Context>().resNameById(it) }
 
-        return Category(
-            id = selectedCategoryId,
+        return DomainCategory(
+            id = selectedCategory.value?.id ?: 0,
+            baseCategoryId = selectedCategory.value?.baseCategoryId ?: 0,
             name = selectedCategoryTitle.value,
             imagePath = imagePath,
             drawableName = if (imagePath.isNullOrBlank()) drawableName else null
         )
     }
 
-    private fun saveCategory(category: Category) {
-        isLoading.value = true
+    private fun saveCategory(category: DomainCategory) {
+        isFragmentLoading.value = true
         launch {
-            val result = if (isEditMode) updateCategoryUseCase.update(category)
-            else updateCategoryUseCase.create(category)
-            result.let {
-                isLoading.value = false
-                mapUpdateCategoryResult(it)
-            }
+            val result = if (isEditMode) categoryUseCase.update(category)
+            else categoryUseCase.create(category)
+            mapUpdateCategoryResult(result)
         }
     }
 
-    private fun mapGetCategoryResult(result: Result): Category? {
-        return mapResponseResult(result, ErrorItem.DATABASE.message)?.let { cast<Category>(it) }
+    private fun mapGetCategoriesResult(result: Result): Flow<List<HomeCategory>> {
+        var categories: Flow<List<HomeCategory>> = flowOf(emptyList())
+        mapResponseResult(result)?.let {
+            tryCast<Flow<List<DomainCategory>>>(it) {
+                categories = this.transform { list ->
+                    emit(list.map { category -> category.toUIModel() })
+                }
+            }
+        }
+        return categories
+    }
+
+    private fun mapGetCategoryResult(result: Result): DomainCategory? {
+        return mapResponseResult(result)?.let {
+            cast<DomainCategory>(it)
+        }
     }
 
     private fun mapUpdateCategoryResult(result: Result) {
         mapResponseResult(result, ErrorItem.DATABASE.message) {
-            userActionEvent.postValue(Event(UserActionItem.UPDATE_CATEGORY))
-        }
-    }
-
-    private fun mapResponseResult(
-        result: Result,
-        errorMessage: String,
-        onSuccess: (() -> Unit)? = null
-    ): Any? {
-        return when (result) {
-            is Result.Success<*> -> {
-                onSuccess?.invoke()
-                result.value
-            }
-            is Result.Error -> {
-                errorEvent.postValue(Event(errorMessage))
-                null
-            }
+            userActionEvent.postValue(Event(UserAction.UPDATE_CATEGORY))
         }
     }
 
@@ -203,7 +181,7 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
         }
     }
 
-    enum class UserActionItem {
+    enum class UserAction {
         CHANGE_IMAGE, SELECT_CAMERA, SELECT_GALLERY, UPDATE_CATEGORY
     }
 

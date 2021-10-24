@@ -52,7 +52,7 @@
                 android:text="@{vm.name}"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                tools:text="@string/add_category_category_face" />
+                tools:text="@string/base_category_face" />
 
             <com.amalkina.beautydiary.ui.common.views.ProgressBarView
                 android:layout_width="52dp"

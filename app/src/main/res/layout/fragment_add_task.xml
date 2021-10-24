@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back_arrow"
-                app:title="@string/add_task_title">
+                app:title="@{vm.fragmentTitle}}">
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/OutlinedButton"
@@ -32,6 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="12dp"
+                    android:enabled="@{!vm.isLoading}"
                     android:minHeight="0dp"
                     android:onClick="@{()->vm.onSaveClick()}"
                     android:text="@string/common_save"
@@ -54,33 +55,28 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="12dp"
+                    android:layout_margin="@dimen/layout_fragment_margin"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="@string/add_task_task_name"
-                        android:textAppearance="?textAppearanceBody1" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="12dp"
+                        android:enabled="@{!vm.isLoading}"
                         app:boxBackgroundColor="?android:colorBackground"
                         app:boxStrokeColor="?attr/colorOnPrimary"
                         app:boxStrokeWidthFocused="1dp"
-                        app:placeholderText="@string/add_task_enter_task">
+                        app:hintTextColor="?attr/colorOnPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/add_task_enter_task"
                             android:imeOptions="actionDone"
                             android:inputType="text|textCapWords|textAutoComplete"
                             android:maxLines="1"
-                            android:padding="8dp"
+                            android:padding="12dp"
                             app:isFocused="@{true}"
                             app:textWithSelection="@={vm.taskTitle}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -100,6 +96,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="-8dp"
                         android:layout_marginBottom="-8dp"
+                        android:enabled="@{!vm.isLoading}"
                         android:isIndicator="false"
                         android:minHeight="0dp"
                         android:numStars="3"
@@ -132,6 +129,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
+                            android:enabled="@{!vm.isLoading}"
                             app:boxBackgroundColor="?android:colorBackground"
                             app:boxStrokeColor="?attr/colorOnPrimary"
                             app:boxStrokeWidthFocused="1dp">
@@ -146,7 +144,7 @@
                                 android:maxLength="3"
                                 android:maxLines="1"
                                 android:padding="4dp"
-                                android:text="@={vm.taskFrequency}"
+                                android:text="@={vm.taskScheduleValue}"
                                 tools:text="2" />
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,6 +200,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:enabled="@{!vm.isLoading}"
                         android:max="100"
                         android:progress="@={vm.taskProgress}"
                         android:progressDrawable="@drawable/seek_bar_progress_style"
@@ -231,32 +230,28 @@
                             android:textColor="?attr/colorPrimaryDark" />
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:text="@string/add_task_note"
-                        android:textAppearance="?textAppearanceBody1" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="24dp"
+                        android:enabled="@{!vm.isLoading}"
                         app:boxBackgroundColor="?android:colorBackground"
                         app:boxStrokeColor="?attr/colorOnPrimary"
                         app:boxStrokeWidthFocused="1dp"
-                        app:placeholderText="@string/add_task_enter_note">
+                        app:hintTextColor="?attr/colorOnPrimary"
+                        app:placeholderTextColor="?attr/colorOnPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top|start"
+                            android:hint="@string/add_task_enter_note"
                             android:imeOptions="actionDone"
                             android:inputType="text|textCapSentences|textMultiLine"
                             android:maxLines="5"
                             android:minLines="3"
-                            android:padding="8dp"
+                            android:padding="12dp"
                             android:text="@={vm.taskNote}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -281,5 +276,9 @@
                     app:goneIf="@{vm.isEditMode}" />
             </FrameLayout>
         </LinearLayout>
+
+        <include
+            layout="@layout/include_loading_view"
+            app:isLoading="@{vm.isFragmentLoading}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
