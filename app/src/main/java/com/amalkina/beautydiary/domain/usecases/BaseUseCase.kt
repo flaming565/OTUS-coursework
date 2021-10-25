@@ -21,10 +21,9 @@ abstract class BaseUseCase : KoinComponent, CoroutineScope {
         }
     }
 
-    internal suspend fun <T> suspendResult(arg: T, request: suspend (T) -> Unit) =
+    internal suspend fun <T, R> suspendResult(arg: T, request: suspend (T) -> R) =
         try {
-            request.invoke(arg)
-            Result.Success(Unit)
+            Result.Success(request.invoke(arg))
         } catch (ex: Exception) {
             Result.Error(ex.localizedMessage ?: ex.message ?: "")
         }

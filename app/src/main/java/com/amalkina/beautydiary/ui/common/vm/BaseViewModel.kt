@@ -36,6 +36,7 @@ internal open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
                 result.value
             }
             is Result.Error -> {
+                Timber.d("Map response error: ${result.message}")
                 val message = errorMessage ?: result.message
                 errorEvent.postValue(Event(message))
                 isLoading.value = false

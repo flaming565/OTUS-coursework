@@ -2,10 +2,19 @@ package com.amalkina.beautydiary.data.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
-@Entity(tableName = "task")
+@Entity(
+    tableName = "task",
+    foreignKeys = [ForeignKey(
+        entity = CategoryEntity::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("category_id"),
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 internal data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

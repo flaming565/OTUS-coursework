@@ -12,6 +12,9 @@ internal interface BaseCategoryDao {
     @Query("SELECT * FROM base_category WHERE id = :id")
     suspend fun getById(id: Long): BaseCategoryEntity
 
+    @Query("SELECT * FROM base_category")
+    fun all(): List<BaseCategoryEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(category: BaseCategoryEntity): Long
 

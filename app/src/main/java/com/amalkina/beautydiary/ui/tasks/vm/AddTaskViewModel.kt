@@ -12,7 +12,6 @@ import com.amalkina.beautydiary.ui.common.ext.*
 import com.amalkina.beautydiary.ui.common.models.BaseModel
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
-import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask.Companion.DEFAULT_PROGRESS
 import kotlinx.coroutines.flow.*
@@ -27,7 +26,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
     val saveTaskEvent = MutableLiveData<Event<Unit>>()
 
-    val isEditMode = taskId >= 0
+    val isEditMode = taskId > 0
     val fragmentTitle = BaseModel.getString(
         when (isEditMode) {
             true -> R.string.common_edit
@@ -90,9 +89,9 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
 
     private fun getCategory(categoryId: Long) {
         launch {
-            val cat = categoryUseCase.get(categoryId)
+            val domainCategory = categoryUseCase.get(categoryId)
                 .run { mapGetCategoryResult(this) }
-            cat?.toUIModel()?.let { category.value = it }
+            domainCategory?.toUIModel()?.let { category.value = it }
         }
     }
 
