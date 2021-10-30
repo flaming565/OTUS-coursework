@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> taskList.onTaskClick(vm.id)}"
-                app:cardBackgroundColor="@color/card_backgroud_color"
+                app:cardBackgroundColor="@color/card_background_color"
                 app:cardCornerRadius="0dp">
 
                 <LinearLayout

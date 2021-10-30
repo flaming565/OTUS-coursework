@@ -5,5 +5,11 @@ internal data class DomainCategoryWithTasks(
     val tasks: List<DomainTask>
 ) {
     private val progressOfTasks = tasks.fold(0) { acc, task -> acc + task.progress }
-    val progress = if (tasks.isNotEmpty()) progressOfTasks / tasks.size else 0
+    val progress = if (tasks.isNotEmpty())
+        (progressOfTasks / tasks.size).coerceAtLeast(MIN_PROGRESS)
+    else 0
+
+    companion object {
+        const val MIN_PROGRESS = 10
+    }
 }

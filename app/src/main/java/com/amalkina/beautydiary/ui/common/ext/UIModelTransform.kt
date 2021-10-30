@@ -1,11 +1,13 @@
 package com.amalkina.beautydiary.ui.common.ext
 
-import com.amalkina.beautydiary.domain.models.DomainCategory
+import com.amalkina.beautydiary.domain.models.*
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
+import com.amalkina.beautydiary.domain.models.DomainQuote
 import com.amalkina.beautydiary.domain.models.DomainTask
 import com.amalkina.beautydiary.domain.models.Priority
 import com.amalkina.beautydiary.ui.common.models.BaseModel.Companion.getContext
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
+import com.amalkina.beautydiary.ui.home.models.QuoteModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 
 internal fun HomeCategory.toDomain() = DomainCategory(
@@ -58,4 +60,9 @@ internal fun DomainTask.toUIModel() = CategoryTask(
     note = this.note,
     startDate = this.startDate,
     lastExecutionDate = this.lastExecutionDate
+)
+
+internal fun DomainQuote.toUIModel() = QuoteModel(
+    quote = this.quote,
+    author = this.author
 )

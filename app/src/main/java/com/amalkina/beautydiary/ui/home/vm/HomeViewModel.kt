@@ -1,20 +1,23 @@
 package com.amalkina.beautydiary.ui.home.vm
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.amalkina.beautydiary.domain.common.ApplicationSettings
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
+import com.amalkina.beautydiary.domain.models.DomainQuote
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
-import com.amalkina.beautydiary.ui.common.ext.mapToMutable
+import com.amalkina.beautydiary.domain.usecases.GetQuoteUseCase
+import com.amalkina.beautydiary.ui.common.ext.cast
 import com.amalkina.beautydiary.ui.common.ext.toDomain
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
 import com.amalkina.beautydiary.ui.common.ext.tryCast
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.HomeCategoryNew
+import com.amalkina.beautydiary.ui.home.models.QuoteModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -22,6 +25,8 @@ import org.koin.core.component.inject
 
 internal class HomeViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
+    private val getQuoteUseCase by inject<GetQuoteUseCase>()
+    private val applicationSettings by inject<ApplicationSettings>()
 
     val userActionEvent = MutableLiveData<Event<UserAction>>()
 
@@ -33,6 +38,12 @@ internal class HomeViewModel : BaseViewModel() {
             initialValue = emptyList()
         )
     var selectedCategory: DomainCategory? = null
+    val quote = MutableLiveData<QuoteModel>()
+
+    init {
+        if (applicationSettings.shouldQuoteBeShown)
+            loadQuote()
+    }
 
     fun onClickCategory(id: Long) {
         initSelectedCategory(id)
@@ -78,10 +89,18 @@ internal class HomeViewModel : BaseViewModel() {
     }
 
     private fun deleteCategory(category: DomainCategory) {
-        isLoading.value = true
         launch {
             val result = categoryUseCase.delete(category)
             mapResponseResult(result)
+        }
+    }
+
+    private fun loadQuote() {
+        launch {
+            val result = getQuoteUseCase.randomQuote()
+            mapResponseResult(result)?.let {
+                quote.value = cast<DomainQuote>(it)?.toUIModel()
+            }
         }
     }
 
