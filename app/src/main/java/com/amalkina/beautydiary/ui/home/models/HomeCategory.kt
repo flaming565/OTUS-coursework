@@ -16,7 +16,7 @@ internal open class HomeCategory(
     val imagePath: String? = null,
     val drawableName: String? = null,
     @DrawableRes var imageDrawable: Int? = null,
-    val progress: Int = BASE_PROGRESS
+    val progress: Int = 0
 ) : BaseModel() {
 
     init {
@@ -27,9 +27,7 @@ internal open class HomeCategory(
     val bitmap: Bitmap? = imagePath?.let { BitmapFactory.decodeFile(it) }
     val drawable = imageDrawable?.let { getContext().getDrawableRes(it) }
 
-    companion object {
-        const val BASE_PROGRESS = 50
-    }
+    val hideProgressView = progress == 0
 }
 
 internal object HomeCategoryNew :

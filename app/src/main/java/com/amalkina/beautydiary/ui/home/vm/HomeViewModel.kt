@@ -1,6 +1,7 @@
 package com.amalkina.beautydiary.ui.home.vm
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
@@ -22,7 +23,6 @@ import org.koin.core.component.inject
 internal class HomeViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
-    val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
     val userActionEvent = MutableLiveData<Event<UserAction>>()
 
     val categories: StateFlow<List<HomeCategory>> = categoryUseCase.allWithTasks()
@@ -78,7 +78,7 @@ internal class HomeViewModel : BaseViewModel() {
     }
 
     private fun deleteCategory(category: DomainCategory) {
-        isFragmentLoading.value = true
+        isLoading.value = true
         launch {
             val result = categoryUseCase.delete(category)
             mapResponseResult(result)

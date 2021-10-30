@@ -7,8 +7,8 @@
 
     <color name="progress_color_min">#81C784</color>
     <color name="progress_color_medium">#9CCC65</color>
-    <color name="progress_color_normal">#FFA726</color>
-    <color name="progress_color_max">#E44B48</color>
+    <color name="progress_color_normal">#F4C04E</color>
+    <color name="progress_color_max">#EE6A5E</color>
     <color name="progress_color_divider">@color/colorOnPrimary</color>
 
     <color name="primary_overlay_80">#80eee3dd</color>

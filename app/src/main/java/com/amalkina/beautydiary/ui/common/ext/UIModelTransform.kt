@@ -3,6 +3,7 @@ package com.amalkina.beautydiary.ui.common.ext
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
 import com.amalkina.beautydiary.domain.models.DomainTask
+import com.amalkina.beautydiary.domain.models.Priority
 import com.amalkina.beautydiary.ui.common.models.BaseModel.Companion.getContext
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
@@ -34,8 +35,20 @@ internal fun DomainCategoryWithTasks.toUIModel() = HomeCategory(
     progress = this.progress
 )
 
+internal fun CategoryTask.toDomain() = DomainTask(
+    id = this.id,
+    categoryId = this.categoryId,
+    name = this.name,
+    stringResName = this.stringResName,
+    priority = Priority.fromInt(this.priority),
+    schedule = this.schedule,
+    note = this.note,
+    startDate = this.startDate
+)
+
 internal fun DomainTask.toUIModel() = CategoryTask(
     id = this.id,
+    categoryId = this.categoryId,
     name = this.name,
     stringResName = this.stringResName,
     priority = this.priority.value,

@@ -7,6 +7,7 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_error">Error</string>
     <string name="common_edit">Edit</string>
+    <string name="common_delete">Delete</string>
 
     <string name="home_new_category">New category</string>
     <string name="home_edit_category">Edit</string>
@@ -27,6 +28,8 @@
     <string name="add_category_get_temp_uri_error">Error accessing saving photos from the camera, please, try again.</string>
 
     <string name="task_list_new_task">Add new task</string>
+    <string name="task_list_delete_task_dialog_message">Are you sure you want to delete the task «%s»? All activity history will also be deleted.</string>
+
 
     <string name="add_task_title">Add Task</string>
     <string name="add_task_task_name">Task name</string>

@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.amalkina.beautydiary.data.converters.DateListTransformer
 import com.amalkina.beautydiary.data.converters.TaskScheduleConverter
 import com.amalkina.beautydiary.data.models.BaseCategoryEntity
 import com.amalkina.beautydiary.data.models.BaseTaskEntity
@@ -20,10 +21,10 @@ import java.util.concurrent.Executors
 
 @Database(
     entities = [BaseCategoryEntity::class, BaseTaskEntity::class, CategoryEntity::class, TaskEntity::class],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
-@TypeConverters(TaskScheduleConverter::class)
+@TypeConverters(TaskScheduleConverter::class, DateListTransformer::class)
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun baseCategoryDao(): BaseCategoryDao
     abstract fun baseTaskDao(): BaseTaskDao

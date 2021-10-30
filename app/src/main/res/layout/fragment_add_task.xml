@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back_arrow"
-                app:title="@{vm.fragmentTitle}}">
+                app:title="@{vm.fragmentTitle}">
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/OutlinedButton"
@@ -201,10 +201,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:enabled="@{!vm.isLoading}"
-                        android:max="100"
+                        android:max="@{vm.taskMaxProgress}"
                         android:progress="@={vm.taskProgress}"
                         android:progressDrawable="@drawable/seek_bar_progress_style"
-                        android:thumb="@drawable/seek_bar_thumb_style" />
+                        android:thumb="@drawable/seek_bar_thumb_style"
+                        tools:ignore="UnusedAttribute" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -279,6 +280,6 @@
 
         <include
             layout="@layout/include_loading_view"
-            app:isLoading="@{vm.isFragmentLoading}" />
+            app:isLoading="@{vm.isLoading}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

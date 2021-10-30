@@ -6,6 +6,9 @@ import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.*
+import com.amalkina.beautydiary.domain.models.DomainTask.Companion.DEFAULT_PROGRESS
+import com.amalkina.beautydiary.domain.models.DomainTask.Companion.MAX_PROGRESS
+import com.amalkina.beautydiary.domain.models.DomainTask.Companion.MIN_PROGRESS
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
 import com.amalkina.beautydiary.ui.common.ext.*
@@ -13,7 +16,6 @@ import com.amalkina.beautydiary.ui.common.models.BaseModel
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
-import com.amalkina.beautydiary.ui.tasks.models.CategoryTask.Companion.DEFAULT_PROGRESS
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -23,7 +25,6 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     private val taskUseCase by inject<TaskActionsUseCase>()
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
-    val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
     val saveTaskEvent = MutableLiveData<Event<Unit>>()
 
     val isEditMode = taskId > 0
@@ -56,6 +57,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     val taskTitle = selectedTask.mapToMutable(viewModelScope) { it?.name ?: "" }
     val taskPriority = selectedTask.mapToMutable(viewModelScope) { it?.priority?.toFloat() ?: 1F }
     val taskProgress = selectedTask.mapToMutable(viewModelScope) { it?.progress ?: DEFAULT_PROGRESS }
+    val taskMaxProgress = MAX_PROGRESS
     val taskNote = selectedTask.mapToMutable(viewModelScope) { it?.note ?: "" }
     private val taskSchedule = selectedTask.map(viewModelScope) { it?.schedule ?: Schedule() }
     val taskScheduleValue = taskSchedule.mapToMutable(viewModelScope) { it.value.toString() }
@@ -77,7 +79,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     }
 
     private fun loadEditableTask(taskId: Long) {
-        isFragmentLoading.value = true
+        isLoading.value = true
         launch {
             val result = taskUseCase.get(taskId)
             val task = mapGetTaskResult(result)
@@ -102,19 +104,27 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
         } ?: flowOf(emptyList())
     }
 
-    private fun createTask(): DomainTask = DomainTask(
-        id = selectedTask.value?.id ?: 0,
-        categoryId = category.value?.id ?: 0,
-        name = taskTitle.value,
-        priority = Priority.fromInt(taskPriority.value.toInt()),
-        schedule = Schedule(taskScheduleValue.value.toInt(), taskFrequency.value),
-        note = taskNote.value,
-        // todo: calculate
-        startDate = System.currentTimeMillis()
-    )
+    private fun createTask(): DomainTask {
+        val currentProgress = when (taskProgress.value) {
+            0 -> taskMaxProgress - MIN_PROGRESS
+            else -> taskMaxProgress - taskProgress.value
+        }
+
+        return DomainTask(
+            id = selectedTask.value?.id ?: 0,
+            categoryId = category.value?.id ?: 0,
+            name = taskTitle.value.trim(),
+            priority = Priority.fromInt(taskPriority.value.toInt()),
+            schedule = Schedule(taskScheduleValue.value.toInt(), taskFrequency.value),
+            note = taskNote.value.trim(),
+            startDate = DomainTask.calculateStartDate(
+                currentProgress,
+                Schedule(taskScheduleValue.value.toInt(), taskFrequency.value)
+            )
+        )
+    }
 
     private fun saveTask(task: DomainTask) {
-        isLoading.value = true
         launch {
             val result = if (isEditMode) taskUseCase.update(task)
             else taskUseCase.create(task)

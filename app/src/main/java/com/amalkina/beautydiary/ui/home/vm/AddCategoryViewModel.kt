@@ -3,6 +3,7 @@ package com.amalkina.beautydiary.ui.home.vm
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.common.Event
@@ -25,7 +26,6 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
     private val readWriteImageUseCase by inject<ReadWriteImageUseCase>()
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
-    val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
     val userActionEvent = MutableLiveData<Event<UserAction>>()
     val launchActionEvent = MutableLiveData<Event<LaunchItem>>()
 
@@ -117,7 +117,7 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
     }
 
     private fun loadEditableCategory(categoryId: Long) {
-        isFragmentLoading.value = true
+        isLoading.value = true
         launch {
             val result = categoryUseCase.get(categoryId)
             val category = mapGetCategoryResult(result)
@@ -136,14 +136,13 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
         return DomainCategory(
             id = selectedCategory.value?.id ?: 0,
             baseCategoryId = selectedCategory.value?.baseCategoryId ?: 0,
-            name = selectedCategoryTitle.value,
+            name = selectedCategoryTitle.value.trim(),
             imagePath = imagePath,
             drawableName = if (imagePath.isNullOrBlank()) drawableName else null
         )
     }
 
     private fun saveCategory(category: DomainCategory) {
-        isFragmentLoading.value = true
         launch {
             val result = if (isEditMode) categoryUseCase.update(category)
             else categoryUseCase.create(category)

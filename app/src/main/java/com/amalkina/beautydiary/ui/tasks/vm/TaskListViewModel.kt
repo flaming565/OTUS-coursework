@@ -1,22 +1,26 @@
 package com.amalkina.beautydiary.ui.tasks.vm
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
+import com.amalkina.beautydiary.domain.models.DomainTask
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
-import com.amalkina.beautydiary.ui.common.ext.map
-import com.amalkina.beautydiary.ui.common.ext.mapToMutable
+import com.amalkina.beautydiary.ui.common.ext.*
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
-import com.amalkina.beautydiary.ui.common.ext.tryCast
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
+import com.amalkina.beautydiary.ui.tasks.models.TaskItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.koin.core.component.inject
+import timber.log.Timber
 
 
 internal class TaskListViewModel(private val category: DomainCategory) : BaseViewModel() {
@@ -24,7 +28,6 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
     val titleFragment = category.name
-    val isFragmentLoading = isLoading.mapToMutable(viewModelScope) { it }
     val userActionEvent = MutableLiveData<Event<UserAction>>()
 
     private val rawCategoryWithTasks = categoryUseCase.getWithTasks(category.id)
@@ -44,12 +47,44 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
         userActionEvent.postValue(Event(UserAction.AddTask(category.id)))
     }
 
-    fun onEditTask() {
-        userActionEvent.postValue(Event(UserAction.EditTask))
+    fun onEditTask(id: Long) {
+        userActionEvent.postValue(Event(UserAction.EditTask(id, category.id)))
     }
 
-    fun onDeleteTask() {
-        userActionEvent.postValue(Event(UserAction.DeleteTask))
+    fun onDeleteTask(id: Long, name: String) {
+        userActionEvent.postValue(Event(UserAction.DeleteTask(id, name)))
+    }
+
+    fun onCompleteTask(id: Long) {
+        getTaskById(id)?.let {
+            completeTask(it)
+        }
+    }
+
+    fun deleteTask(id: Long) {
+        getTaskById(id)?.let {
+            deleteTask(it)
+        }
+    }
+
+    private fun getTaskById(id: Long): DomainTask? {
+        val item = categoryTasks.value.firstOrNull { it.id == id }
+        return (item as? CategoryTask)?.toDomain()
+    }
+
+    private fun completeTask(task: DomainTask) {
+        launch {
+            task.executionDateList.add(System.currentTimeMillis())
+            val result = taskUseCase.update(task)
+            mapResponseResult(result)
+        }
+    }
+
+    private fun deleteTask(task: DomainTask) {
+        launch {
+            val result = taskUseCase.delete(task)
+            mapResponseResult(result)
+        }
     }
 
     private fun mapGetTasksResult(result: Result): Flow<DomainCategoryWithTasks?> {
@@ -62,7 +97,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
         return resultFlow
     }
 
-    private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): List<CategoryTask> {
+    private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): List<TaskItem> {
         return rawData?.let {
             it.tasks.map { task -> task.toUIModel() } + listOf(CategoryTaskNew)
         } ?: emptyList()
@@ -72,8 +107,8 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     sealed class UserAction {
         class OnClickTask(val id: Long) : UserAction()
         class AddTask(val categoryId: Long) : UserAction()
-        object DeleteTask : UserAction()
-        object EditTask : UserAction()
+        class EditTask(val id: Long, val categoryId: Long) : UserAction()
+        class DeleteTask(val id: Long, val name: String) : UserAction()
     }
 
 }

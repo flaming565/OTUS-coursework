@@ -19,7 +19,7 @@
             app:backNavigation="@{true}"
             app:title="@{vm.titleFragment}" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.aitsuki.swipe.SwipeMenuRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,7 +30,7 @@
 
         <include
             layout="@layout/include_loading_view"
-            app:isLoading="@{vm.isFragmentLoading}" />
+            app:isLoading="@{vm.isLoading}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

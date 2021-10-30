@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-
 internal open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->
@@ -21,7 +20,7 @@ internal open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
     }
     override val coroutineContext = viewModelScope.coroutineContext + exceptionHandler
 
-    val isLoading = MutableStateFlow(false)
+    val isLoading = MutableLiveData(false)
     val errorEvent = MutableLiveData<Event<String>>()
 
     fun mapResponseResult(

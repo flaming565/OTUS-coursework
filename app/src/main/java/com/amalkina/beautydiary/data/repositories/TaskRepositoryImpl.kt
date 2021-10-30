@@ -45,7 +45,7 @@ internal class TaskRepositoryImpl : BaseRepository(), TaskRepository {
                 name = task.name,
                 priority = task.priority.value,
                 schedule = task.schedule.toEntity(),
-                note = task.note,
+                note = task.note ?: "",
                 startDate = task.startDate
             )
         )

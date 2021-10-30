@@ -37,7 +37,7 @@ internal fun TaskEntity.toDomain() = DomainTask(
     schedule = this.schedule.toDomain(),
     note = this.note,
     startDate = this.startDate,
-    lastExecutionDate = this.lastExecutionDate,
+    executionDateList = this.executionDateList as MutableList<Long>,
     updateDate = this.updateDate,
     creationDate = this.creationDate
 )
@@ -72,9 +72,9 @@ internal fun DomainTask.toEntity() = TaskEntity(
     name = this.name,
     priority = this.priority.value,
     schedule = this.schedule.toEntity(),
-    note = this.note,
+    note = this.note ?: "",
     startDate = this.startDate,
-    lastExecutionDate = this.lastExecutionDate,
+    executionDateList = this.executionDateList,
     creationDate = this.creationDate
 )
 

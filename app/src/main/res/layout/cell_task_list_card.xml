@@ -18,94 +18,139 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:clipToPadding="false"
         android:elevation="8dp"
-        android:onClick="@{() -> taskList.onTaskClick(vm.id)}"
-        app:cardBackgroundColor="@color/card_backgroud_color"
         app:cardCornerRadius="8dp">
 
-        <LinearLayout
+        <com.aitsuki.swipe.SwipeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:autoClose="true"
+            app:designer="@string/parallax_designer">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> taskList.onTaskClick(vm.id)}"
+                app:cardBackgroundColor="@color/card_backgroud_color"
+                app:cardCornerRadius="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="6dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{vm.name}"
+                                android:textAppearance="?attr/textAppearanceBody1"
+                                tools:text="Task title" />
+
+                            <androidx.appcompat.widget.AppCompatRatingBar
+                                style="?android:attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:numStars="3"
+                                android:rating="@{vm.priority}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="bottom"
+                            android:orientation="vertical">
+
+                            <com.amalkina.beautydiary.ui.common.views.ProgressBarView
+                                android:layout_width="100dp"
+                                android:layout_height="16dp"
+                                app:progress="@{vm.progress}" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="4dp"
+                                android:text="@{vm.progressDesc}"
+                                tools:text="Осталось 5 дней" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorPrimaryDark"
+                        android:paddingStart="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="4dp"
+                        app:goneIfNot="@{vm.note}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="3"
+                            android:text="@{vm.note}"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:colorBackground"
+                            app:drawableStartCompat="@drawable/ic_outline_description"
+                            app:drawableTint="?android:colorBackground"
+                            tools:text="Description task task long Description task task long Description task task long" />
+                    </FrameLayout>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@color/progress_color_min"
+                android:onClick="@{() -> taskList.onCompleteTask(vm.id)}"
+                android:padding="12dp"
+                android:src="@drawable/ic_done" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="6dp">
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.name}"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        tools:text="Task title" />
-
-                    <androidx.appcompat.widget.AppCompatRatingBar
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:numStars="3"
-                        android:rating="@{vm.priority}" />
-                </LinearLayout>
-
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:orientation="vertical">
+                    android:background="@color/progress_color_normal"
+                    android:onClick="@{() -> taskList.onEditTask(vm.id)}"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_edit" />
 
-                    <com.amalkina.beautydiary.ui.common.views.ProgressBarView
-                        android:layout_width="100dp"
-                        android:layout_height="16dp"
-                        app:progress="@{vm.progress}" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:text="@{vm.progressDesc}"
-                        tools:text="Осталось 5 дней" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimaryDark"
-                android:paddingStart="16dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="4dp"
-                app:goneIfNot="@{vm.note}">
-
-                <TextView
+                <androidx.appcompat.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="4dp"
-                    android:ellipsize="end"
-                    android:maxLines="3"
-                    android:text="@{vm.note}"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:colorBackground"
-                    app:drawableStartCompat="@drawable/ic_outline_description"
-                    app:drawableTint="?android:colorBackground"
-                    tools:text="Description task task long Description task task long Description task task long" />
-            </FrameLayout>
-        </LinearLayout>
-
+                    android:layout_height="match_parent"
+                    android:background="@color/progress_color_max"
+                    android:onClick="@{() -> taskList.onDeleteTask(vm.id, vm.name)}"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_delete" />
+            </LinearLayout>
+        </com.aitsuki.swipe.SwipeLayout>
     </com.google.android.material.card.MaterialCardView>
+
 </layout>

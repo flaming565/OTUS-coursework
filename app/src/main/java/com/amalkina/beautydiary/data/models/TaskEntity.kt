@@ -26,8 +26,8 @@ internal data class TaskEntity(
     var note: String = "",
     @ColumnInfo(name = "start_date")
     var startDate: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "last_execution_date")
-    var lastExecutionDate: Long = startDate,
+    @ColumnInfo(name = "execution_date_list")
+    var executionDateList: List<Long> = listOf(startDate),
     @ColumnInfo(name = "update_date")
     var updateDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "creation_date")

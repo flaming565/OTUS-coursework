@@ -1,6 +1,8 @@
 package com.amalkina.beautydiary.domain.models
 
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 
 
 internal data class DomainTask(
@@ -10,16 +12,36 @@ internal data class DomainTask(
     val stringResName: String? = null,
     var priority: Priority = Priority.LOW,
     var schedule: Schedule = Schedule(),
-    val note: String = "",
+    val note: String? = null,
     var startDate: Long = System.currentTimeMillis(),
-    var lastExecutionDate: Long = startDate,
+    var executionDateList: MutableList<Long> = mutableListOf(startDate),
     var updateDate: Long = System.currentTimeMillis(),
     val creationDate: Long = System.currentTimeMillis()
 ) {
-    private val daysAfterExecution = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastExecutionDate)
-    private val maxAvailableDays = schedule.value * schedule.frequency.value
-    val progress = (daysAfterExecution * 100 / maxAvailableDays).toInt()
-    val daysRemaining = (maxAvailableDays - daysAfterExecution).toInt()
+    val lastExecutionDate = executionDateList.last()
+    private val daysAfterExecution =
+        TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastExecutionDate).toInt()
+    private val maxAvailableDays = schedule.getDaysCount()
+
+    val progress = (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays)
+        .roundToInt()
+        .coerceAtLeast(MIN_PROGRESS)
+    val daysRemaining = maxAvailableDays - daysAfterExecution
+
+    companion object {
+        const val MIN_PROGRESS = 5
+        const val MAX_PROGRESS = 100
+        const val DEFAULT_PROGRESS = 50
+
+        fun calculateStartDate(progress: Int, schedule: Schedule): Long {
+            val maxAvailableDays = schedule.getDaysCount()
+            val daysAfterExecution = maxAvailableDays - (progress * maxAvailableDays / MAX_PROGRESS.toFloat())
+
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DATE, -daysAfterExecution.roundToInt())
+            return calendar.timeInMillis
+        }
+    }
 }
 
 internal enum class Priority(val value: Int) {
@@ -36,7 +58,11 @@ internal enum class Priority(val value: Int) {
 internal data class Schedule(
     val value: Int = 1,
     val frequency: Frequency = Frequency.DAY
-)
+) {
+    fun getDaysCount(): Int {
+        return value * frequency.value
+    }
+}
 
 internal enum class Frequency(val value: Int) {
     DAY(1),

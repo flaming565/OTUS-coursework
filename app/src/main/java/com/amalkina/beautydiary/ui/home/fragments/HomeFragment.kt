@@ -102,7 +102,7 @@ class HomeFragment : BaseFragment() {
     private fun showDeleteCategoryDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.home_delete_category_dialog_message)
-            .setPositiveButton(R.string.home_delete_category) { _, _ -> viewModel.deleteSelectedCategory() }
+            .setPositiveButton(R.string.common_delete) { _, _ -> viewModel.deleteSelectedCategory() }
             .setNegativeButton(R.string.common_cancel, null)
             .show()
     }
