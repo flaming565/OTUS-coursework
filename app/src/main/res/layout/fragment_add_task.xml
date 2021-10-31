@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="12dp"
-                    android:enabled="@{!vm.isLoading}"
+                    android:enabled="@{vm.isSaveButtonEnabled}"
                     android:minHeight="0dp"
                     android:onClick="@{()->vm.onSaveClick()}"
                     android:text="@string/common_save"
@@ -67,6 +67,7 @@
                         app:boxBackgroundColor="?android:colorBackground"
                         app:boxStrokeColor="?attr/colorOnPrimary"
                         app:boxStrokeWidthFocused="1dp"
+                        app:counterMaxLength="40"
                         app:hintTextColor="?attr/colorOnPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -75,6 +76,7 @@
                             android:hint="@string/add_task_enter_task"
                             android:imeOptions="actionDone"
                             android:inputType="text|textCapWords|textAutoComplete"
+                            android:maxLength="40"
                             android:maxLines="1"
                             android:padding="12dp"
                             app:isFocused="@{true}"
@@ -138,6 +140,7 @@
                                 android:id="@+id/et_task_frequency"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="0123456789"
                                 android:gravity="center"
                                 android:imeOptions="actionDone"
                                 android:inputType="numberDecimal"
@@ -149,17 +152,13 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
+                            style="@style/SquareIconButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:enabled="@{vm.isDecreaseFrequencyAvailable}"
-                            android:minHeight="0dp"
                             android:onClick="@{()->vm.onDecreaseFrequencyClick()}"
-                            android:paddingStart="0dp"
-                            android:paddingEnd="0dp"
                             app:backgroundTint="@color/color_task_frequency_button"
-                            app:cornerRadius="0dp"
                             app:icon="@drawable/ic_minus" />
 
                         <TextView
@@ -167,7 +166,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/background_task_frequency_type"
                             android:gravity="center"
-                            android:minWidth="72dp"
+                            android:minWidth="64dp"
                             android:paddingTop="6dp"
                             android:paddingBottom="6dp"
                             android:text="@{vm.taskFrequencyValue}"
@@ -175,19 +174,26 @@
                             tools:text="day" />
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
+                            style="@style/SquareIconButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:enabled="@{vm.isIncreaseFrequencyAvailable}"
-                            android:minHeight="0dp"
                             android:onClick="@{()->vm.onIncreaseFrequencyClick()}"
-                            android:paddingStart="0dp"
-                            android:paddingEnd="0dp"
                             app:backgroundTint="@color/color_task_frequency_button"
-                            app:cornerRadius="0dp"
                             app:icon="@drawable/ic_add" />
 
                     </LinearLayout>
+
+                    <TextView
+                        style="@style/textAppearanceError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/add_task_frequency_value_error"
+                        app:drawableStartCompat="@drawable/ic_info"
+                        app:goneIf="@{vm.isScheduleValueValid}" />
 
                     <TextView
                         android:layout_width="wrap_content"

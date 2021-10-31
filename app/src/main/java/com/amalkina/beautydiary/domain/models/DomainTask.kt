@@ -23,9 +23,12 @@ internal data class DomainTask(
         TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastExecutionDate).toInt()
     private val maxAvailableDays = schedule.getDaysCount()
 
-    val progress = (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays)
+    private val isBaseTask = stringResName != null
+    val progress = if (isBaseTask) DEFAULT_PROGRESS
+    else (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays)
         .roundToInt()
         .coerceAtLeast(MIN_PROGRESS)
+
     val daysRemaining = maxAvailableDays - daysAfterExecution
 
     companion object {

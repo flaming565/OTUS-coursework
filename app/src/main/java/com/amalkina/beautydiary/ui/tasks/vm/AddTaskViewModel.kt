@@ -1,6 +1,7 @@
 package com.amalkina.beautydiary.ui.tasks.vm
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.ui.common.utils.Event
@@ -61,10 +62,33 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     val taskNote = selectedTask.mapToMutable(viewModelScope) { it?.note ?: "" }
     private val taskSchedule = selectedTask.map(viewModelScope) { it?.schedule ?: Schedule() }
     val taskScheduleValue = taskSchedule.mapToMutable(viewModelScope) { it.value.toString() }
+    val isScheduleValueValid = taskScheduleValue.map(viewModelScope) { it.toInt() > 0 }
     private val taskFrequency = taskSchedule.mapToMutable(viewModelScope) { it.frequency }
     val taskFrequencyValue = taskFrequency.mapToMutable(viewModelScope) { it.name.lowercase() }
     val isIncreaseFrequencyAvailable = taskFrequency.map(viewModelScope) { it != Frequency.YEAR }
     val isDecreaseFrequencyAvailable = taskFrequency.map(viewModelScope) { it != Frequency.DAY }
+
+    private val isTaskScheduleChanged =
+        combine(taskSchedule, taskScheduleValue, taskFrequency) { schedule, value, frequency ->
+            schedule.value.toString() != value || schedule.frequency != frequency
+        }
+    private val isTaskChanged = combine(
+        selectedTask, taskTitle, taskProgress,
+        taskNote, isTaskScheduleChanged
+    ) { task, title, progress, note, isScheduleChanged ->
+        task?.name != title || task.progress != progress || task.note.toString() != note || isScheduleChanged
+    }
+
+    val isSaveButtonEnabled = combine(
+        taskTitle, taskScheduleValue,
+        isTaskChanged, isLoading.asFlow()
+    ) { title, schedule, isChanged, isLoading ->
+        title.isNotEmpty() && schedule.toInt() > 0 && (isChanged || !isEditMode) && !isLoading
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
 
     fun onSaveClick() {
         saveTask(createTask())

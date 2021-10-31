@@ -5,6 +5,8 @@
     <color name="colorPrimaryLight">#F8F3F0</color>
     <color name="colorOnPrimary">#51453E</color>
 
+    <color name="colorError">#EE6A5E</color>
+
     <color name="progress_color_min">#81C784</color>
     <color name="progress_color_medium">#9CCC65</color>
     <color name="progress_color_normal">#F4C04E</color>

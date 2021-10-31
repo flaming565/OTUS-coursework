@@ -45,6 +45,7 @@
     <string name="add_task_enter_note">Enter note</string>
     <string name="add_task_minus_sign">-</string>
     <string name="add_task_plus_sign">+</string>
+    <string name="add_task_frequency_value_error">The value must be greater than 0</string>
 
     <string name="base_category_other">Other</string>
     <string name="base_category_face">Skin care</string>

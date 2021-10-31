@@ -5,17 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amalkina.beautydiary.databinding.FragmentAddTaskBinding
 import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.ui.tasks.vm.AddTaskViewModel
 import com.weigan.loopview.LoopView
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -35,8 +33,9 @@ class AddTaskFragment : BaseFragment() {
         }
 
         binding.etTaskFrequency.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty())
+            if (text.isNullOrEmpty()) {
                 binding.etTaskFrequency.append("0")
+            }
             else {
                 val formatString = text.toString().toInt().toString()
                 if (text.toString() != formatString) {
@@ -53,22 +52,15 @@ class AddTaskFragment : BaseFragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.tasksNames.collect {
-                        initLoopView(binding.loopView, it)
-                    }
-                }
+        viewModel.tasksNames
+            .onEach { initLoopView(binding.loopView, it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
-                launch {
-                    viewModel.taskPriority.collect {
-                        if (it < 1F)
-                            binding.ratingBar.rating = 1F
-                    }
-                }
+        viewModel.taskPriority
+            .onEach {
+                if (it < 1F) binding.ratingBar.rating = 1F
             }
-        }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.errorEvent.observe(viewLifecycleOwner) { event ->
             event.let {
