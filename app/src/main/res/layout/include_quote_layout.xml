@@ -17,45 +17,49 @@
         app:cardBackgroundColor="@color/card_background_color"
         app:cardCornerRadius="8dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
+            android:layout_margin="8dp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="-6dp"
-                android:layout_marginTop="-6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-2dp"
+                android:layout_marginTop="-2dp"
                 android:src="@drawable/ic_format_quote" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="32dp"
+                android:gravity="end"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:gravity="end"
+                    android:maxLines="@{vm.maxLines}"
                     android:text="@{vm.quoteText}"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="Стремитесь не к успеху, а к ценностям, которые он дает" />
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    tools:text="Стремитесь не к успеху, а к ценностям" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:gravity="end"
                     android:text="@{vm.author}"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceCaption"
                     android:textStyle="italic"
                     app:goneIfNot="@{vm.isAuthorShown}"
                     tools:text="— Альберт Эйнштейн" />
 
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
