@@ -112,7 +112,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
 
         return DomainTask(
             id = selectedTask.value?.id ?: 0,
-            categoryId = category.value?.id ?: 0,
+            categoryId = category.value?.id ?: selectedTask.value?.categoryId ?: 0,
             name = taskTitle.value.trim(),
             priority = Priority.fromInt(taskPriority.value.toInt()),
             schedule = Schedule(taskScheduleValue.value.toInt(), taskFrequency.value),

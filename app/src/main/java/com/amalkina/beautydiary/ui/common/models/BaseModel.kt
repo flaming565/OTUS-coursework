@@ -7,7 +7,7 @@ import org.koin.core.context.GlobalContext.get
 
 internal open class BaseModel {
     companion object {
-        fun getString(@StringRes id: Int, vararg args: Any) = getContext().getStringRes(id, args)
+        fun getString(@StringRes id: Int, vararg args: Any) = getContext().getStringRes(id, *args)
         fun getContext(): Context = get().get()
     }
 }

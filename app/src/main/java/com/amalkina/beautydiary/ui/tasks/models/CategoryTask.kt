@@ -5,6 +5,8 @@ import com.amalkina.beautydiary.domain.models.DomainTask.Companion.DEFAULT_PROGR
 import com.amalkina.beautydiary.domain.models.Schedule
 import com.amalkina.beautydiary.ui.common.ext.resIdByName
 import com.amalkina.beautydiary.ui.common.models.BaseModel
+import kotlin.math.abs
+
 
 internal open class TaskItem(
     open val id: Long = 0,
@@ -31,7 +33,12 @@ internal data class CategoryTask(
         }
     }
 
-    val progressDesc = "осталось $daysRemaining days"
+    val progressDesc = getString(
+        when {
+            daysRemaining < 0 -> R.string.task_list_days_ago
+            else -> R.string.task_list_days_left
+        }, abs(daysRemaining)
+    )
 }
 
 internal object CategoryTaskNew : TaskItem(name = getString(R.string.task_list_new_task))

@@ -3,7 +3,6 @@ package com.amalkina.beautydiary.ui.home.vm
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.common.Event

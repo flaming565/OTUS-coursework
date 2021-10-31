@@ -28,8 +28,9 @@
     <string name="add_category_get_temp_uri_error">Error accessing saving photos from the camera, please, try again.</string>
 
     <string name="task_list_new_task">Add new task</string>
+    <string name="task_list_days_left">%d days left</string>
+    <string name="task_list_days_ago">%d days ago</string>
     <string name="task_list_delete_task_dialog_message">Are you sure you want to delete the task «%s»? All activity history will also be deleted.</string>
-
 
     <string name="add_task_title">Add Task</string>
     <string name="add_task_task_name">Task name</string>
