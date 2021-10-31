@@ -3,7 +3,7 @@ package com.amalkina.beautydiary.ui.home.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.domain.common.ApplicationSettings
-import com.amalkina.beautydiary.domain.common.Event
+import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks

@@ -3,15 +3,16 @@ package com.amalkina.beautydiary.ui.home.vm
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
-import com.amalkina.beautydiary.domain.common.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.domain.usecases.ReadWriteImageUseCase
 import com.amalkina.beautydiary.ui.common.ext.*
 import com.amalkina.beautydiary.ui.common.models.BaseModel.Companion.getString
+import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import kotlinx.coroutines.flow.*
@@ -65,6 +66,19 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = null
+        )
+
+    private val isCategoryChanged =
+        combine(selectedCategory, selectedCategoryTitle, selectedCategoryBitmap) { category, title, image ->
+            category?.name != title || category.bitmap != image
+        }
+    val isSaveButtonEnabled =
+        combine(selectedCategoryTitle, isCategoryChanged, isLoading.asFlow()) { title, isChanged, isLoading ->
+            title.isNotEmpty() && (isChanged || !isEditMode) && !isLoading
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = false
         )
 
     fun onSaveClick() {

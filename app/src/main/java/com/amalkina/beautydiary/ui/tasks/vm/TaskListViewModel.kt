@@ -1,9 +1,8 @@
 package com.amalkina.beautydiary.ui.tasks.vm
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.amalkina.beautydiary.domain.common.Event
+import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
@@ -16,11 +15,9 @@ import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
 import com.amalkina.beautydiary.ui.tasks.models.TaskItem
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
-import timber.log.Timber
 
 
 internal class TaskListViewModel(private val category: DomainCategory) : BaseViewModel() {

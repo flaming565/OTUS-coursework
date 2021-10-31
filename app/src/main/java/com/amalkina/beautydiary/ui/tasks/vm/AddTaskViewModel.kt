@@ -3,7 +3,7 @@ package com.amalkina.beautydiary.ui.tasks.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
-import com.amalkina.beautydiary.domain.common.Event
+import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.*
 import com.amalkina.beautydiary.domain.models.DomainTask.Companion.DEFAULT_PROGRESS

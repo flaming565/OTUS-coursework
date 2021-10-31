@@ -4,12 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalkina.beautydiary.R
-import com.amalkina.beautydiary.domain.common.Event
+import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.ui.common.models.BaseModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
