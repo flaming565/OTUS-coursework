@@ -15,5 +15,5 @@ internal interface TaskDao : BaseDao<TaskEntity> {
 
     @Transaction
     @Query("SELECT * FROM task WHERE id = :id")
-    suspend fun getByIdWithCategory(id: Long): TaskAndCategory
+    fun getByIdWithCategory(id: Long): Flow<TaskAndCategory>
 }

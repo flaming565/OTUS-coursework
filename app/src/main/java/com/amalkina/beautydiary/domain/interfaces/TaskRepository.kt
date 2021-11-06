@@ -12,7 +12,7 @@ internal interface TaskRepository {
 
     fun getBaseTasks(baseCategoryId: Long): Flow<List<DomainTask>>
 
-    suspend fun getCategoryTask(id: Long): DomainTaskAndCategory
+    fun getCategoryTask(id: Long): Flow<DomainTaskAndCategory>
 
     suspend fun createTask(task: DomainTask)
 

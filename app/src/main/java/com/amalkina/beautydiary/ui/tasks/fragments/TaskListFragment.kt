@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import androidx.recyclerview.widget.DefaultItemAnimator
 
 
 class TaskListFragment : BaseFragment() {
@@ -62,14 +61,14 @@ class TaskListFragment : BaseFragment() {
                 dialog?.dismiss()
 
                 when (it) {
-                    is UserAction.OnClickTask -> {
-                        // todo: navigate to task fragment
-                    }
+                    is UserAction.OnClickTask -> findNavController().navigate(
+                        TaskListFragmentDirections.openTaskDetail(it.id)
+                    )
                     is UserAction.AddTask -> findNavController().navigate(TaskListFragmentDirections.openAddTask(it.categoryId))
                     is UserAction.EditTask -> findNavController().navigate(
                         TaskListFragmentDirections.openAddTask(it.categoryId, it.id)
                     )
-                    is UserAction.DeleteTask -> showDeleteCategoryDialog(it.id, it.name)
+                    is UserAction.DeleteTask -> showDeleteTaskDialog(it.id, it.name)
                 }
             }
         }
@@ -85,24 +84,24 @@ class TaskListFragment : BaseFragment() {
         }
 
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if(oldItem is CategoryTask && newItem is CategoryTask) {
+            if (oldItem is CategoryTask && newItem is CategoryTask) {
                 return oldItem.id == newItem.id
             }
             return super.areItemsTheSame(oldItem, newItem)
         }
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if(oldItem is CategoryTask && newItem is CategoryTask) {
+            if (oldItem is CategoryTask && newItem is CategoryTask) {
                 return oldItem.toString() == newItem.toString()
             }
             return super.areContentsTheSame(oldItem, newItem)
         }
     }
 
-    private fun showDeleteCategoryDialog(taskId: Long, taskName: String) {
+    private fun showDeleteTaskDialog(taskId: Long, taskName: String) {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(R.string.task_list_delete_task_dialog_message, taskName))
-            .setPositiveButton(R.string.home_delete_category) { _, _ ->
+            .setPositiveButton(R.string.common_delete) { _, _ ->
                 viewModel.deleteTask(taskId)
             }
             .setNegativeButton(R.string.common_cancel, null)

@@ -1,5 +1,6 @@
 package com.amalkina.beautydiary.domain.models
 
+import com.amalkina.beautydiary.ui.common.ext.toStartOfDay
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -30,6 +31,14 @@ internal data class DomainTask(
         .coerceAtLeast(MIN_PROGRESS)
 
     val daysRemaining = maxAvailableDays - daysAfterExecution
+
+    fun calculateDateProgress(date: Long): Float {
+        val lastExecutionDate = executionDateList
+            .map { it.toStartOfDay() }
+            .findLast { it < date } ?: startDate.toStartOfDay()
+        val daysAfterExecution = TimeUnit.MILLISECONDS.toDays(date - lastExecutionDate)
+        return (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays).coerceAtLeast(2f)
+    }
 
     companion object {
         const val MIN_PROGRESS = 5

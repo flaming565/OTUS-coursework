@@ -16,18 +16,21 @@ import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
 import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel
 import com.amalkina.beautydiary.ui.home.vm.HomeViewModel
 import com.amalkina.beautydiary.ui.tasks.vm.AddTaskViewModel
+import com.amalkina.beautydiary.ui.tasks.vm.TaskDetailViewModel
 import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel
-import kotlinx.serialization.json.Json
-import org.koin.android.ext.koin.androidApplication
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 
+@ExperimentalSerializationApi
 val dataModule = module {
     single<CategoryRepository> { CategoryRepositoryImpl() }
     single<TaskRepository> { TaskRepositoryImpl() }
@@ -75,4 +78,5 @@ val viewModelModule = module {
     viewModel { AddCategoryViewModel(it[0]) }
     viewModel { TaskListViewModel(it[0]) }
     viewModel { AddTaskViewModel(it[0], it[1]) }
+    viewModel { TaskDetailViewModel(it[0]) }
 }

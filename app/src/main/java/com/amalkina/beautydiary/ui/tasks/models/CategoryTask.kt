@@ -5,6 +5,7 @@ import com.amalkina.beautydiary.domain.models.DomainTask.Companion.DEFAULT_PROGR
 import com.amalkina.beautydiary.domain.models.Schedule
 import com.amalkina.beautydiary.ui.common.ext.resIdByName
 import com.amalkina.beautydiary.ui.common.models.BaseModel
+import java.util.*
 import kotlin.math.abs
 
 
@@ -39,6 +40,9 @@ internal data class CategoryTask(
             else -> R.string.task_list_days_left
         }, abs(daysRemaining)
     )
+
+
+    val scheduleDesc = "${schedule.value} ${schedule.frequency.name.lowercase(Locale.getDefault())}"
 }
 
 internal object CategoryTaskNew : TaskItem(name = getString(R.string.task_list_new_task))

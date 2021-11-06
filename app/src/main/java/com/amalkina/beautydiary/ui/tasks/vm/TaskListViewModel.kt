@@ -12,7 +12,6 @@ import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
 import com.amalkina.beautydiary.ui.common.ext.*
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
-import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
 import com.amalkina.beautydiary.ui.tasks.models.TaskItem
 import kotlinx.coroutines.flow.*
@@ -65,8 +64,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     }
 
     private fun getTaskById(id: Long): DomainTask? {
-        val item = categoryTasks.value.firstOrNull { it.id == id }
-        return (item as? CategoryTask)?.toDomain()
+        return rawCategoryWithTasks.value?.tasks?.firstOrNull { it.id == id }
     }
 
     private fun completeTask(task: DomainTask) {

@@ -34,8 +34,8 @@ internal class TaskRepositoryImpl : BaseRepository(), TaskRepository {
         }
     }
 
-    override suspend fun getCategoryTask(id: Long): DomainTaskAndCategory {
-        return dao.getByIdWithCategory(id).toDomain()
+    override fun getCategoryTask(id: Long): Flow<DomainTaskAndCategory> {
+        return dao.getByIdWithCategory(id).map { it.toDomain() }
     }
 
     override suspend fun createTask(task: DomainTask) {

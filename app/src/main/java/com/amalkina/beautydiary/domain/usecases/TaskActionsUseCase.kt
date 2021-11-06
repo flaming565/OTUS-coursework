@@ -14,8 +14,8 @@ internal class TaskActionsUseCase : BaseUseCase() {
     fun getBaseTasks(baseCategoryId: Long) =
         flowResult(baseCategoryId) { repository.getBaseTasks(baseCategoryId) }
 
-    suspend fun categoryTask(id: Long) =
-        suspendResult(id) { repository.getCategoryTask(id) }
+    fun categoryTask(id: Long) =
+        flowResult(id) { repository.getCategoryTask(id) }
 
     suspend fun get(id: Long) =
         suspendResult(id) { repository.getTask(id) }

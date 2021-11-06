@@ -47,6 +47,16 @@
     <string name="add_task_plus_sign">+</string>
     <string name="add_task_frequency_value_error">The value must be greater than 0</string>
 
+    <string name="task_detail_title">Task</string>
+    <string name="task_detail_priority">Priority:</string>
+    <string name="task_detail_complete">Complete:</string>
+    <string name="task_detail_schedule">Every:</string>
+    <string name="task_detail_category">Category:</string>
+    <string name="task_detail_completed_earlier">Completed earlier</string>
+    <string name="task_detail_done">Done</string>
+    <string name="task_detail_select_date">Select date</string>
+    <string name="task_detail_delete_task_dialog_message">Are you sure you want to delete the task? All activity history will also be deleted.</string>
+
     <string name="base_category_other">Other</string>
     <string name="base_category_face">Skin care</string>
     <string name="base_category_body">Body care</string>

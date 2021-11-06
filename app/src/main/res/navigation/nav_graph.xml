@@ -36,6 +36,9 @@
         <action
             android:id="@+id/openAddTask"
             app:destination="@id/addTaskFragment" />
+        <action
+            android:id="@+id/openTaskDetail"
+            app:destination="@id/taskDetailFragment" />
     </fragment>
 
     <fragment
@@ -44,11 +47,25 @@
         android:label="AddTaskFragment">
         <argument
             android:name="categoryId"
+            android:defaultValue="-1L"
             app:argType="long" />
         <argument
             android:name="taskId"
             android:defaultValue="-1L"
             app:argType="long" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/taskDetailFragment"
+        android:name="com.amalkina.beautydiary.ui.tasks.fragments.TaskDetailFragment"
+        android:label="TaskDetailFragment">
+        <argument
+            android:name="taskId"
+            app:argType="long" />
+        <action
+            android:id="@+id/openEditTask"
+            app:destination="@id/addTaskFragment" />
     </fragment>
 
 

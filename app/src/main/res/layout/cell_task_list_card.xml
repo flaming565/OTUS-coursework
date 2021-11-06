@@ -111,7 +111,7 @@
                             android:text="@{vm.note}"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:colorBackground"
-                            app:drawableStartCompat="@drawable/ic_outline_description"
+                            app:drawableStartCompat="@drawable/ic_outline_description_16"
                             app:drawableTint="?android:colorBackground"
                             tools:text="Description task task long Description task task long Description task task long" />
                     </FrameLayout>
