@@ -27,7 +27,11 @@ class TaskDetailFragment : BaseFragment() {
 
     private lateinit var progressChart: TaskProgressChart
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val binding = FragmentTaskDetailBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
@@ -39,7 +43,11 @@ class TaskDetailFragment : BaseFragment() {
             toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.edit -> {
-                        findNavController().navigate(TaskDetailFragmentDirections.openEditTask(taskId = args.taskId))
+                        findNavController().navigate(
+                            TaskDetailFragmentDirections.openEditTask(
+                                taskId = args.taskId
+                            )
+                        )
                         true
                     }
                     R.id.delete -> {
@@ -88,6 +96,7 @@ class TaskDetailFragment : BaseFragment() {
             .build()
 
         val picker = MaterialDatePicker.Builder.datePicker()
+            .setTheme(R.style.MaterialCalendarTheme)
             .setTitleText(R.string.task_detail_select_date)
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .setCalendarConstraints(calendarConstraints)

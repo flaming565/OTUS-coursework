@@ -19,6 +19,15 @@
         <item name="colorPrimary">@color/colorPrimaryVariant</item>
     </style>
 
+    <style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialCalendarButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialCalendarButtonStyle</item>
+    </style>
+
+    <style name="MaterialCalendarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
+    </style>
+
     <style name="textAppearanceError" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorError</item>
         <item name="drawableTint">@color/colorError</item>

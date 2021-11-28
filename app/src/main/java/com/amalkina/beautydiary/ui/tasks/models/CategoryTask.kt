@@ -34,15 +34,23 @@ internal data class CategoryTask(
         }
     }
 
-    val progressDesc = getString(
+    val progressDesc = getPlurals(
         when {
-            daysRemaining < 0 -> R.string.task_list_days_ago
-            else -> R.string.task_list_days_left
-        }, abs(daysRemaining)
+            daysRemaining < 0 -> R.plurals.task_list_days_ago
+            else -> R.plurals.task_list_days_left
+        }, abs(daysRemaining), abs(daysRemaining)
     )
 
+    val progressDetailDesc = getPlurals(
+        when {
+            daysRemaining < 0 -> R.plurals.task_detail_complete_days_ago
+            else -> R.plurals.task_detail_complete_days_left
+        }, abs(daysRemaining), abs(daysRemaining)
+    )
 
-    val scheduleDesc = "${schedule.value} ${schedule.frequency.name.lowercase(Locale.getDefault())}"
+    val scheduleDesc =
+        if (schedule.value == 1) "${schedule.value} ${schedule.frequency.name.lowercase(Locale.getDefault())}"
+        else "${schedule.value} ${schedule.frequency.name.lowercase(Locale.getDefault())}s"
 }
 
 internal object CategoryTaskNew : TaskItem(name = getString(R.string.task_list_new_task))

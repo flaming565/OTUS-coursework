@@ -104,7 +104,7 @@
                         android:layout_marginStart="12dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{vm.task.progressDesc}"
+                        android:text="@{vm.task.progressDetailDesc}"
                         android:textAppearance="?attr/textAppearanceBody1"
                         android:textStyle="italic"
                         app:layout_constrainedWidth="true"
@@ -226,6 +226,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:enabled="@{vm.isDoneButtonEnable}"
                 android:onClick="@{() -> vm.onDoneClick()}"
                 android:text="@string/task_detail_done" />
 

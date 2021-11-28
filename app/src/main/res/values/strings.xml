@@ -28,9 +28,20 @@
     <string name="add_category_get_temp_uri_error">Error accessing saving photos from the camera, please, try again.</string>
 
     <string name="task_list_new_task">Add new task</string>
-    <string name="task_list_days_left">%d days left</string>
-    <string name="task_list_days_ago">%d days ago</string>
+    <plurals name="task_list_days_left">
+        <item quantity="zero">today</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
+    <plurals name="task_list_days_ago">
+        <item quantity="zero">today</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
     <string name="task_list_delete_task_dialog_message">Are you sure you want to delete the task «%s»? All activity history will also be deleted.</string>
+    <string name="task_list_sort">Sort</string>
+    <string name="task_list_sort_by_name">By name</string>
+    <string name="task_list_sort_by_creation_date">By creation date</string>
+    <string name="task_list_sort_by_priority">By priority</string>
+    <string name="task_list_sort_by_due_date">By due date</string>
 
     <string name="add_task_title">Add Task</string>
     <string name="add_task_task_name">Task name</string>
@@ -56,6 +67,16 @@
     <string name="task_detail_done">Done</string>
     <string name="task_detail_select_date">Select date</string>
     <string name="task_detail_delete_task_dialog_message">Are you sure you want to delete the task? All activity history will also be deleted.</string>
+    <plurals name="task_detail_complete_days_left">
+        <item quantity="zero">today</item>
+        <item quantity="one">tomorrow</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <plurals name="task_detail_complete_days_ago">
+        <item quantity="zero">today</item>
+        <item quantity="one">yesterday</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
 
     <string name="base_category_other">Other</string>
     <string name="base_category_face">Skin care</string>

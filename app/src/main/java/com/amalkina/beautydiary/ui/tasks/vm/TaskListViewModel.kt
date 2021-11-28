@@ -2,18 +2,20 @@ package com.amalkina.beautydiary.ui.tasks.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainCategory
 import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
 import com.amalkina.beautydiary.domain.models.DomainTask
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
-import com.amalkina.beautydiary.ui.common.ext.*
+import com.amalkina.beautydiary.ui.common.ext.map
+import com.amalkina.beautydiary.ui.common.ext.mapToMutable
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
+import com.amalkina.beautydiary.ui.common.ext.tryCast
+import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
+import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
-import com.amalkina.beautydiary.ui.tasks.models.TaskItem
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -33,7 +35,11 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
             started = SharingStarted.Lazily,
             initialValue = null
         )
-    val categoryTasks = rawCategoryWithTasks.map(viewModelScope) { mapCategoryTasks(it) }
+    private val categoryTasks =
+        rawCategoryWithTasks.mapToMutable(viewModelScope) { mapCategoryTasks(it) }
+    val allTasks = categoryTasks.map(viewModelScope) {
+        (it.toMutableList() + listOf(CategoryTaskNew)).toTypedArray()
+    }
 
     fun onTaskClick(id: Long) {
         userActionEvent.postValue(Event(UserAction.OnClickTask(id)))
@@ -61,6 +67,36 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
         getTaskById(id)?.let {
             deleteTask(it)
         }
+    }
+
+    fun sortByName() {
+        sortCategoryTasks { a, b ->
+            a.name.compareTo(b.name)
+        }
+    }
+
+    fun sortByPriority() {
+        sortCategoryTasks { a, b ->
+            b.priority.compareTo(a.priority)
+        }
+    }
+
+    fun sortByCreationDate() {
+        sortCategoryTasks { a, b ->
+            a.startDate.compareTo(b.startDate)
+        }
+    }
+
+    fun sortByDueDate() {
+        sortCategoryTasks { a, b ->
+            a.daysRemaining.compareTo(b.daysRemaining)
+        }
+    }
+
+    private fun sortCategoryTasks(comparator: Comparator<CategoryTask>) {
+        val tasks = categoryTasks.value.toMutableList()
+        tasks.sortWith(comparator)
+        categoryTasks.value = tasks.toTypedArray()
     }
 
     private fun getTaskById(id: Long): DomainTask? {
@@ -92,10 +128,8 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
         return resultFlow
     }
 
-    private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): List<TaskItem> {
-        return rawData?.let {
-            it.tasks.map { task -> task.toUIModel() } + listOf(CategoryTaskNew)
-        } ?: emptyList()
+    private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): Array<CategoryTask> {
+        return rawData?.tasks?.map { task -> task.toUIModel() }?.toTypedArray() ?: emptyArray()
     }
 
 

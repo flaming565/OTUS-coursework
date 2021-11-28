@@ -7,9 +7,7 @@ import com.amalkina.beautydiary.domain.common.Result
 import com.amalkina.beautydiary.domain.models.DomainTask
 import com.amalkina.beautydiary.domain.models.DomainTaskAndCategory
 import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
-import com.amalkina.beautydiary.ui.common.ext.cast
-import com.amalkina.beautydiary.ui.common.ext.map
-import com.amalkina.beautydiary.ui.common.ext.toStartOfDay
+import com.amalkina.beautydiary.ui.common.ext.*
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
 import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
@@ -32,6 +30,9 @@ internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
     val task = domainTask.map(viewModelScope) { it?.toUIModel() }
     val category = categoryTask.map(viewModelScope) { it?.category }
 
+    val isDoneButtonEnable = domainTask.map(viewModelScope) {
+        it?.lastExecutionDate?.toDate() != System.currentTimeMillis().toDate()
+    }
     val showCompleteEarlierButton = task.map(viewModelScope) {
         it != null && (it.lastExecutionDate.toStartOfDay() < System.currentTimeMillis()
             .toStartOfDay() - DateUtils.DAY_IN_MILLIS)

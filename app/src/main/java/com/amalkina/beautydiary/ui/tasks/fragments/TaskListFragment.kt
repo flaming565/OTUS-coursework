@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
-import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.databinding.FragmentTaskListBinding
+import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
 import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel
@@ -29,11 +29,42 @@ class TaskListFragment : BaseFragment() {
     private val args by navArgs<TaskListFragmentArgs>()
     private val viewModel by viewModel<TaskListViewModel> { parametersOf(args.category) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val binding = FragmentTaskListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
-            appbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.sort_by_name -> {
+                        viewModel.sortByName()
+                        true
+                    }
+                    R.id.sort_by_due_date -> {
+                        viewModel.sortByDueDate()
+                        true
+                    }
+                    R.id.sort_by_creation_date -> {
+                        viewModel.sortByCreationDate()
+                        true
+                    }
+                    R.id.sort_by_priority -> {
+                        viewModel.sortByPriority()
+                        true
+                    }
+                    R.id.add_task -> {
+                        findNavController().navigate(TaskListFragmentDirections.openAddTask(args.category.id))
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
 
         val taskAdapter = makeAdapter()
@@ -42,14 +73,15 @@ class TaskListFragment : BaseFragment() {
             itemAnimator = null
         }
 
-        var isFirstLayoutAnimation = true
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.categoryTasks.collect {
-                    taskAdapter.items = it.toTypedArray()
-                    if (it.size > 1 && isFirstLayoutAnimation) {
-                        binding.recyclerView.scheduleLayoutAnimation()
-                        isFirstLayoutAnimation = false
+                viewModel.allTasks.collect {
+                    val isContentEquals = taskAdapter.items.contentEquals(it)
+                    if (!isContentEquals) {
+                        taskAdapter.items = it as Array<Any>
+                        if (it.size > 1) {
+                            binding.recyclerView.scheduleLayoutAnimation()
+                        }
                     }
                 }
             }
@@ -64,7 +96,11 @@ class TaskListFragment : BaseFragment() {
                     is UserAction.OnClickTask -> findNavController().navigate(
                         TaskListFragmentDirections.openTaskDetail(it.id)
                     )
-                    is UserAction.AddTask -> findNavController().navigate(TaskListFragmentDirections.openAddTask(it.categoryId))
+                    is UserAction.AddTask -> findNavController().navigate(
+                        TaskListFragmentDirections.openAddTask(
+                            it.categoryId
+                        )
+                    )
                     is UserAction.EditTask -> findNavController().navigate(
                         TaskListFragmentDirections.openAddTask(it.categoryId, it.id)
                     )
