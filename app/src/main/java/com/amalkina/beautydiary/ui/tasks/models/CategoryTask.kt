@@ -22,7 +22,7 @@ internal data class CategoryTask(
     val priority: Int = 1,
     val schedule: Schedule = Schedule(),
     val progress: Int = DEFAULT_PROGRESS,
-    val daysRemaining: Int = 0,
+    var daysRemaining: Int = 0,
     val note: String? = null,
     var startDate: Long = System.currentTimeMillis(),
     var lastExecutionDate: Long = startDate

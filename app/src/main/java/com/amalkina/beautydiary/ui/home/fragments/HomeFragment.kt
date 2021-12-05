@@ -33,6 +33,19 @@ class HomeFragment : BaseFragment() {
         val binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
+
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.to_do_list -> {
+                        findNavController().navigate(HomeFragmentDirections.openTodoList())
+                        true
+                    }
+                    R.id.statistics -> {
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
 
         val categoryAdapter = makeAdapter()
@@ -58,7 +71,9 @@ class HomeFragment : BaseFragment() {
                 when (it) {
                     UserAction.ON_CLICK -> {
                         viewModel.selectedCategory?.let { category ->
-                            findNavController().navigate(HomeFragmentDirections.openTaskListFragment(category))
+                            findNavController().navigate(
+                                HomeFragmentDirections.openTaskList(category)
+                            )
                         }
                     }
                     UserAction.ON_LONG_CLICK -> showCategoryOptionsDialog()

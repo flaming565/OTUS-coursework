@@ -13,8 +13,10 @@ import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.domain.usecases.GetQuoteUseCase
 import com.amalkina.beautydiary.domain.usecases.ReadWriteImageUseCase
 import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
+import com.amalkina.beautydiary.ui.home.fragments.TodoListFragment
 import com.amalkina.beautydiary.ui.home.vm.AddCategoryViewModel
 import com.amalkina.beautydiary.ui.home.vm.HomeViewModel
+import com.amalkina.beautydiary.ui.home.vm.TodoListViewModel
 import com.amalkina.beautydiary.ui.tasks.vm.AddTaskViewModel
 import com.amalkina.beautydiary.ui.tasks.vm.TaskDetailViewModel
 import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel
@@ -75,6 +77,7 @@ val domainModule = module {
 
 val viewModelModule = module {
     viewModel { HomeViewModel() }
+    viewModel { TodoListViewModel() }
     viewModel { AddCategoryViewModel(it[0]) }
     viewModel { TaskListViewModel(it[0]) }
     viewModel { AddTaskViewModel(it[0], it[1]) }

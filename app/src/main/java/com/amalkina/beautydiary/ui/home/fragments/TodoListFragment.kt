@@ -1,69 +1,70 @@
-package com.amalkina.beautydiary.ui.tasks.fragments
+package com.amalkina.beautydiary.ui.home.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
-import com.amalkina.beautydiary.databinding.FragmentTaskListBinding
+import com.amalkina.beautydiary.databinding.FragmentTodoListBinding
 import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
+import com.amalkina.beautydiary.ui.home.models.TodoCategory
+import com.amalkina.beautydiary.ui.home.vm.TodoListViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
-import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
 import com.amalkina.beautydiary.ui.tasks.models.UserTaskAction
-import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 
-class TaskListFragment : BaseFragment() {
-    private val args by navArgs<TaskListFragmentArgs>()
-    private val viewModel by viewModel<TaskListViewModel> { parametersOf(args.category) }
+class TodoListFragment : BaseFragment() {
+
+    private val viewModel by viewModel<TodoListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentTaskListBinding.inflate(inflater, container, false).apply {
+        val binding = FragmentTodoListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
-            toolbar.setNavigationOnClickListener {
+            appbar.toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
-            toolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.sort_by_name -> {
-                        viewModel.sortByName()
-                        true
-                    }
-                    R.id.sort_by_due_date -> {
-                        viewModel.sortByDueDate()
-                        true
-                    }
-                    R.id.sort_by_creation_date -> {
-                        viewModel.sortByCreationDate()
-                        true
-                    }
-                    R.id.sort_by_priority -> {
-                        viewModel.sortByPriority()
-                        true
-                    }
-                    R.id.add_task -> {
-                        findNavController().navigate(TaskListFragmentDirections.openAddTask(args.category.id))
-                        true
-                    }
-                    else -> false
-                }
+        }
+
+        val periodAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.cell_todo_list_dropdown_item,
+            viewModel.periodNames
+        )
+        binding.periodSelector.apply {
+            setAdapter(periodAdapter)
+            setText(viewModel.currentPeriod.value.name, false)
+            onItemClickListener = OnItemClickListener { _, _, position, _ ->
+                viewModel.updateSelectedPeriod(position)
+            }
+        }
+
+        val groupAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.cell_todo_list_dropdown_item,
+            viewModel.groupNames
+        )
+        binding.groupSelector.apply {
+            setAdapter(groupAdapter)
+            setText(viewModel.currentGroup.value.title, false)
+            onItemClickListener = OnItemClickListener { _, _, position, _ ->
+                viewModel.updateSelectedGroup(position)
             }
         }
 
@@ -75,11 +76,13 @@ class TaskListFragment : BaseFragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allTasks.collect {
-                    val isContentEquals = taskAdapter.items.contentEquals(it)
+                viewModel.todoListItems.collect {
+                    val arrayItems = it.toTypedArray()
+                    val isContentEquals = taskAdapter.items.contentEquals(arrayItems)
                     if (!isContentEquals) {
-                        taskAdapter.items = it as Array<Any>
-                        if (it.size > 1) {
+                        taskAdapter.items = arrayItems
+                        if (it.size > 1 && viewModel.isRecycleViewAnimate) {
+                            viewModel.isRecycleViewAnimate = false
                             binding.recyclerView.scheduleLayoutAnimation()
                         }
                     }
@@ -94,17 +97,14 @@ class TaskListFragment : BaseFragment() {
 
                 when (it) {
                     is UserTaskAction.OnClickTask -> findNavController().navigate(
-                        TaskListFragmentDirections.openTaskDetail(it.id)
-                    )
-                    is UserTaskAction.AddTask -> findNavController().navigate(
-                        TaskListFragmentDirections.openAddTask(
-                            it.categoryId
-                        )
+                        TodoListFragmentDirections.openTaskDetail(it.id)
                     )
                     is UserTaskAction.EditTask -> findNavController().navigate(
-                        TaskListFragmentDirections.openAddTask(it.categoryId, it.id)
+                        TodoListFragmentDirections.openAddTask(it.categoryId, it.id)
                     )
                     is UserTaskAction.DeleteTask -> showDeleteTaskDialog(it.id, it.name)
+                    else -> {
+                    }
                 }
             }
         }
@@ -114,9 +114,9 @@ class TaskListFragment : BaseFragment() {
 
     private fun makeAdapter() = object : ViewModelAdapter(viewLifecycleOwner) {
         init {
-            sharedObject(viewModel, BR.taskList)
-            cell(CategoryTask::class.java, R.layout.cell_task_list_card, BR.vm)
-            cell(CategoryTaskNew::class.java, R.layout.cell_task_list_card_new, BR.vm)
+            sharedObject(viewModel, BR.todoList)
+            cell(CategoryTask::class.java, R.layout.cell_todo_list_task_item, BR.vm)
+            cell(TodoCategory::class.java, R.layout.cell_todo_list_category_item, BR.vm)
         }
 
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {

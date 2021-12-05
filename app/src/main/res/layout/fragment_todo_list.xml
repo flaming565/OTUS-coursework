@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.amalkina.beautydiary.ui.home.vm.TodoListViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/include_appbar"
+            app:backNavigation="@{true}"
+            app:title="@{@string/todo_list_title}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/layout_fragment_margin"
+            android:orientation="vertical"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:hint="@string/todo_list_period"
+                    android:labelFor="@id/period_selector"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeColor="?attr/colorPrimaryDark"
+                    app:endIconTint="?attr/colorPrimaryDark"
+                    app:hintAnimationEnabled="false"
+                    app:hintTextColor="?attr/colorPrimaryDark">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/period_selector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_weight="0.5"
+                    android:hint="@string/todo_list_group"
+                    android:labelFor="@id/group_selector"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeColor="?attr/colorPrimaryDark"
+                    app:endIconTint="?attr/colorPrimaryDark"
+                    app:hintAnimationEnabled="false"
+                    app:hintTextColor="?attr/colorPrimaryDark">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/group_selector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:layoutAnimation="@anim/anim_recycler_view"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

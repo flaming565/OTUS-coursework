@@ -8,12 +8,15 @@
     <string name="common_error">Error</string>
     <string name="common_edit">Edit</string>
     <string name="common_delete">Delete</string>
+    <string name="common_today">Today</string>
 
     <string name="home_new_category">New category</string>
     <string name="home_edit_category">Edit</string>
     <string name="home_delete_category">Delete</string>
     <string name="home_delete_category_dialog_title">Alert</string>
     <string name="home_delete_category_dialog_message">If you delete this category, all associated tasks and activity history will also be deleted.</string>
+    <string name="home_statistics">Statistics</string>
+    <string name="home_to_do_list">To-do list</string>
 
     <string name="add_category_title">Add Category</string>
     <string name="add_category_enter_category">Enter category</string>
@@ -77,6 +80,25 @@
         <item quantity="one">yesterday</item>
         <item quantity="other">%d days ago</item>
     </plurals>
+
+    <string name="todo_list_title">To-do list</string>
+    <string name="todo_list_period">Period</string>
+    <string name="todo_list_group">Group</string>
+    <string name="todo_list_group_by_date">By date</string>
+    <string name="todo_list_group_by_category">By category</string>
+    <plurals name="todo_list_period_days">
+        <item quantity="zero">Today</item>
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+
+    <plurals name="todo_list_period_weeks">
+        <item quantity="zero">Today</item>
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
+    <string name="todo_list_period_today">Today</string>
+    <string name="todo_list_period_all">All</string>
 
     <string name="base_category_other">Other</string>
     <string name="base_category_face">Skin care</string>

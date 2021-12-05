@@ -16,6 +16,7 @@ import com.amalkina.beautydiary.ui.common.utils.Event
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
+import com.amalkina.beautydiary.ui.tasks.models.UserTaskAction
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -26,7 +27,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
     val titleFragment = category.name
-    val userActionEvent = MutableLiveData<Event<UserAction>>()
+    val userActionEvent = MutableLiveData<Event<UserTaskAction>>()
 
     private val rawCategoryWithTasks = categoryUseCase.getWithTasks(category.id)
         .flatMapMerge { mapGetTasksResult(it) }
@@ -42,19 +43,19 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     }
 
     fun onTaskClick(id: Long) {
-        userActionEvent.postValue(Event(UserAction.OnClickTask(id)))
+        userActionEvent.postValue(Event(UserTaskAction.OnClickTask(id)))
     }
 
     fun onAddTask() {
-        userActionEvent.postValue(Event(UserAction.AddTask(category.id)))
+        userActionEvent.postValue(Event(UserTaskAction.AddTask(category.id)))
     }
 
     fun onEditTask(id: Long) {
-        userActionEvent.postValue(Event(UserAction.EditTask(id, category.id)))
+        userActionEvent.postValue(Event(UserTaskAction.EditTask(id, category.id)))
     }
 
     fun onDeleteTask(id: Long, name: String) {
-        userActionEvent.postValue(Event(UserAction.DeleteTask(id, name)))
+        userActionEvent.postValue(Event(UserTaskAction.DeleteTask(id, name)))
     }
 
     fun onCompleteTask(id: Long) {
@@ -130,14 +131,6 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
 
     private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): Array<CategoryTask> {
         return rawData?.tasks?.map { task -> task.toUIModel() }?.toTypedArray() ?: emptyArray()
-    }
-
-
-    sealed class UserAction {
-        class OnClickTask(val id: Long) : UserAction()
-        class AddTask(val categoryId: Long) : UserAction()
-        class EditTask(val id: Long, val categoryId: Long) : UserAction()
-        class DeleteTask(val id: Long, val name: String) : UserAction()
     }
 
 }

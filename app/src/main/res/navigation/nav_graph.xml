@@ -12,8 +12,11 @@
             android:id="@+id/openAddCategory"
             app:destination="@id/addCategoryFragment" />
         <action
-            android:id="@+id/openTaskListFragment"
+            android:id="@+id/openTaskList"
             app:destination="@id/taskListFragment" />
+        <action
+            android:id="@+id/openTodoList"
+            app:destination="@id/todoListFragment" />
     </fragment>
 
     <fragment
@@ -66,6 +69,18 @@
         <action
             android:id="@+id/openEditTask"
             app:destination="@id/addTaskFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/todoListFragment"
+        android:name="com.amalkina.beautydiary.ui.home.fragments.TodoListFragment"
+        android:label="TodoListFragment" >
+        <action
+            android:id="@+id/openAddTask"
+            app:destination="@id/addTaskFragment" />
+        <action
+            android:id="@+id/openTaskDetail"
+            app:destination="@id/taskDetailFragment" />
     </fragment>
 
 
