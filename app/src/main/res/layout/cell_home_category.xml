@@ -54,7 +54,7 @@
                 android:textColor="@color/black"
                 tools:text="@string/base_category_face" />
 
-            <com.amalkina.beautydiary.ui.common.views.ProgressBarView
+            <com.amalkina.beautydiary.ui.views.ProgressBarView
                 android:layout_width="52dp"
                 android:layout_height="14dp"
                 android:layout_gravity="center_vertical"

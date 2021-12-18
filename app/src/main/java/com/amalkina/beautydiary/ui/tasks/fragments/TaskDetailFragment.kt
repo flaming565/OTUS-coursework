@@ -10,7 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.databinding.FragmentTaskDetailBinding
 import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
-import com.amalkina.beautydiary.ui.common.views.TaskProgressChart
+import com.amalkina.beautydiary.ui.views.TaskProgressChart
 import com.amalkina.beautydiary.ui.tasks.vm.TaskDetailViewModel
 import com.google.android.material.datepicker.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

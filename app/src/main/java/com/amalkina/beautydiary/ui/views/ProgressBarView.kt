@@ -1,4 +1,4 @@
-package com.amalkina.beautydiary.ui.common.views
+package com.amalkina.beautydiary.ui.views
 
 import android.content.Context
 import android.util.AttributeSet

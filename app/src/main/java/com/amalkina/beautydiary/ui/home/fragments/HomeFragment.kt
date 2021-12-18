@@ -41,6 +41,7 @@ class HomeFragment : BaseFragment() {
                         true
                     }
                     R.id.statistics -> {
+                        findNavController().navigate(HomeFragmentDirections.openStatistics())
                         true
                     }
                     else -> false

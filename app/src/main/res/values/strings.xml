@@ -100,6 +100,12 @@
     <string name="todo_list_period_today">Today</string>
     <string name="todo_list_period_all">All</string>
 
+    <string name="statistics_title">Statistics</string>
+    <string name="statistics_completed_tasks">Completed tasks: %d</string>
+    <string name="statistics_scheduled_tasks">Scheduled tasks: %d</string>
+    <string name="statistics_common_progress_chart_title">Индикатор совокупного прогресса</string>
+    <string name="statistics_categories_progress_chart_title">Прогресс выполнения задач (%)</string>
+
     <string name="base_category_other">Other</string>
     <string name="base_category_face">Skin care</string>
     <string name="base_category_body">Body care</string>

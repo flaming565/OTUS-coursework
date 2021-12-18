@@ -32,12 +32,21 @@ internal data class DomainTask(
 
     val daysRemaining = maxAvailableDays - daysAfterExecution
 
+    val userExecutionList = executionDateList.drop(1)
+
     fun calculateDateProgress(date: Long): Float {
+        if (date < startDate)
+            return -1F
+
         val lastExecutionDate = executionDateList
             .map { it.toStartOfDay() }
             .findLast { it < date } ?: startDate.toStartOfDay()
         val daysAfterExecution = TimeUnit.MILLISECONDS.toDays(date - lastExecutionDate)
+
         return (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays).coerceAtLeast(2f)
+            .coerceAtMost(
+                MAX_PROGRESS.toFloat()
+            )
     }
 
     companion object {
@@ -47,7 +56,8 @@ internal data class DomainTask(
 
         fun calculateStartDate(progress: Int, schedule: Schedule): Long {
             val maxAvailableDays = schedule.getDaysCount()
-            val daysAfterExecution = maxAvailableDays - (progress * maxAvailableDays / MAX_PROGRESS.toFloat())
+            val daysAfterExecution =
+                maxAvailableDays - (progress * maxAvailableDays / MAX_PROGRESS.toFloat())
 
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DATE, -daysAfterExecution.roundToInt())

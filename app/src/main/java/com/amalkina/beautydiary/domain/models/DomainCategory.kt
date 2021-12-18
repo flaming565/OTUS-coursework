@@ -1,7 +1,11 @@
 package com.amalkina.beautydiary.domain.models
 
+
 import android.os.Parcelable
+import com.amalkina.beautydiary.domain.common.LightColor
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+
 
 @Parcelize
 data class DomainCategory(
@@ -13,4 +17,8 @@ data class DomainCategory(
     val drawableName: String? = null,
     val updateDate: Long = System.currentTimeMillis(),
     val creationDate: Long = System.currentTimeMillis()
-) : Parcelable
+) : Parcelable {
+
+    @IgnoredOnParcel
+    val color = LightColor.generate()
+}

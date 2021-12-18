@@ -1,4 +1,4 @@
-package com.amalkina.beautydiary.ui.common.views
+package com.amalkina.beautydiary.ui.views
 
 import android.content.Context
 import android.graphics.Color
@@ -12,18 +12,17 @@ import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.domain.models.DomainTask
 import com.amalkina.beautydiary.ui.common.ext.toDate
 import com.amalkina.beautydiary.ui.common.ext.toStartOfDay
+import com.amalkina.beautydiary.ui.common.utils.TimestampValueFormatter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-internal class TaskProgressChart(context: Context, attrs: AttributeSet?) : LineChart(context, attrs) {
+internal open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
+    LineChart(context, attrs) {
 
     init {
         setTouchEnabled(true)
@@ -98,6 +97,7 @@ internal class TaskProgressChart(context: Context, attrs: AttributeSet?) : LineC
 
     private fun updateChart() {
         setLineShader()
+        animateX(500)
         invalidate()
     }
 
@@ -140,12 +140,4 @@ internal class TaskProgressChart(context: Context, attrs: AttributeSet?) : LineC
         xAxis.axisMaximum = maxDate.toFloat()
     }
 
-}
-
-class TimestampValueFormatter : ValueFormatter() {
-    override fun getFormattedValue(value: Float): String {
-        val date = Date(value.toLong())
-        val sdf = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-        return sdf.format(date)
-    }
 }

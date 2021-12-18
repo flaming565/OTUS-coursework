@@ -17,6 +17,9 @@
         <action
             android:id="@+id/openTodoList"
             app:destination="@id/todoListFragment" />
+        <action
+            android:id="@+id/openStatistics"
+            app:destination="@id/statisticsFragment" />
     </fragment>
 
     <fragment
@@ -74,7 +77,7 @@
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.amalkina.beautydiary.ui.home.fragments.TodoListFragment"
-        android:label="TodoListFragment" >
+        android:label="TodoListFragment">
         <action
             android:id="@+id/openAddTask"
             app:destination="@id/addTaskFragment" />
@@ -82,6 +85,11 @@
             android:id="@+id/openTaskDetail"
             app:destination="@id/taskDetailFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.amalkina.beautydiary.ui.home.fragments.StatisticsFragment"
+        android:label="StatisticsFragment" />
 
 
 </navigation>

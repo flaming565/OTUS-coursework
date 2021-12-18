@@ -72,7 +72,7 @@
                         android:gravity="bottom"
                         android:orientation="vertical">
 
-                        <com.amalkina.beautydiary.ui.common.views.ProgressBarView
+                        <com.amalkina.beautydiary.ui.views.ProgressBarView
                             android:layout_width="100dp"
                             android:layout_height="16dp"
                             app:progress="@{vm.progress}" />
