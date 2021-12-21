@@ -21,10 +21,10 @@ internal class ScheduledTasksPieChart(context: Context, attrs: AttributeSet?) :
             .filter { it.creationDate < endDate }
             .forEach { task ->
                 val taskSchedule = task.schedule.run { value * frequency.value }
-                var lastExecutionDate = task.executionDateList
-                    .findLast { it < startDate } ?: run {
+                var lastExecutionDate = task.executionDateList.findLast { it < startDate }
+                if (lastExecutionDate == null || lastExecutionDate < startDate) {
                     countTasks++
-                    startDate.coerceAtLeast(task.creationDate.toEndOfDay())
+                    lastExecutionDate = startDate.coerceAtLeast(task.creationDate.toEndOfDay())
                 }
 
                 lastExecutionDate += TimeUnit.DAYS.toMillis(taskSchedule.toLong())

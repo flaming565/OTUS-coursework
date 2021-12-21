@@ -6,7 +6,7 @@ import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.ui.common.ext.cast
 import com.amalkina.beautydiary.ui.common.ext.map
-import com.amalkina.beautydiary.ui.common.ext.toDate
+import com.amalkina.beautydiary.ui.common.ext.toMonthDate
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.inject
@@ -39,7 +39,7 @@ internal class StatisticsViewModel : BaseViewModel() {
     }
 
     val isNextMonthAvailable = currentDate.map(viewModelScope) {
-        Calendar.getInstance().timeInMillis.toDate() != it.toDate()
+        Calendar.getInstance().timeInMillis.toMonthDate() != it.toMonthDate()
     }
 
     val isPreviousMonthAvailable = currentDate.map(viewModelScope) { date ->
