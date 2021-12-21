@@ -38,8 +38,8 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
         )
     private val categoryTasks =
         rawCategoryWithTasks.mapToMutable(viewModelScope) { mapCategoryTasks(it) }
-    val allTasks = categoryTasks.map(viewModelScope) {
-        (it.toMutableList() + listOf(CategoryTaskNew)).toTypedArray()
+    val allTasks = categoryTasks.map(viewModelScope) { list ->
+        list?.let { (it.toMutableList() + listOf(CategoryTaskNew)).toTypedArray() }
     }
 
     fun onTaskClick(id: Long) {
@@ -95,7 +95,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     }
 
     private fun sortCategoryTasks(comparator: Comparator<CategoryTask>) {
-        val tasks = categoryTasks.value.toMutableList()
+        val tasks = categoryTasks.value?.toMutableList() ?: return
         tasks.sortWith(comparator)
         categoryTasks.value = tasks.toTypedArray()
     }
@@ -129,8 +129,8 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
         return resultFlow
     }
 
-    private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): Array<CategoryTask> {
-        return rawData?.tasks?.map { task -> task.toUIModel() }?.toTypedArray() ?: emptyArray()
+    private fun mapCategoryTasks(rawData: DomainCategoryWithTasks?): Array<CategoryTask>? {
+        return rawData?.tasks?.map { task -> task.toUIModel() }?.toTypedArray()
     }
 
 }

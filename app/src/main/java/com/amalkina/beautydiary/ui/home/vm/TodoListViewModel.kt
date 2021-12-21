@@ -151,15 +151,15 @@ internal class TodoListViewModel : BaseViewModel() {
         val result = mutableListOf<Any>()
 
         if (period == Period.All)
-            categoriesMap.forEach { (category, tasks) ->
-                result.add(TodoCategory(category.name, "${tasks.size}"))
+            categoriesMap.onEachIndexed { index, (category, tasks) ->
+                result.add(TodoCategory(index.toLong(), category.name, "${tasks.size}"))
                 tasks.forEach { result.add(it.toUIModel()) }
             }
         else
-            categoriesMap.forEach { (category, tasks) ->
+            categoriesMap.onEachIndexed { index, (category, tasks) ->
                 val periodTasks = tasks.filter { it.daysRemaining <= period.value }
                 if (periodTasks.isNotEmpty()) {
-                    result.add(TodoCategory(category.name, "${periodTasks.size}"))
+                    result.add(TodoCategory(index.toLong(), category.name, "${periodTasks.size}"))
                     periodTasks.forEach { result.add(it.toUIModel()) }
                 }
             }
@@ -180,9 +180,11 @@ internal class TodoListViewModel : BaseViewModel() {
             dateTasks = dateTasks.filter { (key, _) -> key <= period.value }
 
         dateTasks.toSortedMap()
-            .forEach { (days, tasks) ->
+            .onEachIndexed { index, (days, tasks) ->
                 if (period != Period.Today)
-                    result.add(TodoCategory(getDateHeader(days), "${tasks.size}"))
+                    result.add(
+                        TodoCategory(-(index + 1).toLong(), getDateHeader(days), "${tasks.size}")
+                    )
                 tasks.forEach { result.add(it) }
             }
 

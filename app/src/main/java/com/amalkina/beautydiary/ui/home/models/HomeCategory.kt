@@ -9,7 +9,7 @@ import com.amalkina.beautydiary.ui.common.ext.resIdByName
 import com.amalkina.beautydiary.ui.common.models.BaseModel
 
 internal open class HomeCategory(
-    val id: Long = 0,
+    val id: Long = -1,
     val baseCategoryId: Long = 0,
     var name: String = "",
     val stringResName: String? = null,

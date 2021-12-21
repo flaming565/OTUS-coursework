@@ -10,10 +10,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
 import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.databinding.FragmentTodoListBinding
 import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
+import com.amalkina.beautydiary.ui.common.fragments.RecyclerViewFragment
+import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.TodoCategory
 import com.amalkina.beautydiary.ui.home.vm.TodoListViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
@@ -25,16 +29,19 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class TodoListFragment : BaseFragment() {
+class TodoListFragment : RecyclerViewFragment() {
 
     private val viewModel by viewModel<TodoListViewModel>()
+    private var binding: FragmentTodoListBinding? = null
+
+    override fun getRecyclerView(): RecyclerView? = binding?.recyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentTodoListBinding.inflate(inflater, container, false).apply {
+    ): View? {
+        binding = FragmentTodoListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
             appbar.toolbar.setNavigationOnClickListener {
@@ -47,7 +54,7 @@ class TodoListFragment : BaseFragment() {
             R.layout.cell_todo_list_dropdown_item,
             viewModel.periodNames
         )
-        binding.periodSelector.apply {
+        binding?.periodSelector?.apply {
             setAdapter(periodAdapter)
             setText(viewModel.currentPeriod.value.name, false)
             onItemClickListener = OnItemClickListener { _, _, position, _ ->
@@ -60,7 +67,7 @@ class TodoListFragment : BaseFragment() {
             R.layout.cell_todo_list_dropdown_item,
             viewModel.groupNames
         )
-        binding.groupSelector.apply {
+        binding?.groupSelector?.apply {
             setAdapter(groupAdapter)
             setText(viewModel.currentGroup.value.title, false)
             onItemClickListener = OnItemClickListener { _, _, position, _ ->
@@ -68,24 +75,17 @@ class TodoListFragment : BaseFragment() {
             }
         }
 
-        val taskAdapter = makeAdapter()
-        binding.recyclerView.apply {
-            adapter = taskAdapter
-            itemAnimator = null
+        rvAdapter = makeAdapter()
+        binding?.recyclerView?.apply {
+            adapter = rvAdapter
+            itemAnimator = DefaultItemAnimator()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.todoListItems.collect {
-                    val arrayItems = it.toTypedArray()
-                    val isContentEquals = taskAdapter.items.contentEquals(arrayItems)
-                    if (!isContentEquals) {
-                        taskAdapter.items = arrayItems
-                        if (it.size > 1 && viewModel.isRecycleViewAnimate) {
-                            viewModel.isRecycleViewAnimate = false
-                            binding.recyclerView.scheduleLayoutAnimation()
-                        }
-                    }
+                    rvAdapter?.items = it.toTypedArray()
+                    startListAnimation(minSize = 1)
                 }
             }
         }
@@ -109,28 +109,33 @@ class TodoListFragment : BaseFragment() {
             }
         }
 
-        return binding.root
+        return binding?.root
     }
 
     private fun makeAdapter() = object : ViewModelAdapter(viewLifecycleOwner) {
         init {
+            setHasStableIds(true)
+
             sharedObject(viewModel, BR.todoList)
             cell(CategoryTask::class.java, R.layout.cell_todo_list_task_item, BR.vm)
             cell(TodoCategory::class.java, R.layout.cell_todo_list_category_item, BR.vm)
         }
 
-        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is CategoryTask && newItem is CategoryTask) {
-                return oldItem.id == newItem.id
+        override fun getItemId(position: Int): Long {
+            return when (val item = items[position]) {
+                is CategoryTask -> item.id
+                is TodoCategory -> item.id
+                else -> super.getItemId(position)
             }
-            return super.areItemsTheSame(oldItem, newItem)
         }
 
-        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is CategoryTask && newItem is CategoryTask) {
-                return oldItem.toString() == newItem.toString()
-            }
-            return super.areContentsTheSame(oldItem, newItem)
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is CategoryTask && newItem is CategoryTask)
+                return oldItem.id == newItem.id
+            else if (oldItem is TodoCategory && newItem is TodoCategory)
+                return oldItem.name == newItem.name
+
+            return super.areItemsTheSame(oldItem, newItem)
         }
     }
 

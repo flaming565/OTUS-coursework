@@ -6,12 +6,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.databinding.DialogHomeSelectCategoryOptionsBinding
 import com.amalkina.beautydiary.databinding.FragmentHomeBinding
-import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
+import com.amalkina.beautydiary.ui.common.fragments.RecyclerViewFragment
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.HomeCategoryNew
 import com.amalkina.beautydiary.ui.home.vm.HomeViewModel
@@ -23,14 +25,18 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : RecyclerViewFragment() {
     private val viewModel by viewModel<HomeViewModel>()
+
+    private var binding: FragmentHomeBinding? = null
+
+    override fun getRecyclerView(): RecyclerView? = binding?.recyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
+    ): View? {
+        binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
 
@@ -49,17 +55,18 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        val categoryAdapter = makeAdapter()
-        binding.recyclerView.apply {
+        rvAdapter = makeAdapter()
+        binding?.recyclerView?.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = categoryAdapter
+            adapter = rvAdapter
+            itemAnimator = DefaultItemAnimator()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.categories.collect {
-                    categoryAdapter.items = it.toTypedArray()
-                    if (it.size > 1) binding.recyclerView.scheduleLayoutAnimation()
+                    rvAdapter?.items = it.toTypedArray()
+                    startListAnimation()
                 }
             }
         }
@@ -93,14 +100,30 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        return binding.root
+        return binding?.root
     }
 
     private fun makeAdapter() = object : ViewModelAdapter(viewLifecycleOwner) {
         init {
+            setHasStableIds(true)
+
             sharedObject(viewModel, BR.home)
             cell(HomeCategory::class.java, R.layout.cell_home_category, BR.vm)
             cell(HomeCategoryNew::class.java, R.layout.cell_home_category_new, BR.vm)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return when (val item = items[position]) {
+                is HomeCategory -> item.id
+                else -> super.getItemId(position)
+            }
+        }
+
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is HomeCategory && newItem is HomeCategory)
+                return oldItem.id == newItem.id
+
+            return super.areItemsTheSame(oldItem, newItem)
         }
     }
 

@@ -9,12 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
 import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.databinding.FragmentTaskListBinding
-import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
+import com.amalkina.beautydiary.ui.common.fragments.RecyclerViewFragment
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTaskNew
+import com.amalkina.beautydiary.ui.tasks.models.TaskItem
 import com.amalkina.beautydiary.ui.tasks.models.UserTaskAction
 import com.amalkina.beautydiary.ui.tasks.vm.TaskListViewModel
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
@@ -25,16 +28,20 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 
-class TaskListFragment : BaseFragment() {
+class TaskListFragment : RecyclerViewFragment() {
     private val args by navArgs<TaskListFragmentArgs>()
     private val viewModel by viewModel<TaskListViewModel> { parametersOf(args.category) }
+
+    private var binding: FragmentTaskListBinding? = null
+
+    override fun getRecyclerView(): RecyclerView? = binding?.recyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentTaskListBinding.inflate(inflater, container, false).apply {
+    ): View? {
+        binding = FragmentTaskListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             vm = viewModel
             toolbar.setNavigationOnClickListener {
@@ -67,21 +74,18 @@ class TaskListFragment : BaseFragment() {
             }
         }
 
-        val taskAdapter = makeAdapter()
-        binding.recyclerView.apply {
-            adapter = taskAdapter
-            itemAnimator = null
+        rvAdapter = makeAdapter()
+        binding?.recyclerView?.apply {
+            adapter = rvAdapter
+            itemAnimator = DefaultItemAnimator()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allTasks.collect {
-                    val isContentEquals = taskAdapter.items.contentEquals(it)
-                    if (!isContentEquals) {
-                        taskAdapter.items = it as Array<Any>
-                        if (it.size > 1) {
-                            binding.recyclerView.scheduleLayoutAnimation()
-                        }
+                viewModel.allTasks.collect { items ->
+                    items?.let {
+                        rvAdapter?.items = it as Array<Any>
+                        startListAnimation()
                     }
                 }
             }
@@ -97,9 +101,7 @@ class TaskListFragment : BaseFragment() {
                         TaskListFragmentDirections.openTaskDetail(it.id)
                     )
                     is UserTaskAction.AddTask -> findNavController().navigate(
-                        TaskListFragmentDirections.openAddTask(
-                            it.categoryId
-                        )
+                        TaskListFragmentDirections.openAddTask(it.categoryId)
                     )
                     is UserTaskAction.EditTask -> findNavController().navigate(
                         TaskListFragmentDirections.openAddTask(it.categoryId, it.id)
@@ -109,28 +111,30 @@ class TaskListFragment : BaseFragment() {
             }
         }
 
-        return binding.root
+        return binding?.root
     }
 
     private fun makeAdapter() = object : ViewModelAdapter(viewLifecycleOwner) {
         init {
+            setHasStableIds(true)
+
             sharedObject(viewModel, BR.taskList)
             cell(CategoryTask::class.java, R.layout.cell_task_list_card, BR.vm)
             cell(CategoryTaskNew::class.java, R.layout.cell_task_list_card_new, BR.vm)
         }
 
-        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is CategoryTask && newItem is CategoryTask) {
-                return oldItem.id == newItem.id
+        override fun getItemId(position: Int): Long {
+            return when (val item = items[position]) {
+                is TaskItem -> item.id
+                else -> super.getItemId(position)
             }
-            return super.areItemsTheSame(oldItem, newItem)
         }
 
-        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is CategoryTask && newItem is CategoryTask) {
-                return oldItem.toString() == newItem.toString()
-            }
-            return super.areContentsTheSame(oldItem, newItem)
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is TaskItem && newItem is TaskItem)
+                return oldItem.id == newItem.id
+
+            return super.areItemsTheSame(oldItem, newItem)
         }
     }
 
@@ -143,4 +147,5 @@ class TaskListFragment : BaseFragment() {
             .setNegativeButton(R.string.common_cancel, null)
             .show()
     }
+
 }
