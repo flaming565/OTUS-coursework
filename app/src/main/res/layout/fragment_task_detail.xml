@@ -35,7 +35,6 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/layout_fragment_margin"
             android:orientation="vertical"
-            android:weightSum="1"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <com.amalkina.beautydiary.ui.views.TaskProgressChart
@@ -43,205 +42,213 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="24dp"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.4"
+                app:invisibleIf="@{!vm.isChartVisible}" />
 
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="24dp"
-                app:strokeColor="?attr/colorPrimaryDark"
-                app:strokeWidth="2dp">
+                android:layout_weight="0.6"
+                android:orientation="vertical">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp">
+                    app:strokeColor="?attr/colorPrimaryDark"
+                    app:strokeWidth="2dp">
 
-                    <TextView
-                        android:id="@+id/tv_priority"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/task_detail_priority"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <RatingBar
-                        android:id="@+id/rating_bar_priority"
-                        style="@style/Widget.AppCompat.RatingBar.Indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginVertical="-8dp"
-                        android:layout_marginStart="-12dp"
-                        android:numStars="3"
-                        android:rating="@{vm.task.priority}"
-                        android:scaleX="0.6"
-                        android:scaleY="0.6"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_priority"
-                        app:layout_constraintEnd_toStartOf="@id/center"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@+id/tv_priority"
-                        app:layout_constraintTop_toTopOf="@id/tv_priority"
-                        tools:rating="2" />
-
-                    <TextView
-                        android:id="@+id/tv_complete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/task_detail_complete"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        app:layout_constraintStart_toStartOf="@id/center"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_complete_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="12dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{vm.task.progressDetailDesc}"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        android:textStyle="italic"
-                        app:layout_constrainedWidth="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@id/tv_complete"
-                        app:layout_constraintTop_toTopOf="@id/tv_complete"
-                        tools:text="in 2 days" />
-
-                    <TextView
-                        android:id="@+id/tv_schedule"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/task_detail_schedule"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        app:layout_constraintStart_toStartOf="@id/tv_priority"
-                        app:layout_constraintTop_toBottomOf="@id/tv_priority" />
-
-                    <TextView
-                        android:id="@+id/tv_schedule_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginHorizontal="12dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@{vm.task.scheduleDesc}"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        android:textStyle="italic"
-                        app:layout_constrainedWidth="true"
-                        app:layout_constraintEnd_toStartOf="@id/center"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@+id/tv_schedule"
-                        app:layout_constraintTop_toTopOf="@id/tv_schedule"
-                        tools:text="2 week" />
-
-                    <TextView
-                        android:id="@+id/tv_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/task_detail_category"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_schedule"
-                        app:layout_constraintStart_toStartOf="@id/center"
-                        app:layout_constraintTop_toTopOf="@id/tv_schedule" />
-
-                    <TextView
-                        android:id="@+id/tv_category_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@{vm.category.name}"
-                        android:textAppearance="?attr/textAppearanceBody1"
-                        android:textStyle="italic"
-                        app:layout_constrainedWidth="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@id/tv_category"
-                        app:layout_constraintTop_toTopOf="@id/tv_category"
-                        tools:text="Hands Care" />
-
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.5" />
-
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="0.8dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:layout_marginTop="20dp"
-                        android:background="?attr/colorPrimaryDark"
-                        app:goneIfNot="@{vm.task.note}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_schedule" />
-
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal"
-                        app:goneIfNot="@{vm.task.note}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_notes" />
+                        android:layout_margin="12dp">
 
                         <TextView
-                            android:id="@+id/tv_description"
+                            android:id="@+id/tv_priority"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/task_detail_priority"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <RatingBar
+                            android:id="@+id/rating_bar_priority"
+                            style="@style/Widget.AppCompat.RatingBar.Indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginVertical="-8dp"
+                            android:layout_marginStart="-12dp"
+                            android:numStars="3"
+                            android:rating="@{vm.task.priority}"
+                            android:scaleX="0.6"
+                            android:scaleY="0.6"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_priority"
+                            app:layout_constraintEnd_toStartOf="@id/center"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/tv_priority"
+                            app:layout_constraintTop_toTopOf="@id/tv_priority"
+                            tools:rating="2" />
+
+                        <TextView
+                            android:id="@+id/tv_complete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/task_detail_complete"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            app:layout_constraintStart_toStartOf="@id/center"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_complete_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="12dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{vm.task.progressDetailDesc}"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            android:textStyle="italic"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@id/tv_complete"
+                            app:layout_constraintTop_toTopOf="@id/tv_complete"
+                            tools:text="in 2 days" />
+
+                        <TextView
+                            android:id="@+id/tv_schedule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/task_detail_schedule"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            app:layout_constraintStart_toStartOf="@id/tv_priority"
+                            app:layout_constraintTop_toBottomOf="@id/tv_priority" />
+
+                        <TextView
+                            android:id="@+id/tv_schedule_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginHorizontal="12dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="@{vm.task.scheduleDesc}"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            android:textStyle="italic"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintEnd_toStartOf="@id/center"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/tv_schedule"
+                            app:layout_constraintTop_toTopOf="@id/tv_schedule"
+                            tools:text="2 week" />
+
+                        <TextView
+                            android:id="@+id/tv_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/task_detail_category"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_schedule"
+                            app:layout_constraintStart_toStartOf="@id/center"
+                            app:layout_constraintTop_toTopOf="@id/tv_schedule" />
+
+                        <TextView
+                            android:id="@+id/tv_category_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:ellipsize="end"
-                            android:maxLines="5"
-                            android:text="@{vm.task.note}"
+                            android:maxLines="2"
+                            android:text="@{vm.category.name}"
                             android:textAppearance="?attr/textAppearanceBody1"
-                            tools:text="Description task task long task task long" />
-                    </LinearLayout>
+                            android:textStyle="italic"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@id/tv_category"
+                            app:layout_constraintTop_toTopOf="@id/tv_category"
+                            tools:text="Hands Care" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.5" />
+
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.8dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginTop="20dp"
+                            android:background="?attr/colorPrimaryDark"
+                            app:goneIfNot="@{vm.task.note}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_schedule" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal"
+                            app:goneIfNot="@{vm.task.note}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/divider">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_notes" />
+
+                            <TextView
+                                android:id="@+id/tv_description"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:ellipsize="end"
+                                android:maxLines="5"
+                                android:text="@{vm.task.note}"
+                                android:textAppearance="?attr/textAppearanceBody1"
+                                tools:text="Description task task long task task long" />
+                        </LinearLayout>
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:enabled="@{vm.isDoneButtonEnable}"
-                android:onClick="@{() -> vm.onDoneClick()}"
-                android:text="@string/task_detail_done" />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:enabled="@{vm.isDoneButtonEnable}"
+                    android:onClick="@{() -> vm.onDoneClick()}"
+                    android:text="@string/task_detail_done" />
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
-                android:onClick="@{() -> vm.onCompleteEarlierClick()}"
-                android:text="@string/task_detail_completed_earlier"
-                android:textColor="?attr/colorOnPrimary"
-                app:cornerRadius="4dp"
-                app:goneIfNot="@{vm.showCompleteEarlierButton}" />
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-4dp"
+                    android:onClick="@{() -> vm.onCompleteEarlierClick()}"
+                    android:text="@string/task_detail_completed_earlier"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:cornerRadius="4dp"
+                    app:goneIfNot="@{vm.showCompleteEarlierButton}" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amalkina.beautydiary.R
@@ -14,8 +16,8 @@ import com.amalkina.beautydiary.ui.views.TaskProgressChart
 import com.amalkina.beautydiary.ui.tasks.vm.TaskDetailViewModel
 import com.google.android.material.datepicker.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -59,10 +61,13 @@ class TaskDetailFragment : BaseFragment() {
             }
         }
 
-        viewModel.domainTask
-            .onEach {
-                it?.let { task -> progressChart.setTask(task) }
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.domainTask.collect { task ->
+                    task?.let { progressChart.setTask(it) }
+                }
+            }
+        }
 
         viewModel.taskCompleteEvent.observe(viewLifecycleOwner) { event ->
             event.let {

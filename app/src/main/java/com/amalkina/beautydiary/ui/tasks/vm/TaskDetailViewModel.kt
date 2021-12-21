@@ -30,6 +30,8 @@ internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
     val task = domainTask.map(viewModelScope) { it?.toUIModel() }
     val category = categoryTask.map(viewModelScope) { it?.category }
 
+    val isChartVisible = domainTask.map(viewModelScope) { it != null }
+
     val isDoneButtonEnable = domainTask.map(viewModelScope) {
         it?.lastExecutionDate?.toDate() != System.currentTimeMillis().toDate()
     }
