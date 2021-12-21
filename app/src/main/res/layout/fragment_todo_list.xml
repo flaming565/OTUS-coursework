@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -26,10 +27,10 @@
             android:orientation="vertical"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -82,7 +83,39 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
                 android:layoutAnimation="@anim/anim_recycler_view"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:goneIf="@{vm.showPlaceholder}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:goneIfNot="@{vm.showPlaceholder}">
+
+                <androidx.constraintlayout.widget.Placeholder
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/base_placeholder" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginTop="24dp"
+                    android:layout_weight="0.4"
+                    android:gravity="top|center"
+                    android:text="@string/todo_list_placeholder_text"
+                    android:textAppearance="?attr/textAppearanceBody1" />
+            </LinearLayout>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

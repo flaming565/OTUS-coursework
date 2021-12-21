@@ -99,6 +99,7 @@
     </plurals>
     <string name="todo_list_period_today">Today</string>
     <string name="todo_list_period_all">All</string>
+    <string name="todo_list_placeholder_text">All task completed</string>
 
     <string name="statistics_title">Statistics</string>
     <string name="statistics_completed_tasks">Completed tasks: %d</string>

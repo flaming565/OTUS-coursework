@@ -9,6 +9,7 @@ import com.amalkina.beautydiary.domain.models.DomainCategoryWithTasks
 import com.amalkina.beautydiary.domain.models.DomainTask
 import com.amalkina.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.amalkina.beautydiary.domain.usecases.TaskActionsUseCase
+import com.amalkina.beautydiary.ui.common.ext.map
 import com.amalkina.beautydiary.ui.common.ext.mapToMutable
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
 import com.amalkina.beautydiary.ui.common.ext.tryCast
@@ -50,13 +51,12 @@ internal class TodoListViewModel : BaseViewModel() {
     }
 
     val todoListItems = fullCategoriesMap.mapToMutable(viewModelScope) { getPeriodItems(it) }
+    val showPlaceholder = todoListItems.map(viewModelScope) { it.isEmpty() }
 
     val userActionEvent = MutableLiveData<Event<UserTaskAction>>()
-    var isRecycleViewAnimate = true
 
     fun updateSelectedPeriod(position: Int) {
         if (position < periods.size && currentPeriod.value != periods[position]) {
-            isRecycleViewAnimate = true
             currentPeriod.value = periods[position]
             updatePeriodItems(periods[position])
         }
@@ -64,7 +64,6 @@ internal class TodoListViewModel : BaseViewModel() {
 
     fun updateSelectedGroup(position: Int) {
         if (position < groupNames.size && currentGroup.value != groups[position]) {
-            isRecycleViewAnimate = true
             currentGroup.value = groups[position]
             todoListItems.value = getPeriodItems()
         }
