@@ -8,4 +8,11 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "BeautyDiary"
-include ':app'
+
+include ':app',
+        ':core',
+        ':core-ui',
+        ':navigation',
+        ':feature-statistics'
+
+

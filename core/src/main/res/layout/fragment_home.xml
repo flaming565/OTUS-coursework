@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.beautydiary.core.ui.home.vm.HomeViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/menu_home"
+                app:title="@{@string/app_name}" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <include
+                layout="@layout/include_quote_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_fragment_margin"
+                android:layout_marginTop="@dimen/layout_fragment_margin"
+                android:layout_marginEnd="@dimen/layout_fragment_margin"
+                app:goneIfNot="@{vm.quote}"
+                app:vm="@{vm.quote}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/layout_fragment_margin"
+                android:layout_marginTop="@dimen/layout_fragment_margin"
+                android:layoutAnimation="@anim/anim_recycler_view" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/include_loading_view"
+            app:isLoading="@{vm.isLoading}" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

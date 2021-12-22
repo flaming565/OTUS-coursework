@@ -1,7 +1,7 @@
 package com.amalkina.beautydiary
 
 import android.app.Application
-import com.amalkina.beautydiary.di.*
+import com.beautydiary.core.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -20,7 +20,12 @@ class App : Application() {
         startKoin {
             androidLogger(Level.NONE)
             androidContext(this@App)
-            modules(domainModule, dataModule, viewModelModule)
+            modules(
+                domainModule,
+                dataModule,
+                viewModelModule,
+                com.beautydiary.featurestatistics.di.statisticsModule
+            )
         }
     }
 
