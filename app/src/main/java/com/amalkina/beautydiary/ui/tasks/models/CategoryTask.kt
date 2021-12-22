@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.math.abs
 
 
-internal open class TaskItem(
+internal sealed class TaskItem(
     open val id: Long = -1,
     open val name: String = ""
 ) : BaseModel()

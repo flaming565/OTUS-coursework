@@ -14,6 +14,7 @@ import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.databinding.DialogHomeSelectCategoryOptionsBinding
 import com.amalkina.beautydiary.databinding.FragmentHomeBinding
 import com.amalkina.beautydiary.ui.common.fragments.RecyclerViewFragment
+import com.amalkina.beautydiary.ui.home.models.CategoryItem
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.HomeCategoryNew
 import com.amalkina.beautydiary.ui.home.vm.HomeViewModel
@@ -114,16 +115,22 @@ class HomeFragment : RecyclerViewFragment() {
 
         override fun getItemId(position: Int): Long {
             return when (val item = items[position]) {
-                is HomeCategory -> item.id
+                is CategoryItem -> item.id
                 else -> super.getItemId(position)
             }
         }
 
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is HomeCategory && newItem is HomeCategory)
+            if (oldItem is CategoryItem && newItem is CategoryItem)
                 return oldItem.id == newItem.id
 
             return super.areItemsTheSame(oldItem, newItem)
+        }
+
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is HomeCategory && newItem is HomeCategory)
+                return oldItem.toString() == newItem.toString()
+            return super.areContentsTheSame(oldItem, newItem)
         }
     }
 

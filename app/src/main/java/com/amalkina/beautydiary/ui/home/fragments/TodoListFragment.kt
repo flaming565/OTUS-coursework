@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amalkina.beautydiary.BR
 import com.amalkina.beautydiary.R
 import com.amalkina.beautydiary.databinding.FragmentTodoListBinding
-import com.amalkina.beautydiary.ui.common.fragments.BaseFragment
 import com.amalkina.beautydiary.ui.common.fragments.RecyclerViewFragment
-import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.TodoCategory
 import com.amalkina.beautydiary.ui.home.vm.TodoListViewModel
 import com.amalkina.beautydiary.ui.tasks.models.CategoryTask
@@ -136,6 +134,15 @@ class TodoListFragment : RecyclerViewFragment() {
                 return oldItem.name == newItem.name
 
             return super.areItemsTheSame(oldItem, newItem)
+        }
+
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is CategoryTask && newItem is CategoryTask)
+                return oldItem.toString() == newItem.toString()
+            else if (oldItem is TodoCategory && newItem is TodoCategory)
+                return oldItem.toString() == newItem.toString()
+
+            return super.areContentsTheSame(oldItem, newItem)
         }
     }
 

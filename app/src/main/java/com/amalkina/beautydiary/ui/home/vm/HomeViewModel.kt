@@ -15,6 +15,7 @@ import com.amalkina.beautydiary.ui.common.ext.toDomain
 import com.amalkina.beautydiary.ui.common.ext.toUIModel
 import com.amalkina.beautydiary.ui.common.ext.tryCast
 import com.amalkina.beautydiary.ui.common.vm.BaseViewModel
+import com.amalkina.beautydiary.ui.home.models.CategoryItem
 import com.amalkina.beautydiary.ui.home.models.HomeCategory
 import com.amalkina.beautydiary.ui.home.models.HomeCategoryNew
 import com.amalkina.beautydiary.ui.home.models.QuoteModel
@@ -30,7 +31,7 @@ internal class HomeViewModel : BaseViewModel() {
 
     val userActionEvent = MutableLiveData<Event<UserAction>>()
 
-    val categories: StateFlow<List<HomeCategory>> = categoryUseCase.allWithTasks()
+    val categories: StateFlow<List<CategoryItem>> = categoryUseCase.allWithTasks()
         .flatMapMerge { mapGetCategoriesResult(it) }
         .stateIn(
             scope = viewModelScope,
@@ -72,8 +73,8 @@ internal class HomeViewModel : BaseViewModel() {
         selectedCategory?.let { deleteCategory(it) }
     }
 
-    private fun mapGetCategoriesResult(result: Result): Flow<List<HomeCategory>> {
-        var categories: Flow<List<HomeCategory>> = flowOf(emptyList())
+    private fun mapGetCategoriesResult(result: Result): Flow<List<CategoryItem>> {
+        var categories: Flow<List<CategoryItem>> = flowOf(emptyList())
         mapResponseResult(result)?.let {
             tryCast<Flow<List<DomainCategoryWithTasks>>>(it) {
                 categories = this.transform { list ->
@@ -85,7 +86,8 @@ internal class HomeViewModel : BaseViewModel() {
     }
 
     private fun initSelectedCategory(id: Long) {
-        selectedCategory = categories.value.firstOrNull { it.id == id }?.toDomain()
+        selectedCategory =
+            (categories.value.firstOrNull { it.id == id } as? HomeCategory)?.toDomain()
     }
 
     private fun deleteCategory(category: DomainCategory) {

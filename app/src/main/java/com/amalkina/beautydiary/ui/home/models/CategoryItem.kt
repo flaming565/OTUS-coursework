@@ -8,16 +8,22 @@ import com.amalkina.beautydiary.ui.common.ext.getDrawableRes
 import com.amalkina.beautydiary.ui.common.ext.resIdByName
 import com.amalkina.beautydiary.ui.common.models.BaseModel
 
-internal open class HomeCategory(
-    val id: Long = -1,
+internal sealed class CategoryItem(
+    open val id: Long = -1,
+    open val name: String = "",
+    @DrawableRes open val imageDrawable: Int? = null
+) : BaseModel()
+
+internal data class HomeCategory(
+    override val id: Long = -1,
     val baseCategoryId: Long = 0,
-    var name: String = "",
+    override var name: String = "",
     val stringResName: String? = null,
     val imagePath: String? = null,
     val drawableName: String? = null,
-    @DrawableRes var imageDrawable: Int? = null,
+    @DrawableRes override var imageDrawable: Int? = null,
     val progress: Int = 0
-) : BaseModel() {
+) : CategoryItem(id = id, name = name, imageDrawable = imageDrawable) {
 
     init {
         stringResName?.let { name = getString(getContext().resIdByName(it, "string")) }
@@ -30,5 +36,9 @@ internal open class HomeCategory(
     val hideProgressView = progress == 0
 }
 
-internal object HomeCategoryNew :
-    HomeCategory(name = getString(R.string.home_new_category), imageDrawable = R.drawable.home_category_add)
+internal object HomeCategoryNew : CategoryItem(
+    name = getString(R.string.home_new_category),
+    imageDrawable = R.drawable.home_category_add
+) {
+    val drawable = imageDrawable?.let { getContext().getDrawableRes(it) }
+}

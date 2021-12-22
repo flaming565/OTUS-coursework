@@ -136,6 +136,13 @@ class TaskListFragment : RecyclerViewFragment() {
 
             return super.areItemsTheSame(oldItem, newItem)
         }
+
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is CategoryTask && newItem is CategoryTask)
+                return oldItem.toString() == newItem.toString()
+
+            return super.areContentsTheSame(oldItem, newItem)
+        }
     }
 
     private fun showDeleteTaskDialog(taskId: Long, taskName: String) {
