@@ -8,13 +8,13 @@ import com.beautydiary.core.ui.common.ext.getDrawableRes
 import com.beautydiary.core.ui.common.ext.resIdByName
 import com.beautydiary.core.ui.common.models.BaseModel
 
-internal sealed class CategoryItem(
+sealed class CategoryItem(
     open val id: Long = -1,
     open val name: String = "",
     @DrawableRes open val imageDrawable: Int? = null
 ) : BaseModel()
 
-internal data class HomeCategory(
+data class HomeCategory(
     override val id: Long = -1,
     val baseCategoryId: Long = 0,
     override var name: String = "",

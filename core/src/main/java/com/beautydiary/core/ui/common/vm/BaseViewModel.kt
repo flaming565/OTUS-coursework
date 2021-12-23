@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beautydiary.core.R
-import com.beautydiary.core.ui.common.utils.Event
 import com.beautydiary.core.domain.common.Result
+import com.beautydiary.core.ui.common.utils.Event
 import com.beautydiary.core.ui.common.models.BaseModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope

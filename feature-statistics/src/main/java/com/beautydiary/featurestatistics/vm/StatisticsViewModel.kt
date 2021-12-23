@@ -1,10 +1,10 @@
 package com.beautydiary.featurestatistics.vm
 
 import androidx.lifecycle.viewModelScope
-import com.beautydiary.core.domain.common.Result
-import com.beautydiary.core.domain.models.DomainCategoryWithTasks
+import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.beautydiary.core.domain.usecases.CategoryActionsUseCase
 import com.beautydiary.core.ui.common.ext.cast
+import com.beautydiary.core.domain.common.Result
 import com.beautydiary.core.ui.common.ext.map
 import com.beautydiary.core.ui.common.ext.toMonthDate
 import com.beautydiary.core.ui.common.vm.BaseViewModel

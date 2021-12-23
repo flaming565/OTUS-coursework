@@ -5,8 +5,21 @@
     app:startDestination="@id/core_flow">
 
     <include app:graph="@navigation/core_flow" />
-
+    <include app:graph="@navigation/tasks_flow" />
+    <include app:graph="@navigation/todo_list_flow" />
     <include app:graph="@navigation/statistics_flow" />
+
+    <action
+        android:id="@+id/toTasksFlow"
+        app:destination="@id/tasks_flow">
+        <argument
+            android:name="category"
+            app:argType="com.beautydiary.domain.models.DomainCategory" />
+    </action>
+
+    <action
+        android:id="@+id/toTodoListFlow"
+        app:destination="@id/todo_list_flow" />
 
     <action
         android:id="@+id/toStatisticsFlow"

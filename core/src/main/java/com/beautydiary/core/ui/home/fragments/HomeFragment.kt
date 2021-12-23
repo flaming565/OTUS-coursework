@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beautydiary.core.BR
+import com.beautydiary.core.R
 import com.beautydiary.core.databinding.DialogHomeSelectCategoryOptionsBinding
 import com.beautydiary.core.databinding.FragmentHomeBinding
-import com.beautydiary.core.R
 import com.beautydiary.core.ui.common.fragments.RecyclerViewFragment
 import com.beautydiary.core.ui.home.models.CategoryItem
 import com.beautydiary.core.ui.home.models.HomeCategory
@@ -46,7 +46,7 @@ class HomeFragment : RecyclerViewFragment() {
             toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.to_do_list -> {
-                        findNavController().navigate(HomeFragmentDirections.openTodoList())
+                        (requireActivity() as ToFlowNavigatable).navigateToFlow(NavigationFlow.TodoListFlow)
                         true
                     }
                     R.id.statistics -> {
@@ -82,8 +82,10 @@ class HomeFragment : RecyclerViewFragment() {
                 when (it) {
                     UserAction.ON_CLICK -> {
                         viewModel.selectedCategory?.let { category ->
-                            findNavController().navigate(
-                                HomeFragmentDirections.openTaskList(category)
+                            (requireActivity() as ToFlowNavigatable).navigateToFlow(
+                                NavigationFlow.TasksFlow(
+                                    category
+                                )
                             )
                         }
                     }

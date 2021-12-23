@@ -1,11 +1,11 @@
 package com.beautydiary.core.domain.usecases
 
 import com.beautydiary.core.domain.interfaces.TaskRepository
-import com.beautydiary.core.domain.models.DomainTask
+import com.beautydiary.domain.models.DomainTask
 import org.koin.core.component.inject
 
 
-internal class TaskActionsUseCase : BaseUseCase() {
+class TaskActionsUseCase : BaseUseCase() {
     private val repository by inject<TaskRepository>()
 
     fun all() =

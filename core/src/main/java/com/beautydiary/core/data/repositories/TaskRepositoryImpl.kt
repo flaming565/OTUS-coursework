@@ -7,8 +7,8 @@ import com.beautydiary.core.data.models.TaskEntity
 import com.beautydiary.core.data.room.dao.BaseTaskDao
 import com.beautydiary.core.data.room.dao.TaskDao
 import com.beautydiary.core.domain.interfaces.TaskRepository
-import com.beautydiary.core.domain.models.DomainTask
-import com.beautydiary.core.domain.models.DomainTaskAndCategory
+import com.beautydiary.domain.models.DomainTask
+import com.beautydiary.domain.models.DomainTaskAndCategory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.inject

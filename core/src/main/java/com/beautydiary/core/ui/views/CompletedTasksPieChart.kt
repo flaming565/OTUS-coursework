@@ -3,7 +3,7 @@ package com.beautydiary.core.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import com.beautydiary.core.R
-import com.beautydiary.core.domain.models.DomainCategoryWithTasks
+import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.github.mikephil.charting.data.PieEntry
 
 

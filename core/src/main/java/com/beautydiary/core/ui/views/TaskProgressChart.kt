@@ -10,7 +10,7 @@ import android.text.format.DateUtils.DAY_IN_MILLIS
 import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import com.beautydiary.core.R
-import com.beautydiary.core.domain.models.DomainTask
+import com.beautydiary.domain.models.DomainTask
 import com.beautydiary.core.ui.common.ext.toStartOfDay
 import com.beautydiary.core.ui.common.utils.TimestampValueFormatter
 import com.github.mikephil.charting.charts.LineChart
@@ -22,7 +22,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 
 
-internal open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
+open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
     LineChart(context, attrs) {
 
     private val now = System.currentTimeMillis()

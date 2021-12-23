@@ -7,8 +7,8 @@ import com.beautydiary.core.data.models.CategoryEntity
 import com.beautydiary.core.data.room.dao.BaseCategoryDao
 import com.beautydiary.core.data.room.dao.CategoryDao
 import com.beautydiary.core.domain.interfaces.CategoryRepository
-import com.beautydiary.core.domain.models.DomainCategory
-import com.beautydiary.core.domain.models.DomainCategoryWithTasks
+import com.beautydiary.domain.models.DomainCategory
+import com.beautydiary.domain.models.DomainCategoryWithTasks
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.inject

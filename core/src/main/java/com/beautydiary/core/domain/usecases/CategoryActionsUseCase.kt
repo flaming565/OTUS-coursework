@@ -1,7 +1,7 @@
 package com.beautydiary.core.domain.usecases
 
 import com.beautydiary.core.domain.interfaces.CategoryRepository
-import com.beautydiary.core.domain.models.DomainCategory
+import com.beautydiary.domain.models.DomainCategory
 import org.koin.core.component.inject
 
 

@@ -3,7 +3,7 @@ package com.beautydiary.core.ui.views
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import com.beautydiary.core.domain.models.DomainCategoryWithTasks
+import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.beautydiary.core.ui.common.ext.toEndOfDay
 import com.beautydiary.core.ui.common.ext.toMonthDate
 import com.beautydiary.core.ui.common.ext.toStartOfDay

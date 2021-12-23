@@ -1,9 +1,9 @@
 package com.beautydiary.core.domain.usecases
 
-import com.beautydiary.core.domain.common.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import com.beautydiary.core.domain.common.Result
 import org.koin.core.component.KoinComponent
 import kotlin.coroutines.CoroutineContext
 

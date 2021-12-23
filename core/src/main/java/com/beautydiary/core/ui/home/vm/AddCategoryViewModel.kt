@@ -7,7 +7,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.beautydiary.core.R
 import com.beautydiary.core.domain.common.Result
-import com.beautydiary.core.domain.models.DomainCategory
+import com.beautydiary.domain.models.DomainCategory
 import com.beautydiary.core.domain.usecases.CategoryActionsUseCase
 import com.beautydiary.core.domain.usecases.ReadWriteImageUseCase
 import com.beautydiary.core.ui.common.ext.*

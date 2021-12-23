@@ -6,7 +6,7 @@ import androidx.annotation.StringRes
 import com.beautydiary.core.ui.common.ext.getStringRes
 import org.koin.core.context.GlobalContext.get
 
-internal open class BaseModel {
+open class BaseModel {
     companion object {
         fun getString(@StringRes id: Int, vararg args: Any) = getContext().getStringRes(id, *args)
         fun getPlurals(@PluralsRes id: Int, quantity: Int, vararg args: Any) = getContext().resources.getQuantityString(id, quantity, *args)

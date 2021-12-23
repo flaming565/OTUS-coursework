@@ -6,7 +6,7 @@ import com.beautydiary.core.ui.common.models.BaseModel
 
 const val MAX_COLLAPSE_QUOTE_SIZE = 100
 
-internal open class QuoteModel(
+open class QuoteModel(
     val quote: String = "",
     var author: String = ""
 ) : BaseModel() {

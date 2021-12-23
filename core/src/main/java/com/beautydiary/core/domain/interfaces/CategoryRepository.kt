@@ -1,7 +1,7 @@
 package com.beautydiary.core.domain.interfaces
 
-import com.beautydiary.core.domain.models.DomainCategory
-import com.beautydiary.core.domain.models.DomainCategoryWithTasks
+import com.beautydiary.domain.models.DomainCategory
+import com.beautydiary.domain.models.DomainCategoryWithTasks
 import kotlinx.coroutines.flow.Flow
 
 internal interface CategoryRepository {

@@ -15,10 +15,6 @@ import com.beautydiary.core.domain.usecases.ReadWriteImageUseCase
 import com.beautydiary.core.domain.usecases.TaskActionsUseCase
 import com.beautydiary.core.ui.home.vm.AddCategoryViewModel
 import com.beautydiary.core.ui.home.vm.HomeViewModel
-import com.beautydiary.core.ui.home.vm.TodoListViewModel
-import com.beautydiary.core.ui.tasks.vm.AddTaskViewModel
-import com.beautydiary.core.ui.tasks.vm.TaskDetailViewModel
-import com.beautydiary.core.ui.tasks.vm.TaskListViewModel
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -76,9 +72,5 @@ val domainModule = module {
 
 val viewModelModule = module {
     viewModel { HomeViewModel() }
-    viewModel { TodoListViewModel() }
     viewModel { AddCategoryViewModel(it[0]) }
-    viewModel { TaskListViewModel(it[0]) }
-    viewModel { AddTaskViewModel(it[0], it[1]) }
-    viewModel { TaskDetailViewModel(it[0]) }
 }

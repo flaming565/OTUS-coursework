@@ -1,7 +1,7 @@
 package com.beautydiary.core.data.common
 
 import com.beautydiary.core.data.models.*
-import com.beautydiary.core.domain.models.*
+import com.beautydiary.domain.models.*
 
 
 internal fun BaseCategoryEntity.toDomain() = DomainCategory(

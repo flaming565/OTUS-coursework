@@ -4,7 +4,7 @@ import com.beautydiary.core.data.common.BaseRepository
 import com.beautydiary.core.data.common.toDomain
 import com.beautydiary.core.data.network.QuoteApiInterface
 import com.beautydiary.core.domain.interfaces.QuoteRepository
-import com.beautydiary.core.domain.models.DomainQuote
+import com.beautydiary.domain.models.DomainQuote
 import org.koin.core.component.inject
 import java.util.*
 

@@ -1,0 +1,89 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 23
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += "-Xopt-in=org.koin.core.component.KoinApiExtension"
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
+    }
+    dataBinding {
+        enabled true
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':core-ui')
+    implementation project(':navigation')
+    implementation project(":domain")
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // WheelView
+    implementation 'com.github.weidongjian:androidWheelView:1.0.0'
+
+    // SwipeMenuLayout
+    implementation 'com.github.aitsuki:SwipeMenuRecyclerView:2.0.1'
+
+    // MPCharts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // Koin
+    implementation "io.insert-koin:koin-core:2.2.3"
+    implementation "io.insert-koin:koin-android:2.2.3"
+    implementation "io.insert-koin:koin-android-viewmodel:2.2.3"
+    testImplementation "io.insert-koin:koin-test:2.2.3"
+
+    // Lifecycle, coroutines
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+
+    // MVVM helpers:
+    implementation 'com.github.akvast:mvvm-adapter:0.4.1'
+    implementation 'com.github.akvast:mvvm-utils:0.3.1'
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+    androidTestImplementation "androidx.navigation:navigation-testing:2.3.5"
+
+    // Reflection
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
+}

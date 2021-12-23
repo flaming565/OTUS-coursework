@@ -41,6 +41,7 @@ dependencies {
     implementation project(':navigation')
     implementation project(":feature-statistics")
     implementation project(":core")
+    implementation project(":feature-tasks")
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'

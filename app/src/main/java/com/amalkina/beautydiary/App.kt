@@ -2,6 +2,8 @@ package com.amalkina.beautydiary
 
 import android.app.Application
 import com.beautydiary.core.di.*
+import com.beautydiary.feature_tasks.di.tasksModule
+import com.beautydiary.featurestatistics.di.statisticsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -24,7 +26,8 @@ class App : Application() {
                 domainModule,
                 dataModule,
                 viewModelModule,
-                com.beautydiary.featurestatistics.di.statisticsModule
+                statisticsModule,
+                tasksModule
             )
         }
     }
