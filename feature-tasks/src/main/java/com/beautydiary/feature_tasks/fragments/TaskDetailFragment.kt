@@ -12,7 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.beautydiary.feature_tasks.R
 import com.beautydiary.feature_tasks.databinding.FragmentTaskDetailBinding
 import com.beautydiary.core_ui.fragments.BaseFragment
-import com.beautydiary.core.ui.views.TaskProgressChart
+import com.beautydiary.view_task_progress.TaskProgressChart
 import com.beautydiary.feature_tasks.vm.TaskDetailViewModel
 import com.google.android.material.datepicker.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -27,7 +27,7 @@ class TaskDetailFragment : BaseFragment() {
     private val args by navArgs<TaskDetailFragmentArgs>()
     private val viewModel by viewModel<TaskDetailViewModel> { parametersOf(args.taskId) }
 
-    private lateinit var progressChart: TaskProgressChart
+    private lateinit var progressChart: com.beautydiary.view_task_progress.TaskProgressChart
 
     override fun onCreateView(
         inflater: LayoutInflater,

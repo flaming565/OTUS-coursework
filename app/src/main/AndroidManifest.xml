@@ -18,7 +18,7 @@
         android:theme="@style/Theme.BeautyDiary">
 
         <activity
-            android:name="com.beautydiary.core.ui.common.activities.MainActivity"
+            android:name="com.beautydiary.core_ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

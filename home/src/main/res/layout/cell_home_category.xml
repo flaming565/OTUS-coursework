@@ -32,7 +32,7 @@
             android:scaleType="centerCrop"
             app:imageBitmap="@{vm.bitmap}"
             app:imageDrawable="@{vm.drawable}"
-            tools:src="@drawable/common_category_body" />
+            tools:src="@drawable/base_placeholder" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,10 +51,10 @@
                 android:maxLines="1"
                 android:text="@{vm.name}"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
-                tools:text="@string/base_category_face" />
+                android:textColor="?attr/colorOnBackground"
+                tools:text="Category" />
 
-            <com.beautydiary.core.ui.views.ProgressBarView
+            <com.beautydiary.view_progress_bar.ProgressBarView
                 android:layout_width="52dp"
                 android:layout_height="14dp"
                 android:layout_gravity="center_vertical"

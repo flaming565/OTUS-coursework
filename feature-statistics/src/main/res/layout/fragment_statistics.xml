@@ -86,7 +86,7 @@
                 app:layout_constraintEnd_toEndOf="@id/line_chart_category"
                 app:layout_constraintTop_toTopOf="@id/line_chart_category" />
 
-            <com.beautydiary.core.ui.views.ProgressOfCategoriesChart
+            <com.amalkina.view_monhtly_charts.ProgressOfCategoriesChart
                 android:id="@+id/line_chart_category"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -96,7 +96,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread_inside" />
 
-            <com.beautydiary.core.ui.views.CompletedTasksPieChart
+            <com.amalkina.view_monhtly_charts.CompletedTasksPieChart
                 android:id="@+id/pie_chart_month"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -108,7 +108,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/line_chart_category"
                 app:layout_constraintWidth_percent="0.49" />
 
-            <com.beautydiary.core.ui.views.ScheduledTasksPieChart
+            <com.amalkina.view_monhtly_charts.ScheduledTasksPieChart
                 android:id="@+id/pie_chart_today"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -128,7 +128,7 @@
                 app:layout_constraintEnd_toEndOf="@id/line_chart_common"
                 app:layout_constraintTop_toTopOf="@id/line_chart_common" />
 
-            <com.beautydiary.core.ui.views.CommonProgressOfCategoriesChart
+            <com.amalkina.view_monhtly_charts.CommonProgressOfCategoriesChart
                 android:id="@+id/line_chart_common"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

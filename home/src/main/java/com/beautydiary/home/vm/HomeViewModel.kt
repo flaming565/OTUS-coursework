@@ -2,7 +2,7 @@ package com.beautydiary.home.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.beautydiary.core.domain.common.ApplicationSettings
+import com.beautydiary.domain.common.ApplicationSettings
 import com.beautydiary.core_ui.utils.Event
 import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.beautydiary.domain.models.DomainQuote
