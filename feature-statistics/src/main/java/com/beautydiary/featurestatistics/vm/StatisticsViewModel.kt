@@ -2,12 +2,12 @@ package com.beautydiary.featurestatistics.vm
 
 import androidx.lifecycle.viewModelScope
 import com.beautydiary.domain.models.DomainCategoryWithTasks
-import com.beautydiary.core.domain.usecases.CategoryActionsUseCase
-import com.beautydiary.core.ui.common.ext.cast
-import com.beautydiary.core.domain.common.Result
-import com.beautydiary.core.ui.common.ext.map
-import com.beautydiary.core.ui.common.ext.toMonthDate
-import com.beautydiary.core.ui.common.vm.BaseViewModel
+import com.beautydiary.domain.usecases.CategoryActionsUseCase
+import com.beautydiary.core_ui.ext.cast
+import com.beautydiary.domain.common.Result
+import com.beautydiary.core_ui.ext.map
+import com.beautydiary.core_ui.ext.toMonthDate
+import com.beautydiary.core_ui.vm.BaseViewModel
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat

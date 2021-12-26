@@ -4,9 +4,9 @@ import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import com.beautydiary.domain.models.DomainCategoryWithTasks
-import com.beautydiary.core.ui.common.ext.toEndOfDay
-import com.beautydiary.core.ui.common.ext.toMonthDate
-import com.beautydiary.core.ui.common.ext.toStartOfDay
+import com.beautydiary.core_ui.ext.toEndOfDay
+import com.beautydiary.core_ui.ext.toMonthDate
+import com.beautydiary.core_ui.ext.toStartOfDay
 import com.beautydiary.core.ui.common.utils.TimestampValueFormatter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis

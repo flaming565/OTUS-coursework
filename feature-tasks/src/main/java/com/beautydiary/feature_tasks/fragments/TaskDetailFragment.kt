@@ -11,9 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.beautydiary.feature_tasks.R
 import com.beautydiary.feature_tasks.databinding.FragmentTaskDetailBinding
-import com.beautydiary.core.ui.common.fragments.BaseFragment
-import com.beautydiary.feature_tasks.fragments.TaskDetailFragmentArgs
-import com.beautydiary.feature_tasks.fragments.TaskDetailFragmentDirections
+import com.beautydiary.core_ui.fragments.BaseFragment
 import com.beautydiary.core.ui.views.TaskProgressChart
 import com.beautydiary.feature_tasks.vm.TaskDetailViewModel
 import com.google.android.material.datepicker.*

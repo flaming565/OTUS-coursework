@@ -4,7 +4,7 @@ import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import com.beautydiary.domain.models.DomainCategoryWithTasks
-import com.beautydiary.core.ui.common.ext.toDate
+import com.beautydiary.core_ui.ext.toDate
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet

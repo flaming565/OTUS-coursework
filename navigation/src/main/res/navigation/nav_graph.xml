@@ -2,9 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/core_flow">
+    app:startDestination="@id/home_flow">
 
-    <include app:graph="@navigation/core_flow" />
+    <include app:graph="@navigation/home_flow" />
     <include app:graph="@navigation/tasks_flow" />
     <include app:graph="@navigation/todo_list_flow" />
     <include app:graph="@navigation/statistics_flow" />

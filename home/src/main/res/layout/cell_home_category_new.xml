@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="home"
+            type="com.beautydiary.home.vm.HomeViewModel" />
+
+        <variable
+            name="vm"
+            type="com.beautydiary.home.models.HomeCategoryNew" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:clipToPadding="false"
+        android:elevation="4dp"
+        android:onClick="@{() -> home.onAddCategory()}"
+        app:cardCornerRadius="8dp"
+        tools:layout_width="180dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@{vm.drawable}"
+            tools:src="@drawable/home_category_add" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/primary_overlay_80"
+            android:gravity="center_horizontal"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp"
+            android:text="@{vm.name}"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            tools:text="@string/home_new_category" />
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -3,8 +3,8 @@ package com.beautydiary.feature_tasks.models
 import com.beautydiary.feature_tasks.R
 import com.beautydiary.domain.models.DomainTask.Companion.DEFAULT_PROGRESS
 import com.beautydiary.domain.models.Schedule
-import com.beautydiary.core.ui.common.ext.resIdByName
-import com.beautydiary.core.ui.common.models.BaseModel
+import com.beautydiary.core_ui.ext.resIdByName
+import com.beautydiary.core_ui.models.BaseModel
 import java.util.*
 import kotlin.math.abs
 

@@ -9,8 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.beautydiary.feature_tasks.databinding.FragmentAddTaskBinding
-import com.beautydiary.core.ui.common.fragments.BaseFragment
-import com.beautydiary.feature_tasks.fragments.AddTaskFragmentArgs
+import com.beautydiary.core_ui.fragments.BaseFragment
 import com.beautydiary.feature_tasks.vm.AddTaskViewModel
 import com.weigan.loopview.LoopView
 import kotlinx.coroutines.flow.launchIn

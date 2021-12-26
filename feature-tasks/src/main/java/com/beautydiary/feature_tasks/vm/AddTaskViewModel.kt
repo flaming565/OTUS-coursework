@@ -4,18 +4,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.beautydiary.feature_tasks.R
-import com.beautydiary.core.ui.common.utils.Event
+import com.beautydiary.core_ui.utils.Event
 import com.beautydiary.domain.models.*
 import com.beautydiary.domain.models.DomainTask.Companion.DEFAULT_PROGRESS
 import com.beautydiary.domain.models.DomainTask.Companion.MAX_PROGRESS
 import com.beautydiary.domain.models.DomainTask.Companion.MIN_PROGRESS
-import com.beautydiary.core.domain.usecases.CategoryActionsUseCase
-import com.beautydiary.core.domain.usecases.TaskActionsUseCase
-import com.beautydiary.core.ui.common.ext.*
-import com.beautydiary.core.domain.common.Result
-import com.beautydiary.core.ui.common.models.BaseModel
-import com.beautydiary.core.ui.common.vm.BaseViewModel
-import com.beautydiary.core.ui.home.models.HomeCategory
+import com.beautydiary.domain.usecases.CategoryActionsUseCase
+import com.beautydiary.domain.usecases.TaskActionsUseCase
+import com.beautydiary.domain.common.Result
+import com.beautydiary.core_ui.models.BaseModel
+import com.beautydiary.core_ui.vm.BaseViewModel
+import com.beautydiary.core_ui.ext.cast
+import com.beautydiary.core_ui.ext.map
+import com.beautydiary.core_ui.ext.mapToMutable
+import com.beautydiary.core_ui.ext.tryCast
 import com.beautydiary.feature_tasks.common.toUIModel
 import com.beautydiary.feature_tasks.models.CategoryTask
 import kotlinx.coroutines.flow.*
@@ -44,7 +46,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
             getCategory(categoryId)
     }
 
-    private val category = MutableStateFlow<HomeCategory?>(null)
+    private val category = MutableStateFlow<DomainCategory?>(null)
     private val baseTasks = category.flatMapMerge { getBaseTasks(it) }
         .stateIn(
             scope = viewModelScope,
@@ -120,11 +122,11 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
         launch {
             val domainCategory = categoryUseCase.get(categoryId)
                 .run { mapGetCategoryResult(this) }
-            domainCategory?.toUIModel()?.let { category.value = it }
+            domainCategory?.let { category.value = it }
         }
     }
 
-    private fun getBaseTasks(category: HomeCategory?): Flow<List<CategoryTask>> {
+    private fun getBaseTasks(category: DomainCategory?): Flow<List<CategoryTask>> {
         return category?.let {
             taskUseCase.getBaseTasks(it.baseCategoryId)
                 .flatMapMerge { result -> mapGetTasksResult(result) }

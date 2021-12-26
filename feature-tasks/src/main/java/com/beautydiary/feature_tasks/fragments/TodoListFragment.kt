@@ -12,7 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
-import com.beautydiary.core.ui.common.fragments.RecyclerViewFragment
+import com.beautydiary.core_ui.fragments.RecyclerViewFragment
 import com.beautydiary.feature_tasks.BR
 import com.beautydiary.feature_tasks.R
 import com.beautydiary.feature_tasks.databinding.FragmentTodoListBinding

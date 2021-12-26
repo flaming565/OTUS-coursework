@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import com.beautydiary.core.R
 import com.beautydiary.domain.models.DomainTask
-import com.beautydiary.core.ui.common.ext.toStartOfDay
+import com.beautydiary.core_ui.ext.toStartOfDay
 import com.beautydiary.core.ui.common.utils.TimestampValueFormatter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine

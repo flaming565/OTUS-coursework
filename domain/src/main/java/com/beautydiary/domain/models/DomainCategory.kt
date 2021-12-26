@@ -5,7 +5,6 @@ import com.beautydiary.domain.common.LightColor
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
-
 @Parcelize
 data class DomainCategory(
     val id: Long = -1,

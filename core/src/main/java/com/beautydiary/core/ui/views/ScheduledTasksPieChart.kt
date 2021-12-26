@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import com.beautydiary.core.R
 import com.beautydiary.domain.models.DomainCategoryWithTasks
-import com.beautydiary.core.ui.common.ext.toEndOfDay
+import com.beautydiary.core_ui.ext.toEndOfDay
 import com.github.mikephil.charting.data.PieEntry
 import java.util.concurrent.TimeUnit
 

@@ -18,3 +18,5 @@ include ':app',
 
 include ':feature-tasks'
 include ':domain'
+include ':data'
+include ':home'

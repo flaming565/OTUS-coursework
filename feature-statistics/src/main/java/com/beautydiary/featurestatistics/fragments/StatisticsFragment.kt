@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.beautydiary.core.ui.common.fragments.BaseFragment
+import com.beautydiary.core_ui.fragments.BaseFragment
 import com.beautydiary.featurestatistics.databinding.FragmentStatisticsBinding
 import com.beautydiary.featurestatistics.vm.StatisticsViewModel
 import kotlinx.coroutines.flow.launchIn

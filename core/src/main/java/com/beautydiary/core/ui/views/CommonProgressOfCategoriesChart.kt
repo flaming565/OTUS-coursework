@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import com.beautydiary.core.R
 import com.beautydiary.domain.models.DomainCategoryWithTasks
-import com.beautydiary.core.ui.common.ext.toDate
+import com.beautydiary.core_ui.ext.toDate
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
