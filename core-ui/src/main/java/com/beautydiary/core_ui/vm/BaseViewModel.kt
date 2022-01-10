@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
+
 open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->

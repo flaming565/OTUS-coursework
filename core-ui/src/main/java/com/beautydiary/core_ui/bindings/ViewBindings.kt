@@ -35,6 +35,16 @@ fun View.goneIf(value: Any?) {
     this.visibility = if (value == null) View.VISIBLE else View.GONE
 }
 
+@BindingAdapter("invisibleIf")
+fun View.invisibleIf(value: Boolean) {
+    this.visibility = if (value) View.INVISIBLE else View.VISIBLE
+}
+
+@BindingAdapter("invisibleIfNot")
+fun View.invisibleIfNot(value: Boolean) {
+    this.visibility = if (!value) View.INVISIBLE else View.VISIBLE
+}
+
 @BindingAdapter("android:layout_weight")
 fun View.setLayoutWeight(weight: Int) {
     val params = layoutParams as? LinearLayout.LayoutParams

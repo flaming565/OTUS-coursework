@@ -9,10 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.beautydiary.core_ui.fragments.BaseFragment
 import com.beautydiary.feature_tasks.R
 import com.beautydiary.feature_tasks.databinding.FragmentTaskDetailBinding
-import com.beautydiary.core_ui.fragments.BaseFragment
-import com.beautydiary.view_task_progress.TaskProgressChart
 import com.beautydiary.feature_tasks.vm.TaskDetailViewModel
 import com.google.android.material.datepicker.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

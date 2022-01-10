@@ -3,8 +3,8 @@ package com.beautydiary.home.fragments
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,8 +23,8 @@ import com.beautydiary.navigation.NavigationFlow
 import com.beautydiary.navigation.ToFlowNavigatable
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -65,14 +65,14 @@ class HomeFragment : RecyclerViewFragment() {
             itemAnimator = DefaultItemAnimator()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.categories.collect {
-                    rvAdapter?.items = it.toTypedArray()
-                    startListAnimation()
-                }
+        viewModel.categories
+            .onEach {
+                rvAdapter?.items = it.toTypedArray()
+                startListAnimation()
             }
-        }
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
             event.let {
