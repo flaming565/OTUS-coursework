@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.beautydiary.feature_tasks.vm.AddTaskViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_back_arrow"
+                app:title="@{vm.fragmentTitle}">
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="12dp"
+                    android:enabled="@{vm.isSaveButtonEnabled}"
+                    android:minHeight="0dp"
+                    android:onClick="@{()->vm.onSaveClick()}"
+                    android:text="@string/common_save"
+                    app:icon="@drawable/ic_save"
+                    app:iconGravity="start" />
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/layout_fragment_margin"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:enabled="@{!vm.isLoading}"
+                        app:boxBackgroundColor="?android:colorBackground"
+                        app:boxStrokeColor="?attr/colorOnPrimary"
+                        app:boxStrokeWidthFocused="1dp"
+                        app:counterMaxLength="40"
+                        app:hintTextColor="?attr/colorOnPrimary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/add_task_enter_task"
+                            android:imeOptions="actionDone"
+                            android:inputType="text|textCapWords|textAutoComplete"
+                            android:maxLength="40"
+                            android:maxLines="1"
+                            android:padding="12dp"
+                            app:isFocused="@{true}"
+                            app:textWithSelection="@={vm.taskTitle}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/add_task_priority"
+                        android:textAppearance="?attr/textAppearanceBody1" />
+
+                    <RatingBar
+                        android:id="@+id/rating_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="-8dp"
+                        android:layout_marginBottom="-8dp"
+                        android:enabled="@{!vm.isLoading}"
+                        android:isIndicator="false"
+                        android:minHeight="0dp"
+                        android:numStars="3"
+                        android:rating="@={vm.taskPriority}"
+                        android:scaleX=".8"
+                        android:scaleY=".8"
+                        android:stepSize="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/add_task_frequency"
+                        android:textAppearance="?textAppearanceBody1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_task_every"
+                            android:textAppearance="?textAppearanceBody1" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:enabled="@{!vm.isLoading}"
+                            app:boxBackgroundColor="?android:colorBackground"
+                            app:boxStrokeColor="?attr/colorOnPrimary"
+                            app:boxStrokeWidthFocused="1dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_task_frequency"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="0123456789"
+                                android:gravity="center"
+                                android:imeOptions="actionDone"
+                                android:inputType="numberDecimal"
+                                android:maxLength="3"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="@={vm.taskScheduleValue}"
+                                tools:text="2" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/SquareIconButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:enabled="@{vm.isDecreaseFrequencyAvailable}"
+                            android:onClick="@{()->vm.onDecreaseFrequencyClick()}"
+                            app:backgroundTint="@color/color_task_frequency_button"
+                            app:icon="@drawable/ic_minus" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_task_frequency_type"
+                            android:gravity="center"
+                            android:minWidth="64dp"
+                            android:paddingTop="6dp"
+                            android:paddingBottom="6dp"
+                            android:text="@{vm.taskFrequencyValue}"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            tools:text="day" />
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/SquareIconButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:enabled="@{vm.isIncreaseFrequencyAvailable}"
+                            android:onClick="@{()->vm.onIncreaseFrequencyClick()}"
+                            app:backgroundTint="@color/color_task_frequency_button"
+                            app:icon="@drawable/ic_add" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/textAppearanceError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/add_task_frequency_value_error"
+                        app:drawableStartCompat="@drawable/ic_info"
+                        app:goneIf="@{vm.isScheduleValueValid}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/add_task_current_state"
+                        android:textAppearance="?textAppearanceBody1" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:enabled="@{!vm.isLoading}"
+                        android:max="@{vm.taskMaxProgress}"
+                        android:progress="@={vm.taskProgress}"
+                        android:progressDrawable="@drawable/seek_bar_progress_style"
+                        android:thumb="@drawable/seek_bar_thumb_style"
+                        tools:ignore="UnusedAttribute" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/add_task_state_good"
+                            android:textAppearance="?textAppearanceBody1"
+                            android:textColor="?attr/colorPrimaryDark" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_task_state_about_time"
+                            android:textAppearance="?textAppearanceBody1"
+                            android:textColor="?attr/colorPrimaryDark" />
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:enabled="@{!vm.isLoading}"
+                        app:boxBackgroundColor="?android:colorBackground"
+                        app:boxStrokeColor="?attr/colorOnPrimary"
+                        app:boxStrokeWidthFocused="1dp"
+                        app:hintTextColor="?attr/colorOnPrimary"
+                        app:placeholderTextColor="?attr/colorOnPrimary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:hint="@string/add_task_enter_note"
+                            android:imeOptions="actionDone"
+                            android:inputType="text|textCapSentences|textMultiLine"
+                            android:maxLines="5"
+                            android:minLines="3"
+                            android:padding="12dp"
+                            android:text="@={vm.taskNote}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:background="?attr/colorPrimary"
+                android:padding="16dp"
+                app:goneIf="@{vm.isEditMode}">
+
+                <com.weigan.loopview.LoopView
+                    android:id="@+id/loop_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorPrimary"
+                    app:awv_itemsVisibleCount="7"
+                    app:awv_textsize="14"
+                    app:goneIf="@{vm.isEditMode}" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <include
+            layout="@layout/include_loading_view"
+            app:isLoading="@{vm.isLoading}" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

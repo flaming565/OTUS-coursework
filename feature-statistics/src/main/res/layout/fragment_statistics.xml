@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.beautydiary.featurestatistics.vm.StatisticsViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/include_appbar"
+            app:backNavigation="@{true}"
+            app:title="@{@string/statistics_title}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_fragment_margin"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.previousMonth()}"
+                app:icon="@drawable/ic_keyboard_arrow"
+                app:iconEnabled="@{vm.isPreviousMonthAvailable}" />
+
+            <androidx.constraintlayout.widget.Placeholder
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.currentMonth}"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                tools:text="December" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{vm.currentYear}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                tools:text="2021" />
+
+            <androidx.constraintlayout.widget.Placeholder
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.nextMonth()}"
+                android:rotationY="180"
+                app:icon="@drawable/ic_keyboard_arrow"
+                app:iconEnabled="@{vm.isNextMonthAvailable}" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/layout_fragment_margin"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistics_categories_progress_chart_title"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="@id/line_chart_category"
+                app:layout_constraintTop_toTopOf="@id/line_chart_category" />
+
+            <com.amalkina.view_monhtly_charts.ProgressOfCategoriesChart
+                android:id="@+id/line_chart_category"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/pie_chart_month"
+                app:layout_constraintHeight_percent="0.34"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+
+            <com.amalkina.view_monhtly_charts.CompletedTasksPieChart
+                android:id="@+id/pie_chart_month"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/line_chart_common"
+                app:layout_constraintEnd_toStartOf="@+id/pie_chart_today"
+                app:layout_constraintHeight_percent="0.32"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line_chart_category"
+                app:layout_constraintWidth_percent="0.49" />
+
+            <com.amalkina.view_monhtly_charts.ScheduledTasksPieChart
+                android:id="@+id/pie_chart_today"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/pie_chart_month"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.32"
+                app:layout_constraintStart_toEndOf="@+id/pie_chart_month"
+                app:layout_constraintTop_toTopOf="@id/pie_chart_month"
+                app:layout_constraintWidth_percent="0.49" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistics_common_progress_chart_title"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="@id/line_chart_common"
+                app:layout_constraintTop_toTopOf="@id/line_chart_common" />
+
+            <com.amalkina.view_monhtly_charts.CommonProgressOfCategoriesChart
+                android:id="@+id/line_chart_common"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHeight_percent="0.32"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pie_chart_month" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>

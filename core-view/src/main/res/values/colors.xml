@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorOnPrimary">?attr/colorOnPrimary</color>
+
+    <color name="progress_color_min">#81C784</color>
+    <color name="progress_color_medium">#9CCC65</color>
+    <color name="progress_color_normal">#F4C04E</color>
+    <color name="progress_color_max">#EE6A5E</color>
+    <color name="progress_color_divider">@color/colorOnPrimary</color>
+
+    <color name="progress_color_min_overlay">#A081C784</color>
+    <color name="progress_color_medium_overlay">#A09CCC65</color>
+    <color name="progress_color_normal_overlay">#A0F4C04E</color>
+    <color name="progress_color_max_overlay">#A0EE6A5E</color>
+</resources>

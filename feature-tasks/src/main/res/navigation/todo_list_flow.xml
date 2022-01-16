@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/todo_list_flow"
+    app:startDestination="@id/todoListFragment">
+
+    <fragment
+        android:id="@+id/todoListFragment"
+        android:name="com.beautydiary.feature_tasks.fragments.TodoListFragment"
+        android:label="TodoListFragment">
+
+        <action
+            android:id="@+id/openAddTask"
+            app:destination="@id/addTaskFragment" />
+        <action
+            android:id="@+id/openTaskDetail"
+            app:destination="@id/taskDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@id/addTaskFragment"
+        android:name="com.beautydiary.feature_tasks.fragments.AddTaskFragment"
+        android:label="AddTaskFragment">
+        <argument
+            android:name="categoryId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="taskId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@id/taskDetailFragment"
+        android:name="com.beautydiary.feature_tasks.fragments.TaskDetailFragment"
+        android:label="TaskDetailFragment">
+        <argument
+            android:name="taskId"
+            app:argType="long" />
+        <action
+            android:id="@id/openEditTask"
+            app:destination="@id/addTaskFragment" />
+    </fragment>
+
+</navigation>
