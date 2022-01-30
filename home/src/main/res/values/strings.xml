@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_new_category">New category</string>
+    <string name="home_edit_category">Edit</string>
+    <string name="home_delete_category">Delete</string>
+    <string name="home_delete_category_dialog_title">Alert</string>
+    <string name="home_delete_category_dialog_message">If you delete this category, all associated tasks and activity history will also be deleted.</string>
+    <string name="home_statistics">Statistics</string>
+    <string name="home_to_do_list">To-do list</string>
+
+    <string name="add_category_title">Add Category</string>
+    <string name="add_category_enter_category">Enter category</string>
+    <string name="add_category_category_image">Category image:</string>
+    <string name="add_category_permission_rational_camera">To continue, you need to grant permission for the camera in the settings of your device.</string>
+    <string name="add_category_permission_rational_gallery">To continue, you need to grant permission to read media files in your device\'s settings.</string>
+    <string name="add_category_select_image">Select image</string>
+    <string name="add_category_open_camera">Open camera</string>
+    <string name="add_category_open_gallery">Open gallery</string>
+    <string name="add_category_error_saving">Saving file error, please, try again.</string>
+    <string name="add_category_error_database">Something went wrong, please, try again.</string>
+    <string name="add_category_get_temp_uri_error">Error accessing saving photos from the camera, please, try again.</string>
+</resources>

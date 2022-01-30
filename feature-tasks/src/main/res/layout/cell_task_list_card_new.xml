@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.beautydiary.feature_tasks.models.CategoryTaskNew" />
+
+        <variable
+            name="taskList"
+            type="com.beautydiary.feature_tasks.vm.TaskListViewModel" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:elevation="8dp"
+        android:onClick="@{() -> taskList.onAddTask()}"
+        app:cardBackgroundColor="@color/card_background_color"
+        app:cardCornerRadius="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="8dp"
+            android:text="@{vm.name}"
+            android:textAppearance="?textAppearanceBody1"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_add"
+            tools:text="@string/task_list_new_task" />
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

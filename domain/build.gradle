@@ -1,0 +1,61 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.31'
+}
+
+android {
+    apply from: '../sdk-version.gradle'
+
+    def config = project.ext
+    compileSdk config.androidCompileSdkVersion
+
+    defaultConfig {
+        minSdk config.androidMinSdkVersion
+        targetSdk config.androidTargetSdkVersion
+        versionCode config.appVersionCode
+        versionName config.appVersionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += "-Xopt-in=org.koin.core.component.KoinApiExtension"
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.7.0'
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+
+    // Koin
+    api "io.insert-koin:koin-core:2.2.3"
+    api "io.insert-koin:koin-android:2.2.3"
+
+    // Serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
+
+    // Timber
+    api 'com.jakewharton.timber:timber:5.0.1'
+
+    // Test
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}

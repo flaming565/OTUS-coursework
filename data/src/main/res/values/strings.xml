@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="base_category_other">Other</string>
+    <string name="base_category_face">Skin care</string>
+    <string name="base_category_body">Body care</string>
+    <string name="base_category_hair">Hair care</string>
+    <string name="base_category_hands">Hand care</string>
+    <string name="base_category_legs">Feet care</string>
+    <string name="base_category_mouth">Oral care</string>
+
+    <string name="base_face_category_task_day_cream">Дневной крем</string>
+    <string name="base_face_category_task_night_cream">Ночной крем</string>
+    <string name="base_face_category_task_massage">Массаж лица</string>
+    <string name="base_face_category_task_mask">Маска</string>
+    <string name="base_face_category_task_serum">Сыворотка</string>
+
+    <string name="base_hands_category_task_cream">Крем для рук</string>
+    <string name="base_hands_category_task_massage">Массаж рук</string>
+    <string name="base_hands_category_task_manicure">Маникюр</string>
+
+    <string name="base_body_category_task_cream">Крем для тела</string>
+    <string name="base_body_category_task_massage">Массаж</string>
+
+    <string name="base_hair_category_task_other">Other</string>
+
+    <string name="base_feet_category_task_other">Other</string>
+
+    <string name="base_oral_category_task_dentist">Dentist</string>
+    <string name="base_oral_category_task_other">Other</string>
+
+    <string name="base_other_category_task_other">Other</string>
+</resources>

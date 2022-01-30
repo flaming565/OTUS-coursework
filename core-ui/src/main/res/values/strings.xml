@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Care Diary</string>
+
+    <string name="common_save">Save</string>
+    <string name="common_settings">Settings</string>
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_error">Error</string>
+    <string name="common_edit">Edit</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_today">Today</string>
+
+    <string name="common_database_error">Something went wrong, please, try again.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#eee3dd</color>
+    <color name="colorPrimaryVariant">#bcb1ab</color>
+    <color name="colorPrimaryLight">#F8F3F0</color>
+    <color name="colorOnPrimary">#51453E</color>
+
+    <color name="colorError">#EE6A5E</color>
+
+    <color name="primary_overlay_80">#80eee3dd</color>
+    <color name="card_background_color">#f9f8f4</color>
+</resources>
