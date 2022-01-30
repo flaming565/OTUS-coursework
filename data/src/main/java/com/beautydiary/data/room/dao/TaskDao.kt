@@ -12,6 +12,9 @@ internal interface TaskDao : BaseDao<TaskEntity> {
     @Query("SELECT * FROM task")
     fun all(): Flow<List<TaskEntity>>
 
+    @Query("SELECT * FROM task")
+    fun allSync(): List<TaskEntity>
+
     @Query("SELECT * FROM task WHERE id = :id")
     suspend fun getById(id: Long): TaskEntity
 

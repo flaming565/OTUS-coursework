@@ -19,6 +19,7 @@ import com.beautydiary.home.models.HomeCategory
 import com.beautydiary.home.models.HomeCategoryNew
 import com.beautydiary.home.models.QuoteModel
 import com.beautydiary.domain.models.DomainCategory
+import com.beautydiary.notifications.NotificationUtils
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -28,6 +29,7 @@ internal class HomeViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
     private val getQuoteUseCase by inject<GetQuoteUseCase>()
     private val applicationSettings by inject<ApplicationSettings>()
+    private val notificationUtils by inject<NotificationUtils>()
 
     val userActionEvent = MutableLiveData<Event<UserAction>>()
 
@@ -44,6 +46,9 @@ internal class HomeViewModel : BaseViewModel() {
     init {
         if (applicationSettings.shouldQuoteBeShown)
             loadQuote()
+
+        // todo: move to settings
+        notificationUtils.scheduleDailyNotification()
     }
 
     fun onClickCategory(id: Long) {
