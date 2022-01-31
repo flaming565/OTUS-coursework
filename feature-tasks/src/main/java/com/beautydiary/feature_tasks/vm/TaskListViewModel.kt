@@ -41,6 +41,8 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     val allTasks = categoryTasks.map(viewModelScope) { list ->
         list?.let { (it.toMutableList() + listOf(CategoryTaskNew)).toTypedArray() }
     }
+    val isSortOptionAvailable =
+        categoryTasks.map(viewModelScope) { !it.isNullOrEmpty() && it.size > 1 }
 
     fun onTaskClick(id: Long) {
         userActionEvent.postValue(Event(UserTaskAction.OnClickTask(id)))

@@ -2,6 +2,7 @@ package com.beautydiary.home.fragments
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -73,6 +74,10 @@ class HomeFragment : RecyclerViewFragment() {
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewModel.isStatisticsOptionAvailable
+            .onEach { binding?.toolbar?.menu?.get(0)?.isVisible = it }
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
             event.let {

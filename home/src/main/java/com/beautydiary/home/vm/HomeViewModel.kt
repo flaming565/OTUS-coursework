@@ -2,23 +2,24 @@ package com.beautydiary.home.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.beautydiary.domain.common.ApplicationSettings
+import com.beautydiary.core_ui.ext.cast
+import com.beautydiary.core_ui.ext.map
+import com.beautydiary.core_ui.ext.tryCast
 import com.beautydiary.core_ui.utils.Event
+import com.beautydiary.core_ui.vm.BaseViewModel
+import com.beautydiary.domain.common.ApplicationSettings
+import com.beautydiary.domain.common.Result
+import com.beautydiary.domain.models.DomainCategory
 import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.beautydiary.domain.models.DomainQuote
 import com.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.beautydiary.domain.usecases.GetQuoteUseCase
-import com.beautydiary.core_ui.ext.cast
-import com.beautydiary.domain.common.Result
 import com.beautydiary.home.ext.toDomain
-import com.beautydiary.core_ui.ext.tryCast
 import com.beautydiary.home.ext.toUIModel
-import com.beautydiary.core_ui.vm.BaseViewModel
 import com.beautydiary.home.models.CategoryItem
 import com.beautydiary.home.models.HomeCategory
 import com.beautydiary.home.models.HomeCategoryNew
 import com.beautydiary.home.models.QuoteModel
-import com.beautydiary.domain.models.DomainCategory
 import com.beautydiary.notifications.NotificationUtils
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -40,6 +41,10 @@ internal class HomeViewModel : BaseViewModel() {
             started = SharingStarted.Lazily,
             initialValue = emptyList()
         )
+    val isStatisticsOptionAvailable = categories.map(viewModelScope) { list ->
+        list.filterIsInstance<HomeCategory>().fold(0) { acc, curr -> acc + curr.progress } > 0
+    }
+
     var selectedCategory: DomainCategory? = null
     val quote = MutableLiveData<QuoteModel>()
 

@@ -6,6 +6,7 @@
         android:id="@+id/sort_tasks"
         android:icon="@drawable/ic_sort"
         android:title="@string/task_list_sort"
+        android:visible="false"
         app:showAsAction="always">
 
         <menu>
