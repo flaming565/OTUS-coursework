@@ -29,7 +29,7 @@ import org.koin.core.component.inject
 internal class HomeViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
     private val getQuoteUseCase by inject<GetQuoteUseCase>()
-    private val applicationSettings by inject<ApplicationSettings>()
+    val applicationSettings by inject<ApplicationSettings>()
     private val notificationUtils by inject<NotificationUtils>()
 
     val userActionEvent = MutableLiveData<Event<UserAction>>()
@@ -82,6 +82,10 @@ internal class HomeViewModel : BaseViewModel() {
 
     fun deleteSelectedCategory() {
         selectedCategory?.let { deleteCategory(it) }
+    }
+
+    fun toggleShowDeleteDialog(value: Boolean) {
+        applicationSettings.switchModeDeleteCategoryDialog(!value)
     }
 
     private fun mapGetCategoriesResult(result: Result): Flow<List<CategoryItem>> {

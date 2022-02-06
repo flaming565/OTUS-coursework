@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beautydiary.core_ui.fragments.RecyclerViewFragment
 import com.beautydiary.feature_tasks.BR
 import com.beautydiary.feature_tasks.R
+import com.beautydiary.feature_tasks.databinding.DialogDeleteTaskAlertBinding
 import com.beautydiary.feature_tasks.databinding.FragmentTaskListBinding
 import com.beautydiary.feature_tasks.models.CategoryTask
 import com.beautydiary.feature_tasks.models.CategoryTaskNew
@@ -151,10 +152,15 @@ class TaskListFragment : RecyclerViewFragment() {
     }
 
     private fun showDeleteTaskDialog(taskId: Long, taskName: String) {
+        val dialogBinding = DialogDeleteTaskAlertBinding.inflate(layoutInflater).apply {
+            message = getString(R.string.task_list_delete_task_dialog_message, taskName)
+        }
+
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(getString(R.string.task_list_delete_task_dialog_message, taskName))
+            .setView(dialogBinding.root)
             .setPositiveButton(R.string.common_delete) { _, _ ->
                 viewModel.deleteTask(taskId)
+                viewModel.toggleShowDeleteDialog(dialogBinding.checkbox.isChecked)
             }
             .setNegativeButton(R.string.common_cancel, null)
             .show()

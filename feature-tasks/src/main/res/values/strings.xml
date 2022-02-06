@@ -10,6 +10,7 @@
         <item quantity="other">%d days ago</item>
     </plurals>
     <string name="task_list_delete_task_dialog_message">Are you sure you want to delete the task «%s»? All activity history will also be deleted.</string>
+    <string name="task_list_delete_task_dialog_checkbox">Don\'t show again</string>
     <string name="task_list_sort">Sort</string>
     <string name="task_list_sort_by_name">By name</string>
     <string name="task_list_sort_by_creation_date">By creation date</string>

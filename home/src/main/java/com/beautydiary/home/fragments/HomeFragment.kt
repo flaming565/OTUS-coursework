@@ -15,6 +15,7 @@ import com.beautydiary.home.BR
 import com.beautydiary.home.R
 import com.beautydiary.home.databinding.DialogHomeSelectCategoryOptionsBinding
 import com.beautydiary.home.databinding.FragmentHomeBinding
+import com.beautydiary.home.databinding.DialogDeleteCategoryAlertBinding
 import com.beautydiary.home.models.CategoryItem
 import com.beautydiary.home.models.HomeCategory
 import com.beautydiary.home.models.HomeCategoryNew
@@ -155,10 +156,20 @@ class HomeFragment : RecyclerViewFragment() {
     }
 
     private fun showDeleteCategoryDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.home_delete_category_dialog_message)
-            .setPositiveButton(R.string.common_delete) { _, _ -> viewModel.deleteSelectedCategory() }
-            .setNegativeButton(R.string.common_cancel, null)
-            .show()
+        dialog?.dismiss()
+        if (viewModel.applicationSettings.shouldDeleteCategoryDialogBeShown) {
+            val dialogBinding = DialogDeleteCategoryAlertBinding.inflate(layoutInflater)
+
+            dialog = MaterialAlertDialogBuilder(requireContext())
+                .setView(dialogBinding.root)
+                .setPositiveButton(R.string.common_delete) { _, _ ->
+                    viewModel.deleteSelectedCategory()
+                    viewModel.toggleShowDeleteDialog(dialogBinding.checkbox.isChecked)
+                }
+                .setNegativeButton(R.string.common_cancel, null)
+                .show()
+        } else {
+            viewModel.deleteSelectedCategory()
+        }
     }
 }
