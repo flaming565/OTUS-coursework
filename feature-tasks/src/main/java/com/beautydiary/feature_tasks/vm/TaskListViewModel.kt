@@ -28,6 +28,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
 
     val titleFragment = category.name
     val userActionEvent = MutableLiveData<Event<UserTaskAction>>()
+    val isLoading = MutableStateFlow(true)
 
     private val rawCategoryWithTasks = categoryUseCase.getWithTasks(category.id)
         .flatMapMerge { mapGetTasksResult(it) }
@@ -123,6 +124,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
 
     private fun mapGetTasksResult(result: Result): Flow<DomainCategoryWithTasks?> {
         var resultFlow = flowOf<DomainCategoryWithTasks?>(null)
+        isLoading.value = false
         mapResponseResult(result)?.let {
             tryCast<Flow<DomainCategoryWithTasks>>(it) {
                 resultFlow = this

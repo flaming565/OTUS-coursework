@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import com.beautydiary.domain.common.Result
+import kotlinx.coroutines.flow.emitAll
 import org.koin.core.component.KoinComponent
 import kotlin.coroutines.CoroutineContext
 
@@ -13,7 +14,6 @@ abstract class BaseUseCase : KoinComponent, CoroutineScope {
         get() = Dispatchers.IO
 
     internal fun <T, R> flowResult(arg: T, request: (T) -> R) = flow {
-        emit(Result.Loading)
         try {
             emit(Result.Success(request.invoke(arg)))
         } catch (ex: Exception) {

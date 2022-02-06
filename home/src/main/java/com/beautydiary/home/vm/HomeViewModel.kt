@@ -33,6 +33,7 @@ internal class HomeViewModel : BaseViewModel() {
     private val notificationUtils by inject<NotificationUtils>()
 
     val userActionEvent = MutableLiveData<Event<UserAction>>()
+    val isLoading = MutableStateFlow(true)
 
     val categories: StateFlow<List<CategoryItem>> = categoryUseCase.allWithTasks()
         .flatMapMerge { mapGetCategoriesResult(it) }
@@ -85,6 +86,7 @@ internal class HomeViewModel : BaseViewModel() {
 
     private fun mapGetCategoriesResult(result: Result): Flow<List<CategoryItem>> {
         var categories: Flow<List<CategoryItem>> = flowOf(emptyList())
+        isLoading.value = false
         mapResponseResult(result)?.let {
             tryCast<Flow<List<DomainCategoryWithTasks>>>(it) {
                 categories = this.transform { list ->

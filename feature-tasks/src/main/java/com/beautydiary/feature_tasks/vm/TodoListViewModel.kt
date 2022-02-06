@@ -32,6 +32,8 @@ internal class TodoListViewModel : BaseViewModel() {
     private val taskUseCase by inject<TaskActionsUseCase>()
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
+    val isLoading = MutableStateFlow(true)
+
     private val periods = Period.values().sortedBy { it.value }.drop(1) + Period.All
     val periodNames = periods.map { it.name }
     val currentPeriod: MutableStateFlow<Period> = MutableStateFlow(Period.Today)
@@ -116,6 +118,7 @@ internal class TodoListViewModel : BaseViewModel() {
 
     private fun mapGetCategoriesMapValues(result: Result): Flow<Map<DomainCategory, List<DomainTask>>> {
         var categoriesMap: Flow<Map<DomainCategory, List<DomainTask>>> = flowOf(emptyMap())
+        isLoading.value = false
         mapResponseResult(result)?.let {
             tryCast<Flow<List<DomainCategoryWithTasks>>>(it) {
                 categoriesMap = this.transform { list ->

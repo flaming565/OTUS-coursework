@@ -17,6 +17,7 @@ import java.util.*
 internal class StatisticsViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
+    val isLoading = MutableStateFlow(true)
     val categories: StateFlow<List<DomainCategoryWithTasks>> = categoryUseCase.allWithTasks()
         .flatMapMerge { mapGetCategoriesResult(it) }
         .stateIn(
@@ -61,6 +62,7 @@ internal class StatisticsViewModel : BaseViewModel() {
     }
 
     private fun mapGetCategoriesResult(result: Result): Flow<List<DomainCategoryWithTasks>> {
+        isLoading.value = false
         return mapResponseResult(result)?.let { cast<Flow<List<DomainCategoryWithTasks>>>(it) }
             ?: flowOf(emptyList())
     }
