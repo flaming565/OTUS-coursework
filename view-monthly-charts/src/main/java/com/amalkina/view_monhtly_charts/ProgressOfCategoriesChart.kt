@@ -19,6 +19,7 @@ class ProgressOfCategoriesChart(context: Context, attrs: AttributeSet?) :
         extraBottomOffset = 20f
 
         legend.apply {
+            textColor = context.resources.getColor(R.color.colorOnPrimary, context.theme)
             isEnabled = true
             horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
             isWordWrapEnabled = true
@@ -27,6 +28,7 @@ class ProgressOfCategoriesChart(context: Context, attrs: AttributeSet?) :
         axisLeft.apply {
             setDrawLabels(true)
             setDrawGridLines(true)
+            textColor = context.resources.getColor(R.color.colorOnPrimary, context.theme)
         }
     }
 

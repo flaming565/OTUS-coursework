@@ -112,6 +112,7 @@ abstract class CategoriesBaseLineChart(context: Context, attrs: AttributeSet?) :
             axisMinimum = getStartDate().toFloat()
             chartDate.set(Calendar.DAY_OF_MONTH, chartDate.getActualMaximum(Calendar.DAY_OF_MONTH))
             axisMaximum = chartDate.timeInMillis.toEndOfDay().toFloat()
+            textColor = context.resources.getColor(R.color.colorOnPrimary, context.theme)
         }
     }
 

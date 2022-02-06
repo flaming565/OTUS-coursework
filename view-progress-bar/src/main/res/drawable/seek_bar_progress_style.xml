@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/background" android:top="6dp" android:bottom="6dp">
+    <item
+        android:id="@android:id/background"
+        android:bottom="6dp"
+        android:top="6dp">
         <shape android:shape="rectangle">
             <corners android:radius="8dp" />
-            <solid android:color="?attr/colorButtonNormal"/>
+            <solid android:color="?attr/colorButtonNormal" />
         </shape>
     </item>
 
-    <item android:id="@android:id/secondaryProgress" android:top="6dp" android:bottom="6dp">
+    <item
+        android:id="@android:id/secondaryProgress"
+        android:bottom="6dp"
+        android:top="6dp">
         <clip>
             <shape android:shape="rectangle">
                 <corners android:radius="8dp" />
-                <solid android:color="?attr/colorPrimaryDark"/>
+                <solid android:color="?attr/colorSecondary" />
             </shape>
         </clip>
     </item>
 
-    <item android:id="@android:id/progress" android:top="6dp" android:bottom="6dp">
+    <item
+        android:id="@android:id/progress"
+        android:bottom="6dp"
+        android:top="6dp">
         <clip>
             <shape android:shape="rectangle">
                 <corners android:radius="8dp" />
-                <solid android:color="?attr/colorPrimaryDark"/>
+                <solid android:color="?attr/colorSecondary" />
             </shape>
         </clip>
     </item>

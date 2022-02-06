@@ -135,6 +135,7 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
                 val taskLifetime = (now - task.startDate)
                 axisMaximum = (now + taskLifetime / 2F)
             }
+            textColor = context.resources.getColor(R.color.colorOnPrimary, context.theme)
         }
     }
 
