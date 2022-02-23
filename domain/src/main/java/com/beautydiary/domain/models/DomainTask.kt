@@ -1,6 +1,5 @@
 package com.beautydiary.domain.models
 
-import com.beautydiary.domain.ext.toStartOfDay
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -20,18 +19,17 @@ data class DomainTask(
     val creationDate: Long = System.currentTimeMillis()
 ) {
     val lastExecutionDate = executionDateList.last()
-    private val daysAfterExecution =
-        TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastExecutionDate).toInt()
-    private val maxAvailableDays = schedule.getDaysCount()
+    private val hoursAfterExecution =
+        TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - lastExecutionDate).toInt()
+    private val maxAvailableHours = schedule.getHoursCount()
 
     private val isBaseTask = stringResName != null
     val progress = if (isBaseTask) DEFAULT_PROGRESS
-    else (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays)
+    else (hoursAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableHours)
         .roundToInt()
         .coerceAtLeast(MIN_PROGRESS)
 
-    val daysRemaining = maxAvailableDays - daysAfterExecution
-
+    val daysRemaining = ((maxAvailableHours - hoursAfterExecution) / 24.0).roundToInt()
     val userExecutionList = executionDateList.drop(1)
 
     fun calculateDateProgress(date: Long): Float {
@@ -39,14 +37,12 @@ data class DomainTask(
             return -1F
 
         val lastExecutionDate = executionDateList
-            .map { it.toStartOfDay() }
-            .findLast { it < date } ?: startDate.toStartOfDay()
-        val daysAfterExecution = TimeUnit.MILLISECONDS.toDays(date - lastExecutionDate)
+            .findLast { it <= date } ?: startDate
+        val hoursAfterExecution = TimeUnit.MILLISECONDS.toHours(date - lastExecutionDate)
 
-        return (daysAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableDays).coerceAtLeast(2f)
-            .coerceAtMost(
-                MAX_PROGRESS.toFloat()
-            )
+        return (hoursAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableHours)
+            .coerceAtLeast(2f)
+            .coerceAtMost(MAX_PROGRESS.toFloat())
     }
 
     companion object {
@@ -55,12 +51,12 @@ data class DomainTask(
         const val DEFAULT_PROGRESS = 50
 
         fun calculateStartDate(progress: Int, schedule: Schedule): Long {
-            val maxAvailableDays = schedule.getDaysCount()
-            val daysAfterExecution =
-                maxAvailableDays - (progress * maxAvailableDays / MAX_PROGRESS.toFloat())
+            val maxAvailableHours = schedule.getHoursCount()
+            val hoursAfterExecution =
+                maxAvailableHours - (progress * maxAvailableHours / MAX_PROGRESS.toFloat())
 
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DATE, -daysAfterExecution.roundToInt())
+            calendar.add(Calendar.HOUR, -hoursAfterExecution.roundToInt())
             return calendar.timeInMillis
         }
     }
@@ -83,6 +79,10 @@ data class Schedule(
 ) {
     fun getDaysCount(): Int {
         return value * frequency.value
+    }
+
+    fun getHoursCount(): Int {
+        return value * frequency.value * 24
     }
 }
 

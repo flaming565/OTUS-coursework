@@ -5,14 +5,15 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
-import android.text.format.DateUtils
 import android.text.format.DateUtils.DAY_IN_MILLIS
+import android.text.format.DateUtils.HOUR_IN_MILLIS
 import android.util.AttributeSet
-import com.beautydiary.core_view.R
 import androidx.core.content.ContextCompat
-import com.beautydiary.domain.models.DomainTask
 import com.beautydiary.core_ui.ext.toStartOfDay
-import com.beautydiary.core_view.TimestampValueFormatter
+import com.beautydiary.core_view.R
+import com.beautydiary.core_view.DayTimestampFormatter
+import com.beautydiary.core_view.HourTimestampFormatter
+import com.beautydiary.domain.models.DomainTask
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import java.util.concurrent.TimeUnit
 
 
 open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
@@ -67,18 +69,21 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
 
     private fun createEntries(task: DomainTask): List<Entry> {
         val data = mutableListOf<Entry>()
+        var startDate = task.creationDate
+        val dataStep = if (TimeUnit.MILLISECONDS.toDays(now - startDate) > 1)
+            DAY_IN_MILLIS else HOUR_IN_MILLIS
 
-        var startDate = task.creationDate.toStartOfDay()
-        val tomorrowDate = (now + DAY_IN_MILLIS).toStartOfDay()
-
-        while (startDate <= tomorrowDate) {
-            val result = task.calculateDateProgress(startDate)
-            data.add(Entry(startDate.toFloat(), result))
-            startDate += DAY_IN_MILLIS
-
-            if (startDate == tomorrowDate)
-                startDate -= DateUtils.MINUTE_IN_MILLIS
+        data.add(
+            Entry(
+                startDate.toStartOfDay().toFloat(),
+                task.calculateDateProgress(startDate)
+            )
+        )
+        while (startDate <= now) {
+            data.add(Entry(startDate.toFloat(), task.calculateDateProgress(startDate)))
+            startDate += dataStep
         }
+        data.add(Entry(now.toFloat(), task.calculateDateProgress(now)))
 
         return data
     }
@@ -125,15 +130,21 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
     private fun configureXAxis() {
         xAxis.apply {
             setDrawGridLines(false)
-
-            granularity = DAY_IN_MILLIS.toFloat()
             position = XAxis.XAxisPosition.BOTTOM
-            valueFormatter = TimestampValueFormatter()
 
             task?.let { task ->
-                axisMinimum = task.creationDate.toFloat()
-                val taskLifetime = (now - task.startDate)
-                axisMaximum = (now + taskLifetime / 2F)
+                if (TimeUnit.MILLISECONDS.toDays(now - task.startDate) > 1) {
+                    granularity = DAY_IN_MILLIS.toFloat()
+                    valueFormatter = DayTimestampFormatter()
+                } else {
+                    granularity = HOUR_IN_MILLIS.toFloat()
+                    valueFormatter = HourTimestampFormatter()
+                }
+
+                val startDate = task.creationDate.toStartOfDay().toFloat()
+                axisMinimum = startDate
+                val taskLifetime = (now - startDate)
+                axisMaximum = (now + taskLifetime / 2)
             }
             textColor = context.resources.getColor(R.color.colorOnPrimary, context.theme)
         }

@@ -134,10 +134,17 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     }
 
     private fun createTask(): DomainTask {
-        val currentProgress = when (taskProgress.value) {
+        val currentProgress = if (isEditMode) taskProgress.value
+        else when (taskProgress.value) {
             0 -> taskMaxProgress - MIN_PROGRESS
             else -> taskMaxProgress - taskProgress.value
         }
+
+        val startDate = if (isEditMode) selectedTask.value!!.startDate
+        else DomainTask.calculateStartDate(
+            currentProgress,
+            Schedule(taskScheduleValue.value.toInt(), taskFrequency.value)
+        )
 
         return DomainTask(
             id = selectedTask.value?.id ?: 0,
@@ -146,10 +153,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
             priority = Priority.fromInt(taskPriority.value.toInt()),
             schedule = Schedule(taskScheduleValue.value.toInt(), taskFrequency.value),
             note = taskNote.value.trim(),
-            startDate = DomainTask.calculateStartDate(
-                currentProgress,
-                Schedule(taskScheduleValue.value.toInt(), taskFrequency.value)
-            )
+            startDate = startDate
         )
     }
 

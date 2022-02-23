@@ -196,7 +196,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:text="@string/add_task_current_state"
-                        android:textAppearance="?textAppearanceBody1" />
+                        android:textAppearance="?textAppearanceBody1"
+                        app:goneIf="@{vm.isEditMode}" />
 
                     <androidx.appcompat.widget.AppCompatSeekBar
                         android:layout_width="match_parent"
@@ -207,6 +208,7 @@
                         android:progress="@={vm.taskProgress}"
                         android:progressDrawable="@drawable/seek_bar_progress_style"
                         android:thumb="@drawable/seek_bar_thumb_style"
+                        app:goneIf="@{vm.isEditMode}"
                         tools:ignore="UnusedAttribute" />
 
                     <LinearLayout
@@ -215,7 +217,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:goneIf="@{vm.isEditMode}">
 
                         <TextView
                             android:layout_width="0dp"
