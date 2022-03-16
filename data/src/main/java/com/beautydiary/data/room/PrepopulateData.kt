@@ -46,46 +46,155 @@ internal class PrepopulateData : KoinComponent {
         }
     }
 
-    // TODO: add more tasks
     private fun getRawBaseTaskData(category: BaseCategoryEnum): List<Triple<Int, Int, TaskSchedule>> {
         return when (category) {
             BaseCategoryEnum.FACE -> listOf(
                 Triple(
-                    R.string.base_face_category_task_day_cream,
+                    R.string.base_face_category_task_toner,
                     2,
                     TaskSchedule(1, TaskFrequency.DAY)
                 ),
                 Triple(
-                    R.string.base_face_category_task_night_cream,
+                    R.string.base_face_category_task_essence,
+                    2,
+                    TaskSchedule(1, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_face_category_task_emulsion,
                     2,
                     TaskSchedule(1, TaskFrequency.DAY)
                 ),
                 Triple(
                     R.string.base_face_category_task_serum,
                     2,
+                    TaskSchedule(1, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_face_category_task_patch,
+                    2,
+                    TaskSchedule(2, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_face_category_task_peeling,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_face_category_task_sheet_mask,
+                    1,
                     TaskSchedule(4, TaskFrequency.DAY)
                 ),
+                Triple(
+                    R.string.base_face_category_task_clay_mask,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_face_category_task_algin_mask,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_face_category_task_facebuilding,
+                    2,
+                    TaskSchedule(1, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_face_category_task_gua_sha,
+                    1,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_category_task_other,
+                    1,
+                    TaskSchedule(2, TaskFrequency.DAY)
+                )
             )
             BaseCategoryEnum.HANDS -> listOf(
                 Triple(
                     R.string.base_hands_category_task_cream,
                     1,
-                    TaskSchedule(1, TaskFrequency.DAY)
-                ),
-                Triple(
-                    R.string.base_hands_category_task_massage,
-                    1,
-                    TaskSchedule(2, TaskFrequency.WEEK)
+                    TaskSchedule(2, TaskFrequency.DAY)
                 ),
                 Triple(
                     R.string.base_hands_category_task_manicure,
                     2,
-                    TaskSchedule(1, TaskFrequency.MONTH)
+                    TaskSchedule(3, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_hands_category_task_massage,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_hands_category_task_oil,
+                    1,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_hands_category_task_mask,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_hands_category_task_paraffin,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_hands_category_task_spa,
+                    1,
+                    TaskSchedule(2, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_category_task_other,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
                 )
             )
             BaseCategoryEnum.HAIR -> listOf(
                 Triple(
-                    R.string.base_hair_category_task_other,
+                    R.string.base_hair_category_task_shampoo,
+                    2,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_conditioner,
+                    2,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_mask,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_scrub,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_haircut,
+                    1,
+                    TaskSchedule(2, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_coloring,
+                    1,
+                    TaskSchedule(2, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_ends_therapy,
+                    1,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_hair_category_task_mesotherapy,
+                    2,
+                    TaskSchedule(1, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_category_task_other,
                     1,
                     TaskSchedule(1, TaskFrequency.WEEK)
                 )
@@ -93,20 +202,75 @@ internal class PrepopulateData : KoinComponent {
             BaseCategoryEnum.BODY -> listOf(
                 Triple(
                     R.string.base_body_category_task_cream,
-                    1,
-                    TaskSchedule(3, TaskFrequency.WEEK)
+                    2,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_body_category_task_scrub,
+                    2,
+                    TaskSchedule(2, TaskFrequency.WEEK)
                 ),
                 Triple(
                     R.string.base_body_category_task_massage,
+                    2,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_body_category_task_dry_brushing,
                     1,
-                    TaskSchedule(4, TaskFrequency.WEEK)
+                    TaskSchedule(1, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_body_category_task_spa,
+                    1,
+                    TaskSchedule(1, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_body_category_task_butter,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_category_task_other,
+                    1,
+                    TaskSchedule(2, TaskFrequency.WEEK)
                 )
             )
             BaseCategoryEnum.FEET -> listOf(
                 Triple(
-                    R.string.base_feet_category_task_other,
+                    R.string.base_feet_category_task_pedicure,
+                    2,
+                    TaskSchedule(3, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_feet_category_task_depilation,
+                    2,
+                    TaskSchedule(1, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_feet_category_task_mask,
                     1,
-                    TaskSchedule(2, TaskFrequency.WEEK)
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_feet_category_task_cream,
+                    1,
+                    TaskSchedule(2, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_feet_category_task_anti_cellulite,
+                    1,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_feet_category_task_massage,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_category_task_other,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
                 )
             )
             BaseCategoryEnum.ORAL -> listOf(
@@ -116,16 +280,56 @@ internal class PrepopulateData : KoinComponent {
                     TaskSchedule(2, TaskFrequency.YEAR)
                 ),
                 Triple(
-                    R.string.base_oral_category_task_other,
+                    R.string.base_oral_category_task_oral_hygiene,
+                    2,
+                    TaskSchedule(2, TaskFrequency.YEAR)
+                ),
+                Triple(
+                    R.string.base_oral_category_task_irrigator,
+                    2,
+                    TaskSchedule(3, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_oral_category_task_whitening,
+                    2,
+                    TaskSchedule(3, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_oral_category_task_dental_floss,
                     1,
-                    TaskSchedule(2, TaskFrequency.WEEK)
+                    TaskSchedule(1, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_category_task_other,
+                    1,
+                    TaskSchedule(1, TaskFrequency.MONTH)
                 )
             )
             BaseCategoryEnum.OTHER -> listOf(
                 Triple(
-                    R.string.base_other_category_task_other,
+                    R.string.base_other_category_task_daily,
+                    1,
+                    TaskSchedule(1, TaskFrequency.DAY)
+                ),
+                Triple(
+                    R.string.base_other_category_task_weekly,
+                    1,
+                    TaskSchedule(1, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_other_category_task_biweekly,
                     1,
                     TaskSchedule(2, TaskFrequency.WEEK)
+                ),
+                Triple(
+                    R.string.base_other_category_task_monthly,
+                    1,
+                    TaskSchedule(1, TaskFrequency.MONTH)
+                ),
+                Triple(
+                    R.string.base_other_category_task_annual,
+                    1,
+                    TaskSchedule(1, TaskFrequency.YEAR)
                 )
             )
         }

@@ -8,25 +8,60 @@
     <string name="base_category_legs">Feet care</string>
     <string name="base_category_mouth">Oral care</string>
 
-    <string name="base_face_category_task_day_cream">Дневной крем</string>
-    <string name="base_face_category_task_night_cream">Ночной крем</string>
-    <string name="base_face_category_task_massage">Массаж лица</string>
-    <string name="base_face_category_task_mask">Маска</string>
-    <string name="base_face_category_task_serum">Сыворотка</string>
+    <string name="base_category_task_other">Other</string>
 
-    <string name="base_hands_category_task_cream">Крем для рук</string>
-    <string name="base_hands_category_task_massage">Массаж рук</string>
-    <string name="base_hands_category_task_manicure">Маникюр</string>
+    <string name="base_face_category_task_toner">Toner</string>
+    <string name="base_face_category_task_essence">Essence</string>
+    <string name="base_face_category_task_emulsion">Emulsion</string>
+    <string name="base_face_category_task_serum">Face serum</string>
+    <string name="base_face_category_task_patch">Eye patch</string>
+    <string name="base_face_category_task_peeling">Facial peeling</string>
+    <string name="base_face_category_task_sheet_mask">Sheet face mask</string>
+    <string name="base_face_category_task_clay_mask">facial clay mask</string>
+    <string name="base_face_category_task_algin_mask">Algin face mask</string>
+    <string name="base_face_category_task_facebuilding">Facebuilding</string>
+    <string name="base_face_category_task_gua_sha">Gua sha massage</string>
 
-    <string name="base_body_category_task_cream">Крем для тела</string>
-    <string name="base_body_category_task_massage">Массаж</string>
+    <string name="base_hands_category_task_cream">Hand cream</string>
+    <string name="base_hands_category_task_manicure">Manicure</string>
+    <string name="base_hands_category_task_massage">Hand Massage</string>
+    <string name="base_hands_category_task_oil">Cuticle Oil</string>
+    <string name="base_hands_category_task_mask">Hand mask</string>
+    <string name="base_hands_category_task_paraffin">Paraffin Treatment</string>
+    <string name="base_hands_category_task_spa">SPA Hand Care</string>
 
-    <string name="base_hair_category_task_other">Other</string>
+    <string name="base_hair_category_task_shampoo">To shampoo</string>
+    <string name="base_hair_category_task_conditioner">Using conditioner</string>
+    <string name="base_hair_category_task_mask">Hair mask</string>
+    <string name="base_hair_category_task_scrub">Scalp scrub</string>
+    <string name="base_hair_category_task_haircut">Haircut</string>
+    <string name="base_hair_category_task_coloring">Hair coloring</string>
+    <string name="base_hair_category_task_ends_therapy">Hair ends oil/serum</string>
+    <string name="base_hair_category_task_mesotherapy">Mesotherapy</string>
 
-    <string name="base_feet_category_task_other">Other</string>
+    <string name="base_body_category_task_cream">Body cream</string>
+    <string name="base_body_category_task_scrub">Body scrub</string>
+    <string name="base_body_category_task_butter">Body butter</string>
+    <string name="base_body_category_task_massage">Massage therapy</string>
+    <string name="base_body_category_task_dry_brushing">Dry brushing</string>
+    <string name="base_body_category_task_spa">SPA treatments</string>
 
-    <string name="base_oral_category_task_dentist">Dentist</string>
-    <string name="base_oral_category_task_other">Other</string>
+    <string name="base_feet_category_task_pedicure">Pedicure</string>
+    <string name="base_feet_category_task_mask">Foot mask</string>
+    <string name="base_feet_category_task_depilation">Depilation/Waxing</string>
+    <string name="base_feet_category_task_massage">Foot massage</string>
+    <string name="base_feet_category_task_cream">Foot cream</string>
+    <string name="base_feet_category_task_anti_cellulite">Anti-cellulite intensive</string>
 
-    <string name="base_other_category_task_other">Other</string>
+    <string name="base_oral_category_task_whitening">Teeth whitening course</string>
+    <string name="base_oral_category_task_irrigator">Use irrigator</string>
+    <string name="base_oral_category_task_dental_floss">Use dental floss</string>
+    <string name="base_oral_category_task_dentist">Visit to dentist</string>
+    <string name="base_oral_category_task_oral_hygiene">Professional oral hygiene</string>
+
+    <string name="base_other_category_task_daily">Daily task</string>
+    <string name="base_other_category_task_weekly">Weekly task</string>
+    <string name="base_other_category_task_biweekly">Biweekly task</string>
+    <string name="base_other_category_task_monthly">Monthly task</string>
+    <string name="base_other_category_task_annual">Annual task</string>
 </resources>

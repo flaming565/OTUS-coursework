@@ -43,9 +43,13 @@ internal class StatisticsViewModel : BaseViewModel() {
         Calendar.getInstance().timeInMillis.toMonthDate() != it.toMonthDate()
     }
 
-    val isPreviousMonthAvailable = currentDate.map(viewModelScope) { date ->
-        categories.value.isEmpty() || categories.value.any { it.category.creationDate < date }
-    }
+    val isPreviousMonthAvailable = combine(categories, currentDate) { categories, date ->
+        categories.isNotEmpty() && categories.any { it.category.creationDate < date }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
 
     fun nextMonth() {
         calendar.timeInMillis = currentDate.value
