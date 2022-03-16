@@ -41,7 +41,7 @@
                 android:text="@{vm.taskCount}"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:drawableEndCompat="@drawable/ic_check_circle_18"
-                app:drawableTint="?attr/colorPrimaryDark"
+                app:drawableTint="?attr/colorSecondary"
                 tools:text="3" />
         </LinearLayout>
 
@@ -50,7 +50,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
-            android:background="?attr/colorPrimaryDark" />
+            android:background="?attr/colorSecondary" />
 
     </LinearLayout>
 </layout>

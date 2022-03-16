@@ -19,8 +19,6 @@ open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
         Timber.e(t, "Exception handled.")
     }
     override val coroutineContext = viewModelScope.coroutineContext + exceptionHandler
-
-    val isLoading = MutableLiveData(false)
     val errorEvent = MutableLiveData<Event<String>>()
 
     fun mapResponseResult(
@@ -31,18 +29,13 @@ open class BaseViewModel : ViewModel(), CoroutineScope, KoinComponent {
         return when (result) {
             is Result.Success<*> -> {
                 onSuccess?.invoke()
-                isLoading.value = false
                 result.value
             }
             is Result.Error -> {
                 Timber.d("Map response error: ${result.message}")
                 val message = errorMessage ?: result.message
                 errorEvent.postValue(Event(message))
-                isLoading.value = false
                 null
-            }
-            Result.Loading -> {
-                isLoading.value = true
             }
         }
     }

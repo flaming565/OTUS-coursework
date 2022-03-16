@@ -2,6 +2,7 @@ package com.beautydiary.home.fragments
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import com.beautydiary.home.BR
 import com.beautydiary.home.R
 import com.beautydiary.home.databinding.DialogHomeSelectCategoryOptionsBinding
 import com.beautydiary.home.databinding.FragmentHomeBinding
+import com.beautydiary.home.databinding.DialogDeleteCategoryAlertBinding
 import com.beautydiary.home.models.CategoryItem
 import com.beautydiary.home.models.HomeCategory
 import com.beautydiary.home.models.HomeCategoryNew
@@ -73,6 +75,10 @@ class HomeFragment : RecyclerViewFragment() {
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewModel.isStatisticsOptionAvailable
+            .onEach { binding?.toolbar?.menu?.get(0)?.isVisible = it }
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
             event.let {
@@ -150,10 +156,20 @@ class HomeFragment : RecyclerViewFragment() {
     }
 
     private fun showDeleteCategoryDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.home_delete_category_dialog_message)
-            .setPositiveButton(R.string.common_delete) { _, _ -> viewModel.deleteSelectedCategory() }
-            .setNegativeButton(R.string.common_cancel, null)
-            .show()
+        dialog?.dismiss()
+        if (viewModel.applicationSettings.shouldDeleteCategoryDialogBeShown) {
+            val dialogBinding = DialogDeleteCategoryAlertBinding.inflate(layoutInflater)
+
+            dialog = MaterialAlertDialogBuilder(requireContext())
+                .setView(dialogBinding.root)
+                .setPositiveButton(R.string.common_delete) { _, _ ->
+                    viewModel.deleteSelectedCategory()
+                    viewModel.toggleShowDeleteDialog(dialogBinding.checkbox.isChecked)
+                }
+                .setNegativeButton(R.string.common_cancel, null)
+                .show()
+        } else {
+            viewModel.deleteSelectedCategory()
+        }
     }
 }

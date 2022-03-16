@@ -17,6 +17,7 @@ import java.util.*
 internal class StatisticsViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
+    val isLoading = MutableStateFlow(true)
     val categories: StateFlow<List<DomainCategoryWithTasks>> = categoryUseCase.allWithTasks()
         .flatMapMerge { mapGetCategoriesResult(it) }
         .stateIn(
@@ -42,9 +43,13 @@ internal class StatisticsViewModel : BaseViewModel() {
         Calendar.getInstance().timeInMillis.toMonthDate() != it.toMonthDate()
     }
 
-    val isPreviousMonthAvailable = currentDate.map(viewModelScope) { date ->
-        categories.value.isEmpty() || categories.value.any { it.category.creationDate < date }
-    }
+    val isPreviousMonthAvailable = combine(categories, currentDate) { categories, date ->
+        categories.isNotEmpty() && categories.any { it.category.creationDate < date }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
 
     fun nextMonth() {
         calendar.timeInMillis = currentDate.value
@@ -61,6 +66,7 @@ internal class StatisticsViewModel : BaseViewModel() {
     }
 
     private fun mapGetCategoriesResult(result: Result): Flow<List<DomainCategoryWithTasks>> {
+        isLoading.value = false
         return mapResponseResult(result)?.let { cast<Flow<List<DomainCategoryWithTasks>>>(it) }
             ?: flowOf(emptyList())
     }

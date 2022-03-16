@@ -6,6 +6,7 @@ import com.beautydiary.domain.di.domainModule
 import com.beautydiary.feature_tasks.di.tasksModule
 import com.beautydiary.featurestatistics.di.statisticsModule
 import com.beautydiary.home.di.homeModule
+import com.beautydiary.notifications.di.notificationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -30,7 +31,8 @@ class App : Application() {
                 dataModule,
                 homeModule,
                 statisticsModule,
-                tasksModule
+                tasksModule,
+                notificationModule
             )
         }
     }

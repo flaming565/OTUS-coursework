@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            app:goneIf="@{vm.isLoading}"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <androidx.core.widget.NestedScrollView
@@ -59,14 +60,11 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayoutStyle.Outline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:enabled="@{!vm.isLoading}"
-                        app:boxBackgroundColor="?android:colorBackground"
-                        app:boxStrokeColor="?attr/colorOnPrimary"
-                        app:boxStrokeWidthFocused="1dp"
                         app:counterMaxLength="40"
                         app:hintTextColor="?attr/colorOnPrimary">
 
@@ -128,13 +126,11 @@
                             android:textAppearance="?textAppearanceBody1" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            style="@style/TextInputLayoutStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:enabled="@{!vm.isLoading}"
-                            app:boxBackgroundColor="?android:colorBackground"
-                            app:boxStrokeColor="?attr/colorOnPrimary"
-                            app:boxStrokeWidthFocused="1dp">
+                            android:enabled="@{!vm.isLoading}">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/et_task_frequency"
@@ -200,7 +196,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:text="@string/add_task_current_state"
-                        android:textAppearance="?textAppearanceBody1" />
+                        android:textAppearance="?textAppearanceBody1"
+                        app:goneIf="@{vm.isEditMode}" />
 
                     <androidx.appcompat.widget.AppCompatSeekBar
                         android:layout_width="match_parent"
@@ -211,6 +208,7 @@
                         android:progress="@={vm.taskProgress}"
                         android:progressDrawable="@drawable/seek_bar_progress_style"
                         android:thumb="@drawable/seek_bar_thumb_style"
+                        app:goneIf="@{vm.isEditMode}"
                         tools:ignore="UnusedAttribute" />
 
                     <LinearLayout
@@ -219,7 +217,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:goneIf="@{vm.isEditMode}">
 
                         <TextView
                             android:layout_width="0dp"
@@ -227,25 +226,22 @@
                             android:layout_weight="1"
                             android:text="@string/add_task_state_good"
                             android:textAppearance="?textAppearanceBody1"
-                            android:textColor="?attr/colorPrimaryDark" />
+                            android:textColor="?attr/colorControlNormal" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/add_task_state_about_time"
                             android:textAppearance="?textAppearanceBody1"
-                            android:textColor="?attr/colorPrimaryDark" />
+                            android:textColor="?attr/colorControlNormal" />
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayoutStyle.Outline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:enabled="@{!vm.isLoading}"
-                        app:boxBackgroundColor="?android:colorBackground"
-                        app:boxStrokeColor="?attr/colorOnPrimary"
-                        app:boxStrokeWidthFocused="1dp"
                         app:hintTextColor="?attr/colorOnPrimary"
                         app:placeholderTextColor="?attr/colorOnPrimary">
 
@@ -278,6 +274,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="?attr/colorPrimary"
+                    app:awv_centerTextColor="?attr/colorOnPrimary"
                     app:awv_itemsVisibleCount="7"
                     app:awv_textsize="14"
                     app:goneIf="@{vm.isEditMode}" />

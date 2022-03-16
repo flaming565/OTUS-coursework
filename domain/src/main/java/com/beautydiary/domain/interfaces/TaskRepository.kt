@@ -10,6 +10,8 @@ interface TaskRepository {
 
     fun getAllTasks(): Flow<List<DomainTask>>
 
+    fun getAllTasksSync(): List<DomainTask>
+
     fun getBaseTasks(baseCategoryId: Long): Flow<List<DomainTask>>
 
     fun getCategoryTask(id: Long): Flow<DomainTaskAndCategory>

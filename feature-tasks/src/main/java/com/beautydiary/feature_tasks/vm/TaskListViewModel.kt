@@ -13,6 +13,7 @@ import com.beautydiary.domain.common.Result
 import com.beautydiary.core_ui.ext.mapToMutable
 import com.beautydiary.core_ui.ext.map
 import com.beautydiary.core_ui.vm.BaseViewModel
+import com.beautydiary.domain.common.ApplicationSettings
 import com.beautydiary.feature_tasks.common.toUIModel
 import com.beautydiary.feature_tasks.models.CategoryTask
 import com.beautydiary.feature_tasks.models.CategoryTaskNew
@@ -25,9 +26,11 @@ import org.koin.core.component.inject
 internal class TaskListViewModel(private val category: DomainCategory) : BaseViewModel() {
     private val taskUseCase by inject<TaskActionsUseCase>()
     private val categoryUseCase by inject<CategoryActionsUseCase>()
+    private val applicationSettings by inject<ApplicationSettings>()
 
     val titleFragment = category.name
     val userActionEvent = MutableLiveData<Event<UserTaskAction>>()
+    val isLoading = MutableStateFlow(true)
 
     private val rawCategoryWithTasks = categoryUseCase.getWithTasks(category.id)
         .flatMapMerge { mapGetTasksResult(it) }
@@ -41,6 +44,8 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     val allTasks = categoryTasks.map(viewModelScope) { list ->
         list?.let { (it.toMutableList() + listOf(CategoryTaskNew)).toTypedArray() }
     }
+    val isSortOptionAvailable =
+        categoryTasks.map(viewModelScope) { !it.isNullOrEmpty() && it.size > 1 }
 
     fun onTaskClick(id: Long) {
         userActionEvent.postValue(Event(UserTaskAction.OnClickTask(id)))
@@ -55,7 +60,14 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
     }
 
     fun onDeleteTask(id: Long, name: String) {
-        userActionEvent.postValue(Event(UserTaskAction.DeleteTask(id, name)))
+        if (applicationSettings.shouldDeleteTaskDialogBeShown)
+            userActionEvent.postValue(Event(UserTaskAction.DeleteTask(id, name)))
+        else
+            deleteTask(id)
+    }
+
+    fun toggleShowDeleteDialog(value: Boolean) {
+        applicationSettings.switchModeDeleteTaskDialog(!value)
     }
 
     fun onCompleteTask(id: Long) {
@@ -121,6 +133,7 @@ internal class TaskListViewModel(private val category: DomainCategory) : BaseVie
 
     private fun mapGetTasksResult(result: Result): Flow<DomainCategoryWithTasks?> {
         var resultFlow = flowOf<DomainCategoryWithTasks?>(null)
+        isLoading.value = false
         mapResponseResult(result)?.let {
             tryCast<Flow<DomainCategoryWithTasks>>(it) {
                 resultFlow = this

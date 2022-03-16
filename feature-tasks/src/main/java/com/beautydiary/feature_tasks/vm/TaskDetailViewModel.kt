@@ -17,11 +17,14 @@ import com.beautydiary.feature_tasks.common.toUIModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
+import timber.log.Timber
 
 
 internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
     private val taskUseCase by inject<TaskActionsUseCase>()
 
+    // todo: не обновляется состояние
+    val isLoading = MutableStateFlow(true)
     private val categoryTask: StateFlow<DomainTaskAndCategory?> = taskUseCase.categoryTask(taskId)
         .flatMapMerge { mapGetTasksResult(it) }
         .stateIn(
@@ -79,6 +82,7 @@ internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
     }
 
     private fun mapGetTasksResult(result: Result): Flow<DomainTaskAndCategory?> {
+        isLoading.value = false
         return mapResponseResult(result)?.let {
             cast<Flow<DomainTaskAndCategory>>(it)
         } ?: flowOf<DomainTaskAndCategory?>(null)

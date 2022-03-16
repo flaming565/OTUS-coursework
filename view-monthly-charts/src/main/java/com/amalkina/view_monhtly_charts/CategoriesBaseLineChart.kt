@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import com.beautydiary.core_ui.ext.toEndOfDay
 import com.beautydiary.core_ui.ext.toMonthDate
 import com.beautydiary.core_ui.ext.toStartOfDay
-import com.beautydiary.core_view.TimestampValueFormatter
+import com.beautydiary.core_view.DayTimestampFormatter
 import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -107,11 +107,12 @@ abstract class CategoriesBaseLineChart(context: Context, attrs: AttributeSet?) :
 
             granularity = DateUtils.DAY_IN_MILLIS.toFloat()
             position = XAxis.XAxisPosition.BOTTOM
-            valueFormatter = TimestampValueFormatter()
+            valueFormatter = DayTimestampFormatter()
 
             axisMinimum = getStartDate().toFloat()
             chartDate.set(Calendar.DAY_OF_MONTH, chartDate.getActualMaximum(Calendar.DAY_OF_MONTH))
             axisMaximum = chartDate.timeInMillis.toEndOfDay().toFloat()
+            textColor = context.resources.getColor(R.color.colorOnPrimary, context.theme)
         }
     }
 

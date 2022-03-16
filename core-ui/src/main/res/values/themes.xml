@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Theme.BeautyDiary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
         <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorPrimaryVariant</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item>
+
         <item name="android:colorControlActivated">@color/colorPrimaryVariant</item>
         <item name="android:textColorPrimary">@color/colorOnPrimary</item>
         <!-- Status bar color. -->
@@ -25,7 +32,7 @@
     </style>
 
     <style name="MaterialCalendarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">?attr/colorPrimaryDark</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
     <style name="textAppearanceError" parent="TextAppearance.MaterialComponents.Body1">
@@ -49,5 +56,27 @@
         <item name="android:padding">0dp</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="TextInputLayoutStyle">
+        <item name="boxStrokeColor">@color/color_text_input_layout</item>
+        <item name="boxStrokeWidth">0.5dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxBackgroundColor">?android:colorBackground</item>
+    </style>
+
+    <style name="TextInputLayoutStyle.Outline" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/color_text_input_layout</item>
+        <item name="boxStrokeWidth">0.5dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxBackgroundColor">?android:colorBackground</item>
+    </style>
+
+    <style name="TextInputLayoutStyle.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/color_text_input_layout</item>
+        <item name="endIconTint">?attr/colorSecondary</item>
+        <item name="boxStrokeWidth">0.5dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
     </style>
 </resources>

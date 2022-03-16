@@ -29,6 +29,7 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
 
     val userActionEvent = MutableLiveData<Event<UserAction>>()
     val launchActionEvent = MutableLiveData<Event<LaunchItem>>()
+    val isLoading = MutableStateFlow(true)
 
     val isEditMode = categoryId > 0
     val fragmentTitle = getString(
@@ -83,7 +84,7 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
         combine(
             selectedCategoryTitle,
             isCategoryChanged,
-            isLoading.asFlow()
+            isLoading
         ) { title, isChanged, isLoading ->
             title.isNotEmpty() && (isChanged || !isEditMode) && !isLoading
         }.stateIn(
@@ -141,7 +142,6 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
     }
 
     private fun loadEditableCategory(categoryId: Long) {
-        isLoading.value = true
         launch {
             val result = categoryUseCase.get(categoryId)
             val category = mapGetCategoryResult(result)
@@ -177,6 +177,7 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
 
     private fun mapGetCategoriesResult(result: Result): Flow<List<HomeCategory>> {
         var categories: Flow<List<HomeCategory>> = flowOf(emptyList())
+        isLoading.value = false
         mapResponseResult(result)?.let {
             tryCast<Flow<List<DomainCategory>>>(it) {
                 categories = this.transform { list ->
@@ -188,6 +189,7 @@ internal class AddCategoryViewModel(categoryId: Long = 0) : BaseViewModel() {
     }
 
     private fun mapGetCategoryResult(result: Result): DomainCategory? {
+        isLoading.value = false
         return mapResponseResult(result)?.let {
             cast<DomainCategory>(it)
         }

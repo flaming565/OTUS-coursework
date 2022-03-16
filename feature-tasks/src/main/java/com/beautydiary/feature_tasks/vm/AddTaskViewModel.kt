@@ -30,6 +30,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
     val saveTaskEvent = MutableLiveData<Event<Unit>>()
+    val isLoading = MutableStateFlow(true)
 
     val isEditMode = taskId > 0
     val fragmentTitle = BaseModel.getString(
@@ -86,7 +87,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
 
     val isSaveButtonEnabled = combine(
         taskTitle, taskScheduleValue,
-        isTaskChanged, isLoading.asFlow()
+        isTaskChanged, isLoading
     ) { title, schedule, isChanged, isLoading ->
         title.isNotEmpty() && schedule.toInt() > 0 && (isChanged || !isEditMode) && !isLoading
     }.stateIn(
@@ -108,7 +109,6 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     }
 
     private fun loadEditableTask(taskId: Long) {
-        isLoading.value = true
         launch {
             val result = taskUseCase.get(taskId)
             val task = mapGetTaskResult(result)
@@ -134,10 +134,17 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     }
 
     private fun createTask(): DomainTask {
-        val currentProgress = when (taskProgress.value) {
+        val currentProgress = if (isEditMode) taskProgress.value
+        else when (taskProgress.value) {
             0 -> taskMaxProgress - MIN_PROGRESS
             else -> taskMaxProgress - taskProgress.value
         }
+
+        val startDate = if (isEditMode) selectedTask.value!!.startDate
+        else DomainTask.calculateStartDate(
+            currentProgress,
+            Schedule(taskScheduleValue.value.toInt(), taskFrequency.value)
+        )
 
         return DomainTask(
             id = selectedTask.value?.id ?: 0,
@@ -146,10 +153,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
             priority = Priority.fromInt(taskPriority.value.toInt()),
             schedule = Schedule(taskScheduleValue.value.toInt(), taskFrequency.value),
             note = taskNote.value.trim(),
-            startDate = DomainTask.calculateStartDate(
-                currentProgress,
-                Schedule(taskScheduleValue.value.toInt(), taskFrequency.value)
-            )
+            startDate = startDate
         )
     }
 
@@ -163,6 +167,7 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
 
     private fun mapGetTasksResult(result: Result): Flow<List<CategoryTask>> {
         var tasks: Flow<List<CategoryTask>> = flowOf(emptyList())
+        isLoading.value = false
         mapResponseResult(result)?.let {
             tryCast<Flow<List<DomainTask>>>(it) {
                 tasks = this.transform { list ->
@@ -174,10 +179,13 @@ internal class AddTaskViewModel(categoryId: Long, taskId: Long) : BaseViewModel(
     }
 
     private fun mapGetCategoryResult(result: Result): DomainCategory? {
-        return mapResponseResult(result)?.let { cast<DomainCategory>(it) }
+        return mapResponseResult(result)?.let {
+            cast<DomainCategory>(it)
+        }
     }
 
     private fun mapGetTaskResult(result: Result): DomainTask? {
+        isLoading.value = false
         return mapResponseResult(result)?.let {
             cast<DomainTask>(it)
         }

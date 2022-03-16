@@ -28,6 +28,12 @@ internal class TaskRepositoryImpl : BaseRepository(),
         }
     }
 
+    override fun getAllTasksSync(): List<DomainTask> {
+        return dao.allSync().map {
+            it.toDomain()
+        }
+    }
+
     override fun getBaseTasks(baseCategoryId: Long): Flow<List<DomainTask>> {
         return baseTaskDao.getCategoryTasks(baseCategoryId).map { list ->
             list.map { it.toDomain() }

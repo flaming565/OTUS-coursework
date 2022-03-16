@@ -45,6 +45,7 @@ dependencies {
     implementation project(":core-ui")
     implementation project(":navigation")
     implementation project(":domain")
+    implementation project(":notifications")
     implementation project(":view-progress-bar")
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -52,7 +53,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
 
     // Koin
-    implementation "io.insert-koin:koin-core:2.2.3"
     implementation "io.insert-koin:koin-android-viewmodel:2.2.3"
 
     // Lifecycle, coroutines
@@ -65,9 +65,6 @@ dependencies {
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
-
-    // Timber
-    implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // WheelView
     implementation 'com.github.weidongjian:androidWheelView:1.0.0'

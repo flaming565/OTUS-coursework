@@ -17,6 +17,8 @@ class TaskActionsUseCase : BaseUseCase() {
     fun categoryTask(id: Long) =
         flowResult(id) { repository.getCategoryTask(id) }
 
+    fun todayTasksSync() = repository.getAllTasksSync().filter { it.daysRemaining <= 1 }
+
     suspend fun get(id: Long) =
         suspendResult(id) { repository.getTask(id) }
 

@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beautydiary.core_ui.fragments.RecyclerViewFragment
 import com.beautydiary.feature_tasks.BR
 import com.beautydiary.feature_tasks.R
+import com.beautydiary.feature_tasks.databinding.DialogDeleteTaskAlertBinding
 import com.beautydiary.feature_tasks.databinding.FragmentTaskListBinding
 import com.beautydiary.feature_tasks.models.CategoryTask
 import com.beautydiary.feature_tasks.models.CategoryTaskNew
@@ -22,8 +24,8 @@ import com.beautydiary.feature_tasks.models.UserTaskAction
 import com.beautydiary.feature_tasks.vm.TaskListViewModel
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -80,16 +82,20 @@ class TaskListFragment : RecyclerViewFragment() {
             itemAnimator = DefaultItemAnimator()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allTasks.collect { items ->
-                    items?.let {
-                        rvAdapter?.items = it as Array<Any>
-                        startListAnimation()
-                    }
+        viewModel.allTasks
+            .onEach { items ->
+                items?.let {
+                    rvAdapter?.items = it as Array<Any>
+                    startListAnimation()
                 }
             }
-        }
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.isSortOptionAvailable
+            .onEach { binding?.toolbar?.menu?.get(0)?.isVisible = it }
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
             event.let {
@@ -146,10 +152,15 @@ class TaskListFragment : RecyclerViewFragment() {
     }
 
     private fun showDeleteTaskDialog(taskId: Long, taskName: String) {
+        val dialogBinding = DialogDeleteTaskAlertBinding.inflate(layoutInflater).apply {
+            message = getString(R.string.task_list_delete_task_dialog_message, taskName)
+        }
+
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(getString(R.string.task_list_delete_task_dialog_message, taskName))
+            .setView(dialogBinding.root)
             .setPositiveButton(R.string.common_delete) { _, _ ->
                 viewModel.deleteTask(taskId)
+                viewModel.toggleShowDeleteDialog(dialogBinding.checkbox.isChecked)
             }
             .setNegativeButton(R.string.common_cancel, null)
             .show()

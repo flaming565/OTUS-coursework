@@ -20,4 +20,5 @@ include ':app',
         ':feature-statistics',
         ':view-task-progress',
         ':view-progress-bar',
-        ':view-monthly-charts'
+        ':view-monthly-charts',
+        ':notifications'
