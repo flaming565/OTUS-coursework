@@ -21,4 +21,5 @@ include ':app',
         ':view-task-progress',
         ':view-progress-bar',
         ':view-monthly-charts',
-        ':notifications'
+        ':notifications',
+        ':lint-checks'
