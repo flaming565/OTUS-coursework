@@ -9,9 +9,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.beautydiary.core_ui.R
 import com.beautydiary.core_ui.ext.hasPermission
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment : Fragment() {
 
@@ -78,6 +84,14 @@ abstract class BaseFragment : Fragment() {
                 handleShouldShowRequestPermissionRationale(context, message)
             }
             else -> requestPermissionLauncher.launch(permission)
+        }
+    }
+
+    protected fun <T> Flow<T>.observe(callback: (T) -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            this@observe
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+                .collect { callback(it) }
         }
     }
 

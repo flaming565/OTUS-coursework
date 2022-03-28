@@ -1,5 +1,5 @@
 <resources>
-    <string name="statistics_title">Statistics</string>
-    <string name="statistics_common_progress_chart_title">Индикатор совокупного прогресса</string>
-    <string name="statistics_categories_progress_chart_title">Прогресс выполнения задач (%)</string>
+    <string name="statistics_title">Statistic</string>
+    <string name="statistics_common_progress_chart_title">Cumulative progress indicator</string>
+    <string name="statistics_categories_progress_chart_title">Task progress (%)</string>
 </resources>

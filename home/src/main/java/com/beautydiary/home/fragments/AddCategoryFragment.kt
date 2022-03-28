@@ -7,9 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.beautydiary.core_ui.fragments.BaseFragment
@@ -21,8 +18,6 @@ import com.beautydiary.home.vm.AddCategoryViewModel.LaunchItem
 import com.beautydiary.home.vm.AddCategoryViewModel.UserAction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weigan.loopview.LoopView
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -45,20 +40,12 @@ class AddCategoryFragment : BaseFragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.categoryNames.collect { list ->
-                    initLoopView(binding.loopView, list)
-                }
-            }
+        viewModel.categoryNames.observe { list ->
+            initLoopView(binding.loopView, list)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.readyImagePathEvent.collect { path ->
-                    path?.let { viewModel.updateCategoryImage(it) }
-                }
-            }
+        viewModel.readyImagePathEvent.observe { path ->
+            path?.let { viewModel.updateCategoryImage(it) }
         }
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
@@ -100,7 +87,8 @@ class AddCategoryFragment : BaseFragment() {
                     viewModel.currentIndex.value = index
                 }
             }
-            viewModel.currentIndex.value = 0
+            if (viewModel.currentIndex.value < 0)
+                viewModel.currentIndex.value = 0
         }
     }
 
