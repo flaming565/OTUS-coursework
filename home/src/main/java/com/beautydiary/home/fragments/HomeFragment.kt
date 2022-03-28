@@ -1,11 +1,10 @@
 package com.beautydiary.home.fragments
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.get
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beautydiary.core_ui.fragments.RecyclerViewFragment
 import com.beautydiary.home.BR
 import com.beautydiary.home.R
+import com.beautydiary.home.databinding.DialogDeleteCategoryAlertBinding
 import com.beautydiary.home.databinding.DialogHomeSelectCategoryOptionsBinding
 import com.beautydiary.home.databinding.FragmentHomeBinding
-import com.beautydiary.home.databinding.DialogDeleteCategoryAlertBinding
 import com.beautydiary.home.models.CategoryItem
 import com.beautydiary.home.models.HomeCategory
 import com.beautydiary.home.models.HomeCategoryNew
@@ -25,8 +24,6 @@ import com.beautydiary.navigation.NavigationFlow
 import com.beautydiary.navigation.ToFlowNavigatable
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -67,18 +64,14 @@ class HomeFragment : RecyclerViewFragment() {
             itemAnimator = DefaultItemAnimator()
         }
 
-        viewModel.categories
-            .onEach {
-                rvAdapter?.items = it.toTypedArray()
-                startListAnimation()
-            }
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.categories.observe {
+            rvAdapter?.items = it.toTypedArray()
+            startListAnimation()
+        }
 
-        viewModel.isStatisticsOptionAvailable
-            .onEach { binding?.toolbar?.menu?.get(0)?.isVisible = it }
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.isStatisticsOptionAvailable.observe {
+            binding?.toolbar?.menu?.get(0)?.isVisible = it
+        }
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
             event.let {

@@ -5,15 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.beautydiary.feature_tasks.databinding.FragmentAddTaskBinding
 import com.beautydiary.core_ui.fragments.BaseFragment
+import com.beautydiary.feature_tasks.databinding.FragmentAddTaskBinding
 import com.beautydiary.feature_tasks.vm.AddTaskViewModel
 import com.weigan.loopview.LoopView
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -35,8 +32,7 @@ class AddTaskFragment : BaseFragment() {
         binding.etTaskFrequency.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 binding.etTaskFrequency.append("0")
-            }
-            else {
+            } else {
                 val formatString = text.toString().toInt().toString()
                 if (text.toString() != formatString) {
                     binding.etTaskFrequency.setText(formatString)
@@ -52,15 +48,13 @@ class AddTaskFragment : BaseFragment() {
             }
         }
 
-        viewModel.tasksNames
-            .onEach { initLoopView(binding.loopView, it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.tasksNames.observe {
+            initLoopView(binding.loopView, it)
+        }
 
-        viewModel.taskPriority
-            .onEach {
-                if (it < 1F) binding.ratingBar.rating = 1F
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.taskPriority.observe {
+            if (it < 1F) binding.ratingBar.rating = 1F
+        }
 
         viewModel.errorEvent.observe(viewLifecycleOwner) { event ->
             event.let {

@@ -1,13 +1,13 @@
 package com.beautydiary.featurestatistics.vm
 
 import androidx.lifecycle.viewModelScope
-import com.beautydiary.domain.models.DomainCategoryWithTasks
-import com.beautydiary.domain.usecases.CategoryActionsUseCase
 import com.beautydiary.core_ui.ext.cast
-import com.beautydiary.domain.common.Result
 import com.beautydiary.core_ui.ext.map
 import com.beautydiary.core_ui.ext.toMonthDate
 import com.beautydiary.core_ui.vm.BaseViewModel
+import com.beautydiary.domain.common.Result
+import com.beautydiary.domain.models.DomainCategoryWithTasks
+import com.beautydiary.domain.usecases.CategoryActionsUseCase
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat
@@ -17,7 +17,7 @@ import java.util.*
 internal class StatisticsViewModel : BaseViewModel() {
     private val categoryUseCase by inject<CategoryActionsUseCase>()
 
-    val isLoading = MutableStateFlow(true)
+    val isLoading = MutableStateFlow(false)
     val categories: StateFlow<List<DomainCategoryWithTasks>> = categoryUseCase.allWithTasks()
         .flatMapMerge { mapGetCategoriesResult(it) }
         .stateIn(

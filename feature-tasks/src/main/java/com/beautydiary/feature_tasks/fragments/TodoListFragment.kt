@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
@@ -22,10 +19,7 @@ import com.beautydiary.feature_tasks.models.UserTaskAction
 import com.beautydiary.feature_tasks.vm.TodoListViewModel
 import com.github.akvast.mvvm.adapter.ViewModelAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 
 class TodoListFragment : RecyclerViewFragment() {
@@ -80,24 +74,15 @@ class TodoListFragment : RecyclerViewFragment() {
             itemAnimator = DefaultItemAnimator()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.todoListItems.collect {
-                    rvAdapter?.items = it.toTypedArray()
-                    startListAnimation(minSize = 1)
-                }
-            }
+        viewModel.todoListItems.observe {
+            rvAdapter?.items = it.toTypedArray()
+            startListAnimation(minSize = 1)
         }
 
         viewModel.userActionEvent.observe(viewLifecycleOwner) { event ->
-            Timber.d("ddd test 2")
             event.let {
-                Timber.d("ddd test 3")
-
                 if (!updateEventTimestamp()) return@let
                 dialog?.dismiss()
-
-                Timber.d("ddd test 4")
 
                 when (it) {
                     is UserTaskAction.OnClickTask -> findNavController().navigate(

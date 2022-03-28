@@ -10,9 +10,9 @@ import android.text.format.DateUtils.HOUR_IN_MILLIS
 import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import com.beautydiary.core_ui.ext.toStartOfDay
-import com.beautydiary.core_view.R
 import com.beautydiary.core_view.DayTimestampFormatter
 import com.beautydiary.core_view.HourTimestampFormatter
+import com.beautydiary.core_view.R
 import com.beautydiary.domain.models.DomainTask
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 
 open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
@@ -30,19 +31,14 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
     private val now = System.currentTimeMillis()
     private var task: DomainTask? = null
 
-    init {
-        animateX(500)
-    }
-
     fun setTask(task: DomainTask) {
         this.task = task
-        updateData()
+        updateData(task)
     }
 
-    private fun updateData() {
-        this.task?.let {
-            updateChartData(createChartData(it))
-        }
+    private fun updateData(task: DomainTask) {
+        updateChartData(createChartData(task))
+        animateX(500)
     }
 
     private fun updateChartData(data: List<ILineDataSet>) {
@@ -69,7 +65,7 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
 
     private fun createEntries(task: DomainTask): List<Entry> {
         val data = mutableListOf<Entry>()
-        var startDate = task.creationDate
+        var startDate = max(task.creationDate, now - TimeUnit.DAYS.toMillis(31))
         val dataStep = if (TimeUnit.MILLISECONDS.toDays(now - startDate) > 1)
             DAY_IN_MILLIS else HOUR_IN_MILLIS
 
@@ -100,6 +96,7 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
 
         return dataSet.apply {
             fillDrawable = gradientBackground
+            mode = LineDataSet.Mode.LINEAR
         }
     }
 
@@ -133,7 +130,7 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
             position = XAxis.XAxisPosition.BOTTOM
 
             task?.let { task ->
-                if (TimeUnit.MILLISECONDS.toDays(now - task.startDate) > 1) {
+                if (TimeUnit.MILLISECONDS.toDays(now - task.creationDate) > 1) {
                     granularity = DAY_IN_MILLIS.toFloat()
                     valueFormatter = DayTimestampFormatter()
                 } else {
@@ -141,7 +138,8 @@ open class TaskProgressChart(context: Context, attrs: AttributeSet?) :
                     valueFormatter = HourTimestampFormatter()
                 }
 
-                val startDate = task.creationDate.toStartOfDay().toFloat()
+                val startDate = max(task.creationDate, now - TimeUnit.DAYS.toMillis(31))
+                    .toStartOfDay().toFloat()
                 axisMinimum = startDate
                 val taskLifetime = (now - startDate)
                 axisMaximum = (now + taskLifetime / 2)

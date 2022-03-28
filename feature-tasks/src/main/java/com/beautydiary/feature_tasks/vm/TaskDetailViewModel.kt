@@ -10,14 +10,13 @@ import com.beautydiary.domain.common.Result
 import com.beautydiary.core_ui.utils.Event
 import com.beautydiary.core_ui.ext.cast
 import com.beautydiary.core_ui.ext.map
-import com.beautydiary.core_ui.ext.toDate
 import com.beautydiary.core_ui.ext.toStartOfDay
 import com.beautydiary.core_ui.vm.BaseViewModel
 import com.beautydiary.feature_tasks.common.toUIModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
-import timber.log.Timber
+import kotlin.math.max
 
 
 internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
@@ -39,14 +38,20 @@ internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
     val isChartVisible = domainTask.map(viewModelScope) { it != null }
 
     val isDoneButtonEnable = domainTask.map(viewModelScope) {
-        it?.lastExecutionDate?.toDate() != System.currentTimeMillis().toDate()
+        it?.let {
+            it.daysRemaining < it.schedule.getDaysCount()
+        } ?: false
     }
-    val showCompleteEarlierButton = task.map(viewModelScope) {
-        it != null && (it.lastExecutionDate.toStartOfDay() < System.currentTimeMillis()
+    val showCompleteEarlierButton = domainTask.map(viewModelScope) {
+        it != null && (max(
+            it.lastExecutionDate.toStartOfDay(),
+            it.creationDate.toStartOfDay()
+        ) < System.currentTimeMillis()
             .toStartOfDay() - DateUtils.DAY_IN_MILLIS)
     }
 
     val taskCompleteEvent = MutableLiveData<Event<DomainTask>>()
+    val closeEvent = MutableLiveData<Event<Unit>>()
 
     fun onDoneClick() {
         completeTask()
@@ -70,14 +75,18 @@ internal class TaskDetailViewModel(taskId: Long) : BaseViewModel() {
         launch {
             task.executionDateList.add(date)
             val result = taskUseCase.update(task)
-            mapResponseResult(result)
+            mapResponseResult(result) {
+                closeEvent.postValue(Event(Unit))
+            }
         }
     }
 
     private fun deleteTask(task: DomainTask) {
         launch {
             val result = taskUseCase.delete(task)
-            mapResponseResult(result)
+            mapResponseResult(result) {
+                closeEvent.postValue(Event(Unit))
+            }
         }
     }
 

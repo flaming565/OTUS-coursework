@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="statistics_title">Статистика</string>
+    <string name="statistics_common_progress_chart_title">Индикатор совокупного прогресса</string>
+    <string name="statistics_categories_progress_chart_title">Прогресс выполнения задач (%)</string>
+</resources>

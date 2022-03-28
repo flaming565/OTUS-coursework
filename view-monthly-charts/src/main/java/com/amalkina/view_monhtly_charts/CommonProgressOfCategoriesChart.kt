@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.beautydiary.core_ui.ext.toDate
+import com.beautydiary.core_ui.ext.toEndOfDay
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
@@ -48,7 +49,7 @@ class CommonProgressOfCategoriesChart(context: Context, attrs: AttributeSet?) :
 
         while (startDate < endDate) {
             val result = categories.fold(0F) { acc, category ->
-                acc + category.calculateDateNegativeProgress(startDate)
+                acc + category.calculateDateNegativeProgress(startDate.toEndOfDay())
             }
             if (categories.isNotEmpty() && result > 0)
                 data.add(Entry(startDate.toFloat(), result / categories.size))

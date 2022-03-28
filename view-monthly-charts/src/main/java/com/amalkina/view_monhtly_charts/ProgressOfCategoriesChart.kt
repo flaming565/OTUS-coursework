@@ -5,6 +5,7 @@ import android.text.format.DateUtils
 import android.util.AttributeSet
 import com.beautydiary.domain.models.DomainCategoryWithTasks
 import com.beautydiary.core_ui.ext.toDate
+import com.beautydiary.core_ui.ext.toEndOfDay
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
@@ -54,7 +55,7 @@ class ProgressOfCategoriesChart(context: Context, attrs: AttributeSet?) :
         val endDate = getEndDate()
 
         while (startDate < endDate) {
-            val categoryProgress = category.calculateDateProgress(startDate)
+            val categoryProgress = category.calculateDateProgress(startDate.toEndOfDay())
             if (categoryProgress > 0)
                 data.add(Entry(startDate.toFloat(), categoryProgress))
 

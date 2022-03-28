@@ -24,10 +24,7 @@ data class DomainTask(
     private val maxAvailableHours = schedule.getHoursCount()
 
     private val isBaseTask = stringResName != null
-    val progress = if (isBaseTask) DEFAULT_PROGRESS
-    else (hoursAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableHours)
-        .roundToInt()
-        .coerceAtLeast(MIN_PROGRESS)
+    val progress = calculateProgress()
 
     val daysRemaining = ((maxAvailableHours - hoursAfterExecution) / 24.0).roundToInt()
     val userExecutionList = executionDateList.drop(1)
@@ -36,13 +33,29 @@ data class DomainTask(
         if (date < startDate)
             return -1F
 
-        val lastExecutionDate = executionDateList
+        val lastDate = executionDateList
             .findLast { it <= date } ?: startDate
-        val hoursAfterExecution = TimeUnit.MILLISECONDS.toHours(date - lastExecutionDate)
+        val hoursAfterExecution = TimeUnit.MILLISECONDS.toHours(date - lastDate)
 
-        return (hoursAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableHours)
-            .coerceAtLeast(2f)
-            .coerceAtMost(MAX_PROGRESS.toFloat())
+        val value = (hoursAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableHours)
+        return when {
+            value > MAX_PROGRESS -> MAX_PROGRESS.toFloat()
+            value < MIN_PROGRESS -> 2f
+            else -> value
+        }
+    }
+
+    private fun calculateProgress(): Int {
+        return if (isBaseTask) DEFAULT_PROGRESS
+        else {
+            val value = (hoursAfterExecution * MAX_PROGRESS.toFloat() / maxAvailableHours)
+                .roundToInt()
+            when {
+                value > MAX_PROGRESS -> MAX_PROGRESS
+                value < MIN_PROGRESS -> MIN_PROGRESS
+                else -> value
+            }
+        }
     }
 
     companion object {
