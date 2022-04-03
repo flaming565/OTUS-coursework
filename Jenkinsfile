@@ -1,11 +1,52 @@
 #!groovy
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'android_beauty_diary'
+            args '-it --memory=12g --cpus="4"'
+        }
+    }
+    parameters {
+        string(
+                name: "branch",
+                defaultValue: "master",
+                description: "Текущая ветка"
+        )
+    }
     stages {
-        stage("Build") {
+        stage('clone') {
             steps {
-                sh 'echo Hello World'
+                checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/master']],
+                        extensions: [],
+                        userRemoteConfigs: [[url: 'https://github.com/flaming565/OTUS-coursework.git']]
+                ])
             }
+        }
+        stage("init") {
+            steps {
+                sh "chmod +x gradlew"
+                sh "./gradlew"
+            }
+        }
+        stage("lint") {
+            when {
+                expression { return "$branch" == "features/lint_homework" }
+            }
+            steps {
+                sh "./gradlew lintDebug"
+            }
+        }
+        stage("build") {
+            steps {
+                sh "./gradlew assembleDebug"
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts(artifacts: '**/build/reports/**', allowEmptyArchive: true)
         }
     }
 }
