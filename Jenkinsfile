@@ -38,6 +38,11 @@ pipeline {
                 sh "./gradlew lintDebug"
             }
         }
+        stage("test") {
+            steps {
+                sh "./gradlew testDebugUnitTest"
+            }
+        }
         stage("build") {
             steps {
                 sh "./gradlew assembleDebug"
